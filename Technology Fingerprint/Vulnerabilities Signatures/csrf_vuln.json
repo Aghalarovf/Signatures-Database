@@ -1,0 +1,210 @@
+{
+  "vulnerabilities": [
+    {
+      "name": "State-Changing Request Without CSRF Token",
+      "category": "CSRF Vulnerability",
+      "cwe": "CWE-352",
+      "severity": "High",
+      "description": "A POST/PUT/PATCH/DELETE request that changes state (account settings, password, funds transfer) carries no CSRF token in the body, headers, or a custom per-request value, relying only on session cookies for authentication.",
+      "headers": {
+        "request": {
+          "^Cookie$": "session|auth|token",
+          "^X-CSRF-Token$": "^$",
+          "^X-XSRF-Token$": "^$"
+        },
+        "response": {}
+      },
+      "notes": "Absence of any csrf/xsrf-named header or hidden form field across the captured state-changing requests is the primary indicator; confirm by diffing the request body for a token field.",
+      "references": [
+        "https://owasp.org/www-community/attacks/csrf",
+        "https://cwe.mitre.org/data/definitions/352.html"
+      ]
+    },
+    {
+      "name": "CSRF Cookie Missing SameSite Attribute",
+      "category": "CSRF Vulnerability",
+      "cwe": "CWE-352",
+      "severity": "Medium",
+      "description": "Session cookie is issued without SameSite=Lax/Strict (or explicitly SameSite=None without a compensating CSRF token), so the browser will still attach it to cross-site requests originating from another site.",
+      "headers": {
+        "request": {},
+        "response": {
+          "^Set-Cookie$": "^(?!.*SameSite=(Strict|Lax)).*(session|auth|token)"
+        }
+      },
+      "notes": "SameSite=None is acceptable only when paired with Secure and an independent CSRF-token defense; flag when None appears without a token-based mitigation observed elsewhere in the flow.",
+      "references": [
+        "https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie/SameSite",
+        "https://cwe.mitre.org/data/definitions/352.html"
+      ]
+    },
+    {
+      "name": "CSRF Token Accepted When Omitted or Blank",
+      "category": "CSRF Vulnerability",
+      "cwe": "CWE-352",
+      "severity": "High",
+      "description": "Server-side validation of the CSRF token is not enforced: a state-changing request with the token field removed entirely, or sent as an empty value, is still processed (non-error response).",
+      "headers": {
+        "request": {
+          "^X-CSRF-Token$": "^$",
+          "^Cookie$": "session|auth|token"
+        },
+        "response": {
+          "^Status$": "^(200|201|204|302)$"
+        }
+      },
+      "notes": "Confirmed by replaying a captured state-changing request with the token header/field stripped and observing a success status rather than 400/403.",
+      "references": [
+        "https://owasp.org/www-community/attacks/csrf",
+        "https://cwe.mitre.org/data/definitions/352.html"
+      ]
+    },
+    {
+      "name": "CSRF Token Not Bound to Session (Static or Reusable)",
+      "category": "CSRF Vulnerability",
+      "cwe": "CWE-352",
+      "severity": "High",
+      "description": "The anti-CSRF token is identical across sessions, users, or requests (not regenerated per session/request), so a token obtained from one context (e.g. the attacker's own account) can be replayed against the victim.",
+      "headers": {
+        "request": {
+          "^X-CSRF-Token$": ""
+        },
+        "response": {
+          "^Set-Cookie$": "csrf|xsrf"
+        }
+      },
+      "notes": "Confirmed by comparing the token value across two independent sessions (different cookies jars / incognito) and finding it identical or predictably derived.",
+      "references": [
+        "https://owasp.org/www-community/attacks/csrf",
+        "https://cwe.mitre.org/data/definitions/352.html"
+      ]
+    },
+    {
+      "name": "Double-Submit Cookie Without Server-Side Secret Binding",
+      "category": "CSRF Vulnerability",
+      "cwe": "CWE-352",
+      "severity": "Medium",
+      "description": "Server only checks that a request header/body token matches a cookie value (double-submit pattern) without an HMAC or server-side session binding, so an attacker able to set any cookie on their own origin (e.g. via a related subdomain) can also forge the matching header.",
+      "headers": {
+        "request": {
+          "^X-CSRF-Token$": "",
+          "^Cookie$": "csrf|xsrf"
+        },
+        "response": {
+          "^Set-Cookie$": "csrf|xsrf"
+        }
+      },
+      "notes": "Higher risk when combined with a permissive cookie scope (Domain=.example.com) letting any subdomain set the comparison cookie.",
+      "references": [
+        "https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html",
+        "https://cwe.mitre.org/data/definitions/352.html"
+      ]
+    },
+    {
+      "name": "State Change via GET Request",
+      "category": "CSRF Vulnerability",
+      "cwe": "CWE-352",
+      "severity": "High",
+      "description": "A GET request alone (no body, no custom header) performs a state-changing action, making it trivially forgeable via a plain <img>/<a> tag or 302 redirect with no preflight or SameSite protection applicable to top-level navigation.",
+      "headers": {
+        "request": {
+          "^:method$": "^GET$",
+          "^Cookie$": "session|auth|token"
+        },
+        "response": {
+          "^Status$": "^(200|204|302)$"
+        }
+      },
+      "notes": "Confirmed when the same action is normally exposed as GET and succeeds using only the session cookie, with no token parameter required.",
+      "references": [
+        "https://owasp.org/www-community/attacks/csrf",
+        "https://cwe.mitre.org/data/definitions/352.html"
+      ]
+    },
+    {
+      "name": "Missing Origin/Referer Validation on State-Changing Requests",
+      "category": "CSRF Vulnerability",
+      "cwe": "CWE-352",
+      "severity": "Medium",
+      "description": "Server does not check the Origin or Referer header on state-changing requests as a secondary defense, so a cross-site forged request succeeds purely on cookie presence.",
+      "headers": {
+        "request": {
+          "^Origin$": ".+",
+          "^Referer$": ".+",
+          "^Cookie$": "session|auth|token"
+        },
+        "response": {
+          "^Status$": "^(200|201|204|302)$"
+        }
+      },
+      "notes": "Confirmed by replaying a captured request with Origin/Referer altered to an unrelated third-party domain and observing the request still succeeds.",
+      "references": [
+        "https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html",
+        "https://cwe.mitre.org/data/definitions/352.html"
+      ]
+    },
+    {
+      "name": "JSON Content-Type Requirement Bypassed via Form-Encoded Body",
+      "category": "CSRF Vulnerability",
+      "cwe": "CWE-352",
+      "severity": "Medium",
+      "description": "Application relies on requiring Content-Type: application/json as an implicit CSRF defense (since HTML forms cannot natively send it), but the endpoint also accepts application/x-www-form-urlencoded or text/plain for the same action, which a plain HTML form can submit cross-site.",
+      "headers": {
+        "request": {
+          "^Content-Type$": "application/x-www-form-urlencoded|text/plain",
+          "^Cookie$": "session|auth|token"
+        },
+        "response": {
+          "^Status$": "^(200|201|204)$"
+        }
+      },
+      "notes": "Confirmed by resending a captured JSON request with the same parameters re-encoded as form-urlencoded/text-plain and the same Content-Type swapped.",
+      "references": [
+        "https://portswigger.net/web-security/csrf/bypassing-token-validation",
+        "https://cwe.mitre.org/data/definitions/352.html"
+      ]
+    },
+    {
+      "name": "CSRF Token Validated Only Client-Side",
+      "category": "CSRF Vulnerability",
+      "cwe": "CWE-352",
+      "severity": "High",
+      "description": "The CSRF token is checked in client-side JavaScript before submission but the server-side endpoint performs no corresponding validation, so a request crafted outside the normal UI flow bypasses the control entirely.",
+      "headers": {
+        "request": {
+          "^X-CSRF-Token$": "^$"
+        },
+        "response": {
+          "^Status$": "^(200|201|204|302)$"
+        }
+      },
+      "notes": "Confirmed by issuing the state-changing request directly (bypassing the page's JS) with the token omitted and observing success.",
+      "references": [
+        "https://owasp.org/www-community/attacks/csrf",
+        "https://cwe.mitre.org/data/definitions/352.html"
+      ]
+    },
+    {
+      "name": "Permissive CORS Enabling Cross-Origin CSRF-Style Reads",
+      "category": "CSRF Vulnerability",
+      "cwe": "CWE-352",
+      "severity": "High",
+      "description": "A reflected or wildcard Access-Control-Allow-Origin combined with Access-Control-Allow-Credentials: true lets a malicious page issue authenticated cross-origin requests and read the JSON response, going beyond classic blind CSRF into full response disclosure.",
+      "headers": {
+        "request": {
+          "^Origin$": ".+",
+          "^Cookie$": "session|auth|token"
+        },
+        "response": {
+          "^Access-Control-Allow-Origin$": "^(?!\\*$).+",
+          "^Access-Control-Allow-Credentials$": "true"
+        }
+      },
+      "notes": "Cross-reference with cors_vuln.json — this entry marks where a CORS misconfiguration specifically upgrades CSRF exposure from blind write to readable response.",
+      "references": [
+        "https://portswigger.net/web-security/cors",
+        "https://cwe.mitre.org/data/definitions/352.html"
+      ]
+    }
+  ]
+}
