@@ -2,23 +2,97 @@
   "technologies": [
     {
       "name": "PHP",
-      "category": "Programming Language"
+      "category": "Programming Language",
+      "cookies": {},
+      "headers": {
+        "^X-Powered-By$": "PHP/?([\\d.]+)?",
+        "^Set-Cookie$": "PHPSESSID"
+      },
+      "url": [
+        ".php",
+        "/index.php"
+      ],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [],
+      "scriptjs": {}
     },
     {
       "name": "Python",
-      "category": "Programming Language"
+      "category": "Programming Language",
+      "cookies": {},
+      "headers": {
+        "^Server$": "Python/?([\\d.]+)?|WSGIServer|gunicorn|uvicorn|Werkzeug"
+      },
+      "url": [
+        ".py",
+        "__pycache__"
+      ],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [],
+      "scriptjs": {}
     },
     {
       "name": "Node.js",
-      "category": "Programming Language"
+      "category": "Programming Language",
+      "cookies": {
+        "^connect.sid$": ""
+      },
+      "headers": {
+        "^X-Powered-By$": "Express|Node\\.js"
+      },
+      "url": [
+        "/node_modules/"
+      ],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [],
+      "scriptjs": {}
     },
     {
       "name": "Ruby",
-      "category": "Programming Language"
+      "category": "Programming Language",
+      "cookies": {
+        "^_session_id$": ""
+      },
+      "headers": {
+        "^Server$": "Puma|Unicorn|Passenger|WEBrick",
+        "^X-Powered-By$": "Phusion Passenger"
+      },
+      "url": [
+        ".rb",
+        "/assets/application-"
+      ],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [],
+      "scriptjs": {}
     },
     {
       "name": ".NET",
-      "category": "Programming Language"
+      "category": "Programming Language",
+      "cookies": {
+        "^ASP\\.NET_SessionId$": "",
+        "^\\.AspNetCore\\.": ""
+      },
+      "headers": {
+        "^X-Powered-By$": "ASP\\.NET",
+        "^X-AspNet-Version$": "",
+        "^X-AspNetMvc-Version$": ""
+      },
+      "url": [
+        ".aspx",
+        ".ashx",
+        "/__browserLink/"
+      ],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [
+        "/WebResource.axd",
+        "/ScriptResource.axd"
+      ],
+      "scriptjs": {}
     },
     {
       "name": "PHP Session",
@@ -26,6 +100,12 @@
       "cookies": {
         "^PHPSESSID$": ""
       },
+      "headers": {},
+      "url": [],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [],
+      "scriptjs": {},
       "implies": [
         "PHP"
       ]
@@ -35,7 +115,20 @@
       "category": "Programming Language",
       "cookies": {
         "^JSESSIONID$": ""
-      }
+      },
+      "headers": {
+        "^Server$": "Apache-Coyote|Tomcat|JBoss|WildFly|GlassFish|Jetty",
+        "^X-Powered-By$": "Servlet|JSP"
+      },
+      "url": [
+        ".jsp",
+        ".do",
+        ".action"
+      ],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [],
+      "scriptjs": {}
     },
     {
       "name": "ColdFusion",
@@ -44,21 +137,75 @@
         "^CFID$": "",
         "^CFTOKEN$": "",
         "^CFGLOBALS$": ""
-      }
+      },
+      "headers": {
+        "^Server$": "ColdFusion"
+      },
+      "url": [
+        ".cfm",
+        ".cfc"
+      ],
+      "meta": {
+        "generator": "^Adobe ?ColdFusion ?([\\d.]+)?"
+      },
+      "robots": [
+        "/CFIDE/",
+        "Disallow: /CFIDE/"
+      ],
+      "scriptSrc": [
+        "/CFIDE/scripts/"
+      ],
+      "scriptjs": {}
     },
     {
       "name": "Classic ASP",
       "category": "Programming Language",
       "cookies": {
         "^ASPSESSIONID[A-Z]{8}$": ""
-      }
+      },
+      "headers": {
+        "^Server$": "Microsoft-IIS",
+        "^X-Powered-By$": "ASP\\.NET"
+      },
+      "url": [
+        ".asp"
+      ],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [],
+      "scriptjs": {}
     },
     {
       "name": "Perl CGI::Session",
       "category": "Programming Language",
       "cookies": {
         "^CGISESSID$": ""
-      }
+      },
+      "headers": {
+        "^Server$": "mod_perl",
+        "^X-Powered-By$": "Perl"
+      },
+      "url": [
+        ".pl",
+        ".cgi"
+      ],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [],
+      "scriptjs": {}
+    },
+    {
+      "name": "Go",
+      "category": "Programming Language",
+      "cookies": {},
+      "headers": {
+        "^Server$": "Go-http-client|net/http"
+      },
+      "url": [],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [],
+      "scriptjs": {}
     }
   ]
 }
