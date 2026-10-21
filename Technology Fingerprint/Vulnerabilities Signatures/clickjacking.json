@@ -1,0 +1,246 @@
+{
+  "vulnerabilities": [
+    {
+      "name": "Missing X-Frame-Options and CSP frame-ancestors",
+      "category": "Clickjacking Vulnerability",
+      "cwe": "CWE-1021",
+      "severity": "Medium",
+      "description": "The response carries neither an X-Frame-Options header nor a Content-Security-Policy with a frame-ancestors directive, so the page can be embedded in an <iframe>/<frame>/<object> on any third-party origin.",
+      "url": [],
+      "headers": {
+        "request": {},
+        "response": {
+          "^X-Frame-Options$": "^$",
+          "^Content-Security-Policy$": "^(?!.*frame-ancestors).*$|^$"
+        }
+      },
+      "html": {},
+      "notes": "Confirmed by loading the target page inside a test iframe from an unrelated origin and observing it render rather than being blocked by the browser.",
+      "references": [
+        "https://owasp.org/www-community/attacks/Clickjacking",
+        "https://cwe.mitre.org/data/definitions/1021.html"
+      ]
+    },
+    {
+      "name": "Weak X-Frame-Options Value (ALLOW-FROM / Unsupported Directive)",
+      "category": "Clickjacking Vulnerability",
+      "cwe": "CWE-1021",
+      "severity": "Medium",
+      "description": "X-Frame-Options is set to ALLOW-FROM, a deprecated directive that modern browsers (Chrome, Edge, Safari) ignore entirely, causing them to fall back to allowing framing from any origin as if the header were absent.",
+      "url": [],
+      "headers": {
+        "request": {},
+        "response": {
+          "^X-Frame-Options$": "^ALLOW-FROM"
+        }
+      },
+      "html": {},
+      "notes": "Flag regardless of the whitelisted origin named in ALLOW-FROM, since the directive itself is non-functional in most current browsers; a CSP frame-ancestors directive should be present as the real control.",
+      "references": [
+        "https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Frame-Options",
+        "https://cwe.mitre.org/data/definitions/1021.html"
+      ]
+    },
+    {
+      "name": "frame-ancestors Allows Wildcard or Overly Broad Origins",
+      "category": "Clickjacking Vulnerability",
+      "cwe": "CWE-1021",
+      "severity": "Medium",
+      "description": "The CSP frame-ancestors directive is present but set to * or to a broad pattern (e.g. https://*.example.com when example.com hosts untrusted user content on subdomains), still permitting framing from an effectively unrestricted or attacker-reachable set of origins.",
+      "url": [],
+      "headers": {
+        "request": {},
+        "response": {
+          "^Content-Security-Policy$": "frame-ancestors\\s+\\*|frame-ancestors[^;]*https?://\\*\\."
+        }
+      },
+      "html": {},
+      "notes": "Especially relevant when the wildcarded parent domain allows user-controlled subdomains (e.g. a PaaS with *.example-paas.com tenants).",
+      "references": [
+        "https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/frame-ancestors",
+        "https://cwe.mitre.org/data/definitions/1021.html"
+      ]
+    },
+    {
+      "name": "Conflicting X-Frame-Options and CSP frame-ancestors",
+      "category": "Clickjacking Vulnerability",
+      "cwe": "CWE-1021",
+      "severity": "Low",
+      "description": "The response sends both X-Frame-Options and a CSP frame-ancestors directive with inconsistent policies (e.g. X-Frame-Options: DENY alongside frame-ancestors allowing an origin, or vice versa). Per spec, browsers that support frame-ancestors ignore X-Frame-Options, so the effective policy may be looser than the X-Frame-Options value suggests.",
+      "url": [],
+      "headers": {
+        "request": {},
+        "response": {
+          "^X-Frame-Options$": "DENY|SAMEORIGIN",
+          "^Content-Security-Policy$": "frame-ancestors\\s+(?!'none'|'self').+"
+        }
+      },
+      "html": {},
+      "notes": "Verify actual browser behavior rather than assuming the stricter of the two headers wins; CSP frame-ancestors takes precedence in browsers that implement it.",
+      "references": [
+        "https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/frame-ancestors",
+        "https://cwe.mitre.org/data/definitions/1021.html"
+      ]
+    },
+    {
+      "name": "Sensitive State-Changing Page Is Framable",
+      "category": "Clickjacking Vulnerability",
+      "cwe": "CWE-1021",
+      "severity": "High",
+      "description": "A specific page that triggers a sensitive, irreversible, or state-changing action with a single click/tap (delete account, change email, authorize an OAuth grant, transfer funds, change password) lacks framing protection, making it a realistic clickjacking target even if the site has a general policy elsewhere.",
+      "url": [
+        "/account/delete",
+        "/settings/email",
+        "/settings/password",
+        "/oauth2/authorize",
+        "/payment/confirm",
+        "/transfer"
+      ],
+      "headers": {
+        "request": {},
+        "response": {
+          "^X-Frame-Options$": "^$",
+          "^Content-Security-Policy$": "^(?!.*frame-ancestors).*$|^$"
+        }
+      },
+      "html": {},
+      "notes": "Check framing protection per-endpoint, not only on the login page; a global policy on static pages does not guarantee coverage of dynamically rendered sensitive actions.",
+      "references": [
+        "https://owasp.org/www-community/attacks/Clickjacking",
+        "https://cwe.mitre.org/data/definitions/1021.html"
+      ]
+    },
+    {
+      "name": "JavaScript Frame-Busting Script as Sole Defense",
+      "category": "Clickjacking Vulnerability",
+      "cwe": "CWE-1021",
+      "severity": "Medium",
+      "description": "The page relies only on a client-side frame-busting script (checking top !== self and reloading/breaking out) instead of X-Frame-Options/CSP, which can be neutralized via the sandbox attribute on the containing iframe, the Suppress Script Exceptions technique (onbeforeunload abuse), or simply double-framing.",
+      "url": [],
+      "headers": {
+        "request": {},
+        "response": {
+          "^X-Frame-Options$": "^$",
+          "^Content-Security-Policy$": "^(?!.*frame-ancestors).*$|^$"
+        }
+      },
+      "html": {
+        "sinks": {
+          "if\\s*\\(\\s*top\\s*(!==|!=)\\s*self\\s*\\)": "",
+          "if\\s*\\(\\s*window\\.top\\s*(!==|!=)\\s*window\\.self\\s*\\)": "",
+          "top\\.location\\s*=\\s*self\\.location": ""
+        }
+      },
+      "notes": "Confirmed bypassable when the embedding iframe carries sandbox=\"allow-scripts\" without allow-top-navigation, which silently prevents the frame-busting script's own top.location reassignment from executing.",
+      "references": [
+        "https://owasp.org/www-community/attacks/Clickjacking",
+        "https://cwe.mitre.org/data/definitions/1021.html"
+      ]
+    },
+    {
+      "name": "Drag-and-Drop / Scroll-Jacking Surface",
+      "category": "Clickjacking Vulnerability",
+      "cwe": "CWE-1021",
+      "severity": "Low",
+      "description": "A framable page exposes a drag-and-drop interaction (file upload target, draggable UI element, sortable list) that can be re-targeted by overlaying a transparent decoy, tricking the user into dragging sensitive data (e.g. an autofilled credential, a copied token) into an attacker-controlled drop target.",
+      "url": [],
+      "headers": {
+        "request": {},
+        "response": {
+          "^X-Frame-Options$": "^$",
+          "^Content-Security-Policy$": "^(?!.*frame-ancestors).*$|^$"
+        }
+      },
+      "html": {
+        "sinks": {
+          "draggable\\s*=\\s*[\"']true[\"']": "",
+          "ondrop\\s*=": "",
+          "addEventListener\\s*\\(\\s*[\"']drop[\"']": ""
+        }
+      },
+      "notes": "Treat as a sub-variant of standard clickjacking; the same frame-ancestors/X-Frame-Options fix also closes this surface.",
+      "references": [
+        "https://owasp.org/www-community/attacks/Clickjacking",
+        "https://cwe.mitre.org/data/definitions/1021.html"
+      ]
+    },
+    {
+      "name": "Likejacking / Cursorjacking via CSS Opacity Overlay Surface",
+      "category": "Clickjacking Vulnerability",
+      "cwe": "CWE-1021",
+      "severity": "Low",
+      "description": "A framable page contains a small, single-purpose action button (social share/like, one-click subscribe, consent toggle) that is a realistic target for pixel-precise opacity-overlay clickjacking, where the real control is made nearly transparent and positioned beneath a decoy UI the user is lured into clicking.",
+      "url": [
+        "/share",
+        "/like",
+        "/subscribe",
+        "/consent"
+      ],
+      "headers": {
+        "request": {},
+        "response": {
+          "^X-Frame-Options$": "^$",
+          "^Content-Security-Policy$": "^(?!.*frame-ancestors).*$|^$"
+        }
+      },
+      "html": {},
+      "notes": "",
+      "references": [
+        "https://owasp.org/www-community/attacks/Clickjacking",
+        "https://cwe.mitre.org/data/definitions/1021.html"
+      ]
+    },
+    {
+      "name": "Double-Click / Delayed-Click Interaction Bypassing Single-Click Guards",
+      "category": "Clickjacking Vulnerability",
+      "cwe": "CWE-1021",
+      "severity": "Low",
+      "description": "The page implements a client-side click-validation defense (requiring pointer movement, a short delay, or disabling the button until a real mouse event fires) intended to defeat clickjacking, but the control is still embeddable, and the requirement can be satisfied by a two-stage decoy (double-click clickjacking) that lures a genuine second click after an initial decoy interaction.",
+      "url": [],
+      "headers": {
+        "request": {},
+        "response": {
+          "^X-Frame-Options$": "^$",
+          "^Content-Security-Policy$": "^(?!.*frame-ancestors).*$|^$"
+        }
+      },
+      "html": {
+        "sinks": {
+          "pointer-events\\s*:\\s*none": "",
+          "disabled\\s*=\\s*[\"']?true": ""
+        }
+      },
+      "notes": "Client-side interaction heuristics are not a substitute for frame-ancestors/X-Frame-Options; flag whenever the underlying page is still framable regardless of the click-guard logic present.",
+      "references": [
+        "https://owasp.org/www-community/attacks/Clickjacking",
+        "https://cwe.mitre.org/data/definitions/1021.html"
+      ]
+    },
+    {
+      "name": "Framable Login/OAuth Consent Page Enabling Credential or Grant Theft",
+      "category": "Clickjacking Vulnerability",
+      "cwe": "CWE-1021",
+      "severity": "High",
+      "description": "A login form or OAuth/SSO consent screen is embeddable in a third-party frame, allowing invisible-iframe overlay techniques to trick the user into submitting credentials or approving an authorization grant that they believe they are not interacting with at all.",
+      "url": [
+        "/login",
+        "/signin",
+        "/oauth2/authorize",
+        "/consent"
+      ],
+      "headers": {
+        "request": {},
+        "response": {
+          "^X-Frame-Options$": "^$",
+          "^Content-Security-Policy$": "^(?!.*frame-ancestors).*$|^$"
+        }
+      },
+      "html": {},
+      "notes": "Highest-severity variant of this class since a successful decoy can harvest credentials or an OAuth grant rather than just a single UI action.",
+      "references": [
+        "https://owasp.org/www-community/attacks/Clickjacking",
+        "https://cwe.mitre.org/data/definitions/1021.html"
+      ]
+    }
+  ]
+}
