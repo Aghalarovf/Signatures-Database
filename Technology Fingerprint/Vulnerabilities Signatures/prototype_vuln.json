@@ -1,0 +1,474 @@
+{
+  "vulnerabilities": [
+    {
+      "name": "Server-Side Prototype Pollution via Unsafe Recursive Merge (lodash, hoek, deep-extend, merge libraries)",
+      "category": "Prototype Pollution Vulnerability",
+      "pp_type": "Server-side",
+      "cwe": "CWE-1321",
+      "severity": "High",
+      "description": "Attacker-controlled JSON or query data is passed into a recursive merge, extend, or defaults function that does not block the __proto__, constructor, and prototype keys. The attacker can add properties to Object.prototype, which then appear on every plain object in the Node.js process.",
+      "headers": {
+        "request": {
+          "^Content-Type$": "application/json|application/x-www-form-urlencoded"
+        },
+        "response": {
+          "^X-Powered-By$": "Express"
+        }
+      },
+      "html": {
+        "sinks": {
+          "_\\.(merge|mergeWith|defaultsDeep|set|setWith|update|updateWith|zipObjectDeep)\\s*\\(": "",
+          "lodash\\.(merge|mergewith|defaultsdeep|set|setwith|zipobjectdeep)\\s*\\(": "",
+          "\\$\\.extend\\s*\\(\\s*true\\s*,": "",
+          "jQuery\\.extend\\s*\\(\\s*true\\s*,": "",
+          "(deepmerge|deepMerge|deep-extend|deepExtend|merge-deep|mergeDeep|mixin-deep|defaults-deep|assign-deep|merge-options|object-merge|nested-property|set-value|dset|dot-prop|object-path|dottie|flat)\\b": "",
+          "require\\s*\\(\\s*[\"'](deep-extend|merge-deep|mixin-deep|assign-deep|set-value|dot-prop|object-path|hoek|@hapi/hoek|merge|merge-objects|lodash\\.merge)[\"']\\s*\\)": "",
+          "Hoek\\.(merge|applyToDefaults)\\s*\\(": "",
+          "(merge|extend|assign|clone|copy|mixin|defaults)\\s*\\(\\s*\\w+\\s*,\\s*(req\\.(body|query|params)|JSON\\.parse\\s*\\(|ctx\\.request\\.body)": "",
+          "Object\\.assign\\s*\\(\\s*\\{\\s*\\}\\s*,\\s*\\w+\\s*,\\s*(req\\.(body|query)|JSON\\.parse)": ""
+        },
+        "sources": {
+          "req\\.(body|query|params|cookies|headers)": "",
+          "request\\.(body|query|params)": "",
+          "ctx\\.(request\\.body|query|params)": "",
+          "JSON\\.parse\\s*\\(": "",
+          "event\\.(body|queryStringParameters)": ""
+        }
+      },
+      "notes": "Flag when a source reaches the merge/set call without filtering __proto__, constructor, and prototype (or without using Object.create(null), Map, or a patched library version). Check dependency versions against known advisories: lodash before 4.17.21, hoek before 4.2.1/5.0.3, and similar.",
+      "references": [
+        "https://portswigger.net/web-security/prototype-pollution",
+        "https://cwe.mitre.org/data/definitions/1321.html"
+      ]
+    },
+    {
+      "name": "Prototype Pollution via Custom Recursive Merge or Clone Function Without Key Filtering",
+      "category": "Prototype Pollution Vulnerability",
+      "pp_type": "Code-level",
+      "cwe": "CWE-1321",
+      "severity": "High",
+      "description": "A hand-written recursive copy loop iterates over keys of an untrusted object with for...in, Object.keys, or Object.entries and assigns target[key] = source[key] (recursing for nested objects) without rejecting dangerous keys or checking hasOwnProperty.",
+      "headers": {
+        "request": {},
+        "response": {}
+      },
+      "html": {
+        "sinks": {
+          "for\\s*\\(\\s*(var|let|const)?\\s*\\w+\\s+in\\s+\\w+\\s*\\)\\s*\\{?[^}]{0,200}\\w+\\s*\\[\\s*\\w+\\s*\\]\\s*=\\s*\\w+\\s*\\[\\s*\\w+\\s*\\]": "",
+          "Object\\.(keys|entries)\\s*\\(\\s*\\w+\\s*\\)\\s*\\.forEach\\s*\\([^)]*\\)[\\s\\S]{0,250}\\w+\\s*\\[\\s*\\w+\\s*\\]\\s*=\\s*\\w+\\s*\\[\\s*\\w+\\s*\\]": "",
+          "(function|const|let|var)\\s+(deep|recursive)?(merge|extend|clone|copy|assign|mixin|defaults)\\w*\\s*(=|\\()[\\s\\S]{0,300}typeof\\s+\\w+\\s*\\[\\s*\\w+\\s*\\]\\s*===?\\s*[\"']object[\"']": "",
+          "\\w+\\s*\\[\\s*\\w+\\s*\\]\\s*=\\s*(merge|extend|clone|deepMerge|deepCopy|deepClone)\\s*\\(\\s*\\w+\\s*\\[\\s*\\w+\\s*\\]\\s*,\\s*\\w+\\s*\\[\\s*\\w+\\s*\\]\\s*\\)": "",
+          "JSON\\.parse\\s*\\(\\s*JSON\\.stringify\\s*\\(": ""
+        },
+        "sources": {
+          "req\\.(body|query|params)": "",
+          "JSON\\.parse\\s*\\(": "",
+          "location\\.(search|hash)": "",
+          "Object\\.(keys|entries)\\s*\\(": "",
+          "for\\s*\\(\\s*(var|let|const)?\\s*\\w+\\s+in\\s+": ""
+        }
+      },
+      "notes": "A safe merge skips __proto__, constructor, and prototype keys, uses Object.prototype.hasOwnProperty.call for own-property checks, or creates targets with Object.create(null). Note that JSON.parse creates an own property named __proto__, which is why merging parsed JSON is dangerous while object literals are not.",
+      "references": [
+        "https://portswigger.net/web-security/prototype-pollution/server-side",
+        "https://cwe.mitre.org/data/definitions/1321.html"
+      ]
+    },
+    {
+      "name": "Prototype Pollution via Dynamic Property Path Assignment With Untrusted Keys",
+      "category": "Prototype Pollution Vulnerability",
+      "pp_type": "Code-level",
+      "cwe": "CWE-1321",
+      "severity": "High",
+      "description": "A property path supplied by the user (for example a dot-separated or bracketed key list) is walked and assigned (obj[a][b][c] = value) without validating each path segment. Paths such as __proto__.polluted or constructor.prototype.polluted then modify shared prototypes.",
+      "headers": {
+        "request": {
+          "^Content-Type$": "application/json|application/x-www-form-urlencoded"
+        },
+        "response": {}
+      },
+      "html": {
+        "sinks": {
+          "\\w+\\s*\\[\\s*(req|request)\\.(body|query|params)\\.\\w+\\s*\\]\\s*\\[\\s*(req|request)\\.(body|query|params)\\.\\w+\\s*\\]\\s*=": "",
+          "\\w+\\s*\\[\\s*\\w+\\s*\\]\\s*\\[\\s*\\w+\\s*\\]\\s*=\\s*(req|request)\\.(body|query|params)": "",
+          "\\.split\\s*\\(\\s*[\"'`.\\[]+\\s*[\"'`]?\\s*\\)[\\s\\S]{0,300}(reduce|forEach|for\\s*\\()[\\s\\S]{0,200}\\w+\\s*\\[\\s*\\w+\\s*\\]\\s*=": "",
+          "(setPath|setByPath|setValue|setNested|set_in|assignPath|deepSet|setDeep|setProperty|putPath)\\s*\\(": "",
+          "(path|keys|key_?path|prop(erty)?_?path)\\s*\\.(split|match)\\s*\\([^)]*\\)\\s*\\.(reduce|forEach)\\s*\\(": "",
+          "Reflect\\.set\\s*\\(\\s*\\w+\\s*,\\s*(req|request)\\.": "",
+          "(unflatten|qs\\.parse|querystring\\.parse|parseQuery|parseQueryString)\\s*\\(": "",
+          "qs\\.parse\\s*\\([^)]*allowPrototypes\\s*:\\s*true": ""
+        },
+        "sources": {
+          "req\\.(body|query|params)": "",
+          "request\\.(body|query|params)": "",
+          "location\\.(search|hash)": "",
+          "URLSearchParams": "",
+          "formData": ""
+        }
+      },
+      "notes": "Also check form and query parsers: bracket notation such as a[__proto__][x]=1 is parsed into nested objects by qs and similar libraries. Keep allowPrototypes false (default) and validate path segments against an allow-list.",
+      "references": [
+        "https://portswigger.net/web-security/prototype-pollution",
+        "https://cwe.mitre.org/data/definitions/1321.html"
+      ]
+    },
+    {
+      "name": "Prototype Pollution in Command-Line and Config Parsers (minimist, yargs-parser, optimist, nconf, config)",
+      "category": "Prototype Pollution Vulnerability",
+      "pp_type": "Dependency",
+      "cwe": "CWE-1321",
+      "severity": "Medium",
+      "description": "Argument or configuration parsers used on untrusted input (HTTP-supplied arguments, user-uploaded config, environment-derived strings) can be coerced into setting __proto__ or constructor.prototype properties when dot-notation or nested keys are expanded.",
+      "headers": {
+        "request": {},
+        "response": {}
+      },
+      "html": {
+        "sinks": {
+          "require\\s*\\(\\s*[\"'](minimist|yargs-parser|optimist|nconf|rc|config|ini|toml|properties|js-yaml|yaml|xml2js|query-string|querystring|qs)[\"']\\s*\\)": "",
+          "minimist\\s*\\(\\s*(req|request|process\\.argv|args|argv|input)": "",
+          "yargsParser\\s*\\(\\s*(req|request|args|input|str)": "",
+          "ini\\.parse\\s*\\(\\s*(req|request|data|input|body|file|content)": "",
+          "xml2js\\.(parseString|Parser)\\s*\\(": "",
+          "\"(minimist|yargs-parser|optimist|nconf|ini|xml2js)\"\\s*:\\s*\"[\\^~]?(0\\.|1\\.[0-9]\\.|2\\.[0-4]\\.)": ""
+        },
+        "sources": {
+          "req\\.(body|query|params)": "",
+          "process\\.argv": "",
+          "process\\.env": "",
+          "fs\\.readFile(Sync)?\\s*\\(": "",
+          "req\\.files?": ""
+        }
+      },
+      "notes": "Severity depends on whether the parser input is attacker-reachable. Check dependency versions against advisories and run an SCA tool. Keys such as __proto__.x=1 or constructor.prototype.x=1 are the classic abuse vector.",
+      "references": [
+        "https://github.com/advisories?query=prototype%20pollution",
+        "https://cwe.mitre.org/data/definitions/1321.html"
+      ]
+    },
+    {
+      "name": "Client-Side Prototype Pollution via URL Query or Hash Parsed Into Objects",
+      "category": "Prototype Pollution Vulnerability",
+      "pp_type": "Client-side",
+      "cwe": "CWE-1321",
+      "severity": "High",
+      "description": "The browser parses location.search or location.hash into nested objects (deparam, query-string libraries, custom parsers) or merges URL-derived data into configuration objects without filtering dangerous keys. A crafted link such as ?__proto__[x]=y can then pollute Object.prototype in the victim's page.",
+      "headers": {
+        "request": {},
+        "response": {
+          "^Content-Type$": "text/html"
+        }
+      },
+      "html": {
+        "sinks": {
+          "\\$\\.(deparam|bbq\\.getState)\\s*\\(": "",
+          "jQuery\\.(deparam|bbq)": "",
+          "jquery[.-](deparam|bbq)(\\.min)?\\.js": "",
+          "(deparam|parseQuery|parseQueryString|parseParams|queryToObject|getQueryParams|urlParams)\\s*\\(\\s*(window\\.)?location\\.(search|hash)": "",
+          "(merge|extend|assign|defaults|mixin)\\s*\\(\\s*\\w+\\s*,\\s*(parse|deparam|qs\\.parse|queryString\\.parse)\\w*\\s*\\(": "",
+          "Qs\\.parse\\s*\\(\\s*(window\\.)?location\\.(search|hash)": "",
+          "queryString\\.parse\\s*\\(\\s*(window\\.)?location\\.(search|hash)": "",
+          "new\\s+URLSearchParams\\s*\\([^)]*\\)[\\s\\S]{0,300}(forEach|entries)\\s*\\([^)]*\\)[\\s\\S]{0,200}\\w+\\s*\\[\\s*\\w+\\s*\\]\\s*=": "",
+          "\\w+\\s*\\[\\s*\\w+\\s*\\]\\s*\\[\\s*\\w+\\s*\\]\\s*=\\s*\\w+[\\s\\S]{0,100}(location\\.(search|hash)|URLSearchParams)": ""
+        },
+        "sources": {
+          "location\\.(search|hash|href)": "",
+          "document\\.(URL|documentURI|referrer)": "",
+          "window\\.name": "",
+          "URLSearchParams": "",
+          "postMessage|addEventListener\\s*\\(\\s*[\"']message[\"']": ""
+        }
+      },
+      "notes": "Confirm in the browser: load the page with ?__proto__[unique_marker]=1 (or #__proto__[unique_marker]=1, or constructor[prototype][unique_marker]=1) and evaluate Object.prototype.unique_marker in the console. A defined value proves pollution. Exploitability then depends on gadgets in the page or its libraries.",
+      "references": [
+        "https://portswigger.net/web-security/prototype-pollution/client-side",
+        "https://cwe.mitre.org/data/definitions/1321.html"
+      ]
+    },
+    {
+      "name": "Prototype Pollution via JSON Input From postMessage, Web Storage, or Third-Party Responses",
+      "category": "Prototype Pollution Vulnerability",
+      "pp_type": "Client-side",
+      "cwe": "CWE-1321",
+      "severity": "Medium",
+      "description": "JSON obtained from postMessage events, localStorage/sessionStorage, cookies, or third-party API responses is merged into application objects with an unsafe merge helper. Anyone who controls that data source (another origin, an earlier XSS, or an upstream service) can pollute the prototype.",
+      "headers": {
+        "request": {},
+        "response": {}
+      },
+      "html": {
+        "sinks": {
+          "(merge|extend|assign|defaults|mixin|deepMerge|_\\.merge|\\$\\.extend)\\s*\\([^)]*JSON\\.parse\\s*\\(\\s*(event|e|msg|message)\\.data": "",
+          "(merge|extend|assign|defaults|mixin|deepMerge|_\\.merge)\\s*\\([^)]*JSON\\.parse\\s*\\(\\s*(localStorage|sessionStorage)\\.getItem": "",
+          "(merge|extend|assign|defaults|mixin|deepMerge|_\\.merge)\\s*\\([^)]*(response|res|data|result)\\.(json|data|body)": "",
+          "Object\\.assign\\s*\\(\\s*(window|this|config|options|settings)\\w*\\s*,\\s*JSON\\.parse": "",
+          "\\$\\.extend\\s*\\(\\s*true\\s*,[^)]*(event\\.data|JSON\\.parse|localStorage|sessionStorage)": ""
+        },
+        "sources": {
+          "addEventListener\\s*\\(\\s*[\"']message[\"']": "",
+          "(event|e|msg)\\.data": "",
+          "localStorage\\.getItem\\s*\\(": "",
+          "sessionStorage\\.getItem\\s*\\(": "",
+          "document\\.cookie": "",
+          "fetch\\s*\\(|XMLHttpRequest|axios\\.(get|post)\\s*\\(": ""
+        }
+      },
+      "notes": "Check whether the message handler validates event.origin before processing, and whether stored data can be influenced by another origin or subdomain. Combine with the unsafe-merge rule to assess reachability.",
+      "references": [
+        "https://portswigger.net/web-security/prototype-pollution/client-side",
+        "https://cwe.mitre.org/data/definitions/1321.html"
+      ]
+    },
+    {
+      "name": "Client-Side Prototype Pollution Gadgets: Script, URL, and HTML Sinks Reading Unguarded Options",
+      "category": "Prototype Pollution Vulnerability",
+      "pp_type": "Gadget",
+      "cwe": "CWE-1321",
+      "severity": "High",
+      "description": "Page or library code reads configuration properties from an options object without checking own-property status and then uses them in a dangerous sink (script src, innerHTML, eval, location, iframe srcdoc). If Object.prototype is polluted, those undefined properties inherit attacker-chosen values and turn pollution into DOM XSS.",
+      "headers": {
+        "request": {},
+        "response": {
+          "^Content-Security-Policy$": "^$|.*'unsafe-(inline|eval)'.*"
+        }
+      },
+      "html": {
+        "sinks": {
+          "\\.src\\s*=\\s*(config|options|opts|settings|params|conf|cfg|defaults)\\w*\\.\\w+": "",
+          "\\.(innerHTML|outerHTML)\\s*=\\s*(config|options|opts|settings|params|conf|cfg|defaults)\\w*\\.\\w+": "",
+          "(setAttribute\\s*\\(\\s*[\"'](src|href|srcdoc|data)[\"']\\s*,\\s*)(config|options|opts|settings|params|conf|cfg)\\w*\\.\\w+": "",
+          "(eval|setTimeout|setInterval|Function)\\s*\\(\\s*(config|options|opts|settings|params|conf|cfg)\\w*\\.\\w+": "",
+          "(location(\\.href)?\\s*=|location\\.(assign|replace)\\s*\\(|window\\.open\\s*\\()\\s*(config|options|opts|settings|params|conf|cfg)\\w*\\.\\w+": "",
+          "(transport_url|transportUrl|scriptUrl|script_url|sourceURL|baseUrl|base_url|jsUrl|cdnUrl|endpoint|templateUrl|srcdoc|hitCallback|onload|onerror)\\s*[=:]?\\s*\\w*(config|options|opts|settings)\\w*\\.": "",
+          "if\\s*\\(\\s*!?\\s*(config|options|opts|settings|params|conf|cfg)\\w*\\.\\w+\\s*\\)": "",
+          "\\|\\|\\s*(config|options|opts|settings|defaults)\\w*\\.\\w+": "",
+          "(config|options|opts|settings)\\w*\\.hasOwnProperty\\s*\\(": ""
+        },
+        "sources": {
+          "location\\.(search|hash)": "",
+          "URLSearchParams": "",
+          "Object\\.prototype": "",
+          "__proto__": "",
+          "constructor\\.prototype": ""
+        }
+      },
+      "notes": "Known gadget families exist in analytics tags, tag managers, jQuery plugins, and templating libraries. Test safely by polluting a benign marker property, then check whether the page reads it. Mitigation: use hasOwnProperty or Object.hasOwn checks, Object.create(null) option bags, and Object.freeze(Object.prototype).",
+      "references": [
+        "https://portswigger.net/web-security/prototype-pollution/client-side/browser-apis",
+        "https://cwe.mitre.org/data/definitions/1321.html"
+      ]
+    },
+    {
+      "name": "Server-Side Prototype Pollution Gadgets: Child Process, Template Engine, and Framework Options",
+      "category": "Prototype Pollution Vulnerability",
+      "pp_type": "Gadget",
+      "cwe": "CWE-1321",
+      "severity": "Critical",
+      "description": "Node.js APIs and libraries read optional properties (shell, env, execArgv, NODE_OPTIONS, argv0, template options) from option objects that normally inherit nothing. After prototype pollution, those lookups can return attacker-supplied values, which can change spawned-process behavior or template compilation and lead to code execution.",
+      "headers": {
+        "request": {},
+        "response": {}
+      },
+      "html": {
+        "sinks": {
+          "child_process\\.(fork|spawn|exec|execFile|spawnSync|execSync|execFileSync)\\s*\\(": "",
+          "require\\s*\\(\\s*[\"']child_process[\"']\\s*\\)": "",
+          "\\.fork\\s*\\([^)]*\\{(?![^}]*(execArgv|env|shell))[^}]*\\}": "",
+          "\\b(spawn|exec|execFile)\\s*\\([^)]*\\{(?![^}]*(shell|env))[^}]*\\}": "",
+          "\\b(spawn|execFile)\\s*\\([^)]*\\)(?![\\s\\S]{0,60}(shell\\s*:\\s*false))": "",
+          "ejs\\.(render|renderFile|compile)\\s*\\(": "",
+          "res\\.render\\s*\\(": "",
+          "(pug|jade)\\.(compile|render|renderFile)\\s*\\(": "",
+          "Handlebars\\.(compile|template)\\s*\\(": "",
+          "(outputFunctionName|escapeFunction|client|localsName|destructuredLocals|delimiter|openDelimiter|closeDelimiter)\\b": "",
+          "(execArgv|NODE_OPTIONS|NODE_PATH|argv0|shell)\\s*:": "",
+          "vm\\.(runInContext|runInNewContext|runInThisContext|Script)\\s*\\(": "",
+          "new\\s+Function\\s*\\(|\\beval\\s*\\(": ""
+        },
+        "sources": {
+          "req\\.(body|query|params)": "",
+          "Object\\.prototype": "",
+          "__proto__": "",
+          "constructor\\.prototype": ""
+        }
+      },
+      "notes": "Gadget presence only matters if pollution is reachable, so treat as a severity multiplier for the server-side merge rules. Do not test gadgets that execute commands. Detect pollution with harmless behavioral markers, and apply mitigations: --disable-proto=delete, Object.freeze(Object.prototype), and explicit option objects created with Object.create(null).",
+      "references": [
+        "https://portswigger.net/web-security/prototype-pollution/server-side",
+        "https://cwe.mitre.org/data/definitions/1321.html"
+      ]
+    },
+    {
+      "name": "Server-Side Prototype Pollution Behavioral Indicators: Safe Non-Destructive Detection",
+      "category": "Prototype Pollution Vulnerability",
+      "pp_type": "Behavioral",
+      "cwe": "CWE-1321",
+      "severity": "Medium",
+      "description": "Sending JSON bodies or form parameters containing __proto__ or constructor.prototype keys with harmless markers changes how the application responds, for example by altering JSON formatting, status codes, charset, or by exposing the marker property on unrelated objects. These are the non-destructive signals for detecting server-side pollution.",
+      "headers": {
+        "request": {
+          "^Content-Type$": "application/json|application/x-www-form-urlencoded"
+        },
+        "response": {
+          "^Content-Type$": "application/json|text/html",
+          "^X-Powered-By$": "Express"
+        }
+      },
+      "html": {
+        "reflection_indicators": {
+          "\"__proto__\"\\s*:\\s*\\{": "response echoes a __proto__ object, suggesting that the key was accepted and parsed as an own property",
+          "\"constructor\"\\s*:\\s*\\{\\s*\"prototype\"\\s*:": "response echoes a nested constructor.prototype structure from the request",
+          "\"(pp_marker|polluted|proto_test|ppmarker)[A-Za-z0-9_]*\"\\s*:\\s*\"?[A-Za-z0-9_-]{4,}": "unique marker property appears on an object that did not receive it directly (inherited through the prototype)",
+          "(?i)(unexpected token|cannot read propert(y|ies) of undefined|maximum call stack size exceeded)[^<\\n]{0,120}(__proto__|constructor|prototype)": "error mentioning prototype keys after a pollution probe",
+          "^\\{\\n\\s{2,8}\"[^\"]+\"\\s*:": "pretty-printed JSON with unexpected indentation after probing the JSON spaces setting (Express)",
+          "(?i)charset=(utf-7|utf-16|iso-8859-1|ibm037)": "unexpected charset change after probing the content-type charset gadget"
+        }
+      },
+      "notes": "Safe detection approach: (1) send {\"__proto__\":{\"unique_marker_abc\":\"x\"}} and check whether unique_marker_abc appears on other objects or in later responses; (2) probe harmless behavior switches such as JSON spaces or status override and compare to a baseline; (3) repeat with constructor.prototype for filters that block __proto__. Use unique random marker names and restart-safe tests: pollution persists until the process restarts.",
+      "references": [
+        "https://portswigger.net/web-security/prototype-pollution/server-side",
+        "https://cwe.mitre.org/data/definitions/1321.html"
+      ]
+    },
+    {
+      "name": "Client-Side Prototype Pollution Behavioral Indicator: Marker Visible on Object.prototype",
+      "category": "Prototype Pollution Vulnerability",
+      "pp_type": "Behavioral",
+      "cwe": "CWE-1321",
+      "severity": "Medium",
+      "description": "After loading a page with __proto__ or constructor.prototype style parameters in the URL, a unique marker property is readable from Object.prototype or from newly created empty objects, which proves that URL-derived data polluted the prototype.",
+      "headers": {
+        "request": {},
+        "response": {
+          "^Content-Type$": "text/html"
+        }
+      },
+      "html": {
+        "reflection_indicators": {
+          "[?&#]__proto__(\\[|\\.|%5B|%2E)[^=&]+=": "pollution-style parameter in the page URL, query string, or hash (bracket or dot notation)",
+          "[?&#]constructor(\\[|\\.|%5B|%2E)prototype(\\]|\\.|%5D|%2E)": "constructor.prototype style pollution parameter in the URL",
+          "[?&#]__proto__=": "direct __proto__ assignment parameter in the URL",
+          "(?i)Object\\.prototype\\.(pp_marker|polluted|proto_test|ppmarker)\\w*": "marker property referenced on Object.prototype in page code or console output"
+        }
+      },
+      "notes": "Detection is performed in a browser context: after loading the probe URL, evaluate ({}).unique_marker in the console or through an automated browser. A non-undefined result confirms pollution. DOM Invader or a headless browser can automate this; HTTP-only scanners cannot see it.",
+      "references": [
+        "https://portswigger.net/web-security/prototype-pollution/client-side",
+        "https://cwe.mitre.org/data/definitions/1321.html"
+      ]
+    },
+    {
+      "name": "Class Pollution in Python (Recursive Merge Reaching __class__, __globals__, __init__)",
+      "category": "Prototype Pollution Vulnerability",
+      "pp_type": "Class Pollution",
+      "cwe": "CWE-915",
+      "severity": "High",
+      "description": "A Python function recursively merges untrusted dictionary data into an object using getattr/setattr (or __dict__ access). Attackers can traverse special attributes such as __class__, __init__, __globals__, or __base__ to modify class-level or module-level state, overwrite configuration or secrets, and in some cases reach code execution gadgets.",
+      "headers": {
+        "request": {
+          "^Content-Type$": "application/json"
+        },
+        "response": {}
+      },
+      "html": {
+        "sinks": {
+          "setattr\\s*\\(\\s*\\w+\\s*,\\s*\\w+\\s*,\\s*\\w+\\s*\\)": "",
+          "getattr\\s*\\(\\s*\\w+\\s*,\\s*\\w+\\s*\\)[\\s\\S]{0,200}(merge|update|setattr)": "",
+          "def\\s+(merge|deep_merge|update|recursive_update|deep_update|apply|populate|fill|from_dict)\\w*\\s*\\([^)]*\\)\\s*:[\\s\\S]{0,300}(setattr|\\.__dict__)": "",
+          "\\.__dict__\\s*\\.\\s*update\\s*\\(\\s*(request|data|payload|json|body)": "",
+          "\\.__dict__\\s*\\[\\s*\\w+\\s*\\]\\s*=": "",
+          "for\\s+\\w+\\s*,\\s*\\w+\\s+in\\s+\\w+\\.items\\s*\\(\\s*\\)\\s*:[\\s\\S]{0,150}(hasattr|getattr)\\s*\\([^)]*\\)[\\s\\S]{0,150}setattr": "",
+          "__(class|init|globals|base|bases|subclasses|mro|builtins|dict|module)__": "",
+          "pydash\\.(set_|set_with|update|update_with|merge|merge_with)\\s*\\(": "",
+          "(dotty|dpath|glom|jmespath|dictor)\\.\\w*(set|assign|merge|new)\\w*\\s*\\(": ""
+        },
+        "sources": {
+          "request\\.(json|get_json|data|form|args)": "",
+          "flask\\.request": "",
+          "request\\.(POST|GET|body)": "",
+          "json\\.loads\\s*\\(": "",
+          "yaml\\.(safe_)?load\\s*\\(": ""
+        }
+      },
+      "notes": "Safe design: merge into plain dictionaries rather than objects, schema-validate with pydantic or marshmallow, allow-list attribute names, and reject keys that start with double underscores.",
+      "references": [
+        "https://portswigger.net/web-security/prototype-pollution",
+        "https://cwe.mitre.org/data/definitions/915.html"
+      ]
+    },
+    {
+      "name": "Object Injection and Mass Assignment Through Unfiltered Object Property Assignment (Ruby, PHP, Java Bean Binding)",
+      "category": "Prototype Pollution Vulnerability",
+      "pp_type": "Class Pollution",
+      "cwe": "CWE-915",
+      "severity": "High",
+      "description": "Languages with reflective or dynamic property binding can expose a similar attack class: request parameters are bound to arbitrary object attributes, including nested class or loader properties (for example Spring4Shell-style class.module.classLoader bindings or Ruby hash-to-attributes assignment), allowing modification of internal framework state.",
+      "headers": {
+        "request": {
+          "^Content-Type$": "application/(json|x-www-form-urlencoded)|multipart/form-data"
+        },
+        "response": {}
+      },
+      "html": {
+        "sinks": {
+          "@ModelAttribute": "",
+          "WebDataBinder|initBinder\\s*\\(": "",
+          "setAllowedFields|setDisallowedFields": "",
+          "BeanUtils\\.(copyProperties|populate)\\s*\\(": "",
+          "PropertyUtils\\.(setProperty|setNestedProperty)\\s*\\(": "",
+          "\\.update(_attributes)?\\s*\\(\\s*params(\\.permit!|\\[)": "",
+          "params\\.permit!": "",
+          "\\.new\\s*\\(\\s*params\\s*\\)": "",
+          "\\.(assign_attributes|update_attributes|attributes\\s*=)\\s*\\(?\\s*params": "",
+          "(extract|parse_str|mb_parse_str)\\s*\\(\\s*\\$_(GET|POST|REQUEST)": "",
+          "foreach\\s*\\(\\s*\\$_(GET|POST|REQUEST)\\s+as\\s+\\$\\w+\\s*=>\\s*\\$\\w+\\s*\\)\\s*\\{?[\\s\\S]{0,100}\\$\\$\\w+\\s*=": "",
+          "\\$this->\\{\\s*\\$\\w+\\s*\\}\\s*=\\s*\\$": "",
+          "Model::unguard\\s*\\(|\\$guarded\\s*=\\s*\\[\\s*\\]": ""
+        },
+        "sources": {
+          "request\\.getParameterMap\\s*\\(": "",
+          "params\\s*\\[": "",
+          "\\$_(GET|POST|REQUEST)": "",
+          "@RequestBody": ""
+        }
+      },
+      "notes": "Related class of bug rather than JavaScript prototype pollution proper. Restrict binding with explicit allow-lists (strong parameters in Rails, setAllowedFields in Spring, $fillable in Laravel) and keep framework patches current.",
+      "references": [
+        "https://cheatsheetseries.owasp.org/cheatsheets/Mass_Assignment_Cheat_Sheet.html",
+        "https://cwe.mitre.org/data/definitions/915.html"
+      ]
+    },
+    {
+      "name": "Prototype Pollution Hardening Gap: Missing Key Filtering, Frozen Prototypes, or Null-Prototype Objects",
+      "category": "Prototype Pollution Vulnerability",
+      "pp_type": "Mitigation Gap",
+      "cwe": "CWE-1321",
+      "severity": "Low",
+      "description": "The application lacks defense-in-depth for prototype pollution: it does not run Node.js with --disable-proto, does not freeze Object.prototype, keeps vulnerable library versions, uses plain objects as maps for user-controlled keys, and ignores key filtering in custom parsers. A single unfiltered merge then has outsized impact.",
+      "headers": {
+        "request": {},
+        "response": {}
+      },
+      "html": {
+        "sinks": {
+          "const\\s+\\w*(map|cache|store|registry|lookup|dict|counts?|seen|index|users|sessions)\\w*\\s*=\\s*\\{\\s*\\}": "",
+          "(cache|store|lookup|registry|seen|counts?)\\w*\\s*\\[\\s*(req|request)\\.(body|query|params)\\.\\w+\\s*\\]\\s*=": "",
+          "if\\s*\\(\\s*\\w+\\s*\\[\\s*\\w+\\s*\\]\\s*\\)\\s*\\{?[\\s\\S]{0,60}\\w+\\s*\\[\\s*\\w+\\s*\\]\\s*(\\+\\+|\\+=)": "",
+          "\\w+\\s+in\\s+\\w+(?![\\s\\S]{0,40}hasOwn)": "",
+          "\"(lodash|lodash\\.merge|lodash\\.defaultsdeep|lodash-es)\"\\s*:\\s*\"[\\^~]?(3\\.|4\\.[0-9]\\.|4\\.1[0-6]\\.|4\\.17\\.[0-9]\\b|4\\.17\\.1[0-9]\\b|4\\.17\\.20)": "",
+          "\"(minimist|jquery|merge|deep-extend|mixin-deep|set-value|hoek|handlebars|ini)\"\\s*:\\s*\"[\\^~]?[0-9]+\\.[0-9]+": "",
+          "node\\s+(?![^\\n]*--disable-proto)[^\\n]*\\.js": "",
+          "Object\\.freeze\\s*\\(\\s*Object\\.prototype\\s*\\)": "",
+          "Object\\.create\\s*\\(\\s*null\\s*\\)": "",
+          "--disable-proto\\s*=\\s*(delete|throw)": ""
+        },
+        "sources": {}
+      },
+      "notes": "Mitigation-gap finding, not a direct vulnerability. The last three sink patterns are mitigation markers: their presence indicates hardening, so report the gap when they are absent. Prefer Map or Object.create(null) for user-keyed data, block dangerous keys in parsers, run an SCA tool, and consider Node.js --disable-proto=delete.",
+      "references": [
+        "https://nodejs.org/api/cli.html#--disable-protomode",
+        "https://cwe.mitre.org/data/definitions/1321.html"
+      ]
+    }
+  ]
+}
