@@ -1,0 +1,217 @@
+{
+  "vulnerabilities": [
+    {
+      "name": "Reflected Origin in Access-Control-Allow-Origin",
+      "category": "CORS Vulnerability",
+      "cwe": "CWE-942",
+      "severity": "High",
+      "description": "Server echoes the request's Origin header back verbatim as Access-Control-Allow-Origin instead of validating it against an allow-list, letting any origin read cross-origin responses.",
+      "headers": {
+        "request": {
+          "^Origin$": ".+"
+        },
+        "response": {
+          "^Access-Control-Allow-Origin$": "^(?!\\*$).+",
+          "^Vary$": "^(?!.*Origin).*$"
+        }
+      },
+      "notes": "Confirmed when Access-Control-Allow-Origin in the response exactly equals the Origin value sent in the request, including for arbitrary/attacker-controlled origins.",
+      "references": [
+        "https://portswigger.net/web-security/cors",
+        "https://cwe.mitre.org/data/definitions/942.html"
+      ]
+    },
+    {
+      "name": "Wildcard ACAO Combined with Credentials",
+      "category": "CORS Vulnerability",
+      "cwe": "CWE-942",
+      "severity": "Critical",
+      "description": "Response sets Access-Control-Allow-Origin: * together with Access-Control-Allow-Credentials: true. Per spec browsers should reject this combination, but misconfigurations (dynamic wildcard generation, proxy rewriting) can still expose credentialed data.",
+      "headers": {
+        "request": {
+          "^Origin$": ".+"
+        },
+        "response": {
+          "^Access-Control-Allow-Origin$": "^\\*$",
+          "^Access-Control-Allow-Credentials$": "true"
+        }
+      },
+      "notes": "Also check for ACAO dynamically generated as \"*\" per-origin (effectively a wildcard) rather than a literal static header.",
+      "references": [
+        "https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials",
+        "https://cwe.mitre.org/data/definitions/942.html"
+      ]
+    },
+    {
+      "name": "Null Origin Allow-Listed",
+      "category": "CORS Vulnerability",
+      "cwe": "CWE-942",
+      "severity": "High",
+      "description": "Server accepts Origin: null as valid, which can be forced by an attacker via a sandboxed iframe, a data: URI, or a file:// context, bypassing normal origin restrictions.",
+      "headers": {
+        "request": {
+          "^Origin$": "^null$"
+        },
+        "response": {
+          "^Access-Control-Allow-Origin$": "^null$",
+          "^Access-Control-Allow-Credentials$": "true"
+        }
+      },
+      "notes": "",
+      "references": [
+        "https://portswigger.net/web-security/cors#whitelisted-null-origin-value",
+        "https://cwe.mitre.org/data/definitions/942.html"
+      ]
+    },
+    {
+      "name": "Weak Origin Suffix/Substring Matching",
+      "category": "CORS Vulnerability",
+      "cwe": "CWE-942",
+      "severity": "High",
+      "description": "Server validates Origin by substring/suffix check (e.g. endswith \"example.com\") instead of exact domain match, so an attacker-registered domain like evilexample.com or example.com.attacker.com satisfies the check.",
+      "headers": {
+        "request": {
+          "^Origin$": ".+\\.attacker-controlled-suffix-test$|.+trusted-domain\\..+$"
+        },
+        "response": {
+          "^Access-Control-Allow-Origin$": ".+",
+          "^Access-Control-Allow-Credentials$": "true"
+        }
+      },
+      "notes": "Confirmed by observing ACAO reflect an origin that merely contains the trusted domain as a substring rather than matching it exactly.",
+      "references": [
+        "https://portswigger.net/web-security/cors#breaking-trusted-subdomains",
+        "https://cwe.mitre.org/data/definitions/942.html"
+      ]
+    },
+    {
+      "name": "Weak Origin Prefix Matching",
+      "category": "CORS Vulnerability",
+      "cwe": "CWE-942",
+      "severity": "High",
+      "description": "Server validates Origin by prefix check (e.g. startswith \"https://trusted.com\") without a following delimiter, so https://trusted.com.attacker.com or https://trusted.comattacker.com passes validation.",
+      "headers": {
+        "request": {
+          "^Origin$": "^https?://trusted[^/]*\\..+"
+        },
+        "response": {
+          "^Access-Control-Allow-Origin$": ".+",
+          "^Access-Control-Allow-Credentials$": "true"
+        }
+      },
+      "notes": "",
+      "references": [
+        "https://portswigger.net/web-security/cors#breaking-https",
+        "https://cwe.mitre.org/data/definitions/942.html"
+      ]
+    },
+    {
+      "name": "Insecure Regex-Based Origin Allow-List",
+      "category": "CORS Vulnerability",
+      "cwe": "CWE-942",
+      "severity": "Medium",
+      "description": "Server allow-lists origins via a regular expression with unescaped special characters (e.g. an unescaped dot matching any character), allowing lookalike domains to pass validation.",
+      "headers": {
+        "request": {
+          "^Origin$": ".+"
+        },
+        "response": {
+          "^Access-Control-Allow-Origin$": ".+",
+          "^Access-Control-Allow-Credentials$": "true"
+        }
+      },
+      "notes": "Differential testing: compare ACAO behavior for the real domain vs. a lookalike (one character substituted, or a dot replaced with another character) to detect loose regex matching.",
+      "references": [
+        "https://portswigger.net/web-security/cors#breaking-trusted-subdomains",
+        "https://cwe.mitre.org/data/definitions/942.html"
+      ]
+    },
+    {
+      "name": "Sensitive Endpoint Lacks Vary: Origin",
+      "category": "CORS Vulnerability",
+      "cwe": "CWE-525",
+      "severity": "Medium",
+      "description": "A dynamically-reflected ACAO response is cached by an intermediary without Vary: Origin, so a response generated for one origin can be served to a different, unintended origin from cache.",
+      "headers": {
+        "request": {
+          "^Origin$": ".+"
+        },
+        "response": {
+          "^Access-Control-Allow-Origin$": "^(?!\\*$).+",
+          "^Cache-Control$": "public|s-maxage|max-age",
+          "^Vary$": "^(?!.*Origin).*$"
+        }
+      },
+      "notes": "Combine with web_cache.json findings: if the endpoint is also behind a shared cache, this compounds into cross-user CORS response poisoning.",
+      "references": [
+        "https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Vary",
+        "https://cwe.mitre.org/data/definitions/525.html"
+      ]
+    },
+    {
+      "name": "Overly Permissive Access-Control-Allow-Headers / Methods",
+      "category": "CORS Vulnerability",
+      "cwe": "CWE-942",
+      "severity": "Low",
+      "description": "Preflight response allows a wildcard or an unnecessarily broad set of methods/headers (e.g. Authorization, X-Api-Key) for cross-origin requests, widening the attack surface for any origin that is otherwise allow-listed.",
+      "headers": {
+        "request": {
+          "^Access-Control-Request-Method$": "",
+          "^Access-Control-Request-Headers$": ""
+        },
+        "response": {
+          "^Access-Control-Allow-Methods$": "\\*|PUT|DELETE|PATCH",
+          "^Access-Control-Allow-Headers$": "\\*|Authorization"
+        }
+      },
+      "notes": "",
+      "references": [
+        "https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Headers",
+        "https://cwe.mitre.org/data/definitions/942.html"
+      ]
+    },
+    {
+      "name": "Trusted Internal/Staging Origin Exposed",
+      "category": "CORS Vulnerability",
+      "cwe": "CWE-942",
+      "severity": "Medium",
+      "description": "Allow-list includes internal, staging, or localhost origins (e.g. http://localhost, http://127.0.0.1, internal dev domains) that remain reachable from a public-facing production endpoint.",
+      "headers": {
+        "request": {
+          "^Origin$": "^https?://(localhost|127\\.0\\.0\\.1|.+\\.(dev|staging|internal))"
+        },
+        "response": {
+          "^Access-Control-Allow-Origin$": ".+",
+          "^Access-Control-Allow-Credentials$": "true"
+        }
+      },
+      "notes": "",
+      "references": [
+        "https://portswigger.net/web-security/cors",
+        "https://cwe.mitre.org/data/definitions/942.html"
+      ]
+    },
+    {
+      "name": "Missing Access-Control-Allow-Credentials Check on Sensitive Data Endpoint",
+      "category": "CORS Vulnerability",
+      "cwe": "CWE-942",
+      "severity": "High",
+      "description": "An endpoint returning session- or user-specific data sets a permissive ACAO without requiring Access-Control-Allow-Credentials, relying on client-side assumptions; some clients/libraries still forward cookies via fetch(..., {credentials: 'include'}) regardless, exposing data if ACAO is reflected.",
+      "headers": {
+        "request": {
+          "^Origin$": ".+",
+          "^Cookie$": "session|auth|token"
+        },
+        "response": {
+          "^Access-Control-Allow-Origin$": "^(?!\\*$).+",
+          "^Set-Cookie$": ""
+        }
+      },
+      "notes": "",
+      "references": [
+        "https://portswigger.net/web-security/cors",
+        "https://cwe.mitre.org/data/definitions/942.html"
+      ]
+    }
+  ]
+}
