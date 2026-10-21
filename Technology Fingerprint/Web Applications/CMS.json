@@ -1,0 +1,288 @@
+{
+  "technologies": [
+    {
+      "name": "WordPress",
+      "category": "CMS",
+      "cookies": {
+        "^wordpress_": "",
+        "^wp-settings-": "",
+        "^wordpress_logged_in_": "",
+        "^wordpress_sec_": "",
+        "^wordpress_test_cookie$": ""
+      },
+      "implies": [
+        "PHP"
+      ]
+    },
+    {
+      "name": "Drupal",
+      "category": "CMS",
+      "cookies": {
+        "^S?SESS[0-9a-f]{32}$": "",
+        "^Drupal\\.visitor\\.": ""
+      },
+      "implies": [
+        "PHP"
+      ]
+    },
+    {
+      "name": "Joomla",
+      "category": "CMS",
+      "cookies": {
+        "^joomla_user_state$": "",
+        "^joomla_remember_me__": ""
+      },
+      "implies": [
+        "PHP"
+      ]
+    },
+    {
+      "name": "Ghost",
+      "category": "CMS",
+      "cookies": {
+        "^ghost-admin-api-session$": "",
+        "^ghost-members-ssr$": ""
+      }
+    },
+    {
+      "name": "Craft CMS",
+      "category": "CMS",
+      "cookies": {
+        "^CraftSessionId$": "",
+        "^CRAFT_CSRF_TOKEN$": ""
+      },
+      "implies": [
+        "PHP"
+      ]
+    },
+    {
+      "name": "TYPO3",
+      "category": "CMS",
+      "cookies": {
+        "^fe_typo_user$": "",
+        "^be_typo_user$": ""
+      },
+      "implies": [
+        "PHP"
+      ]
+    },
+    {
+      "name": "Umbraco",
+      "category": "CMS",
+      "cookies": {
+        "^UMB_UCONTEXT$": "",
+        "^UMB-XSRF-TOKEN$": ""
+      },
+      "implies": [
+        "ASP.NET"
+      ]
+    },
+    {
+      "name": "Sitecore",
+      "category": "CMS",
+      "cookies": {
+        "^SC_ANALYTICS_GLOBAL_COOKIE$": ""
+      },
+      "implies": [
+        "ASP.NET"
+      ]
+    },
+    {
+      "name": "Concrete CMS",
+      "category": "CMS",
+      "cookies": {
+        "^CONCRETE5$": ""
+      },
+      "implies": [
+        "PHP"
+      ]
+    },
+    {
+      "name": "Contao",
+      "category": "CMS",
+      "cookies": {
+        "^contao_": ""
+      },
+      "implies": [
+        "PHP"
+      ]
+    },
+    {
+      "name": "Statamic",
+      "category": "CMS",
+      "cookies": {
+        "^statamic_session$": ""
+      },
+      "implies": [
+        "PHP"
+      ]
+    },
+    {
+      "name": "ExpressionEngine",
+      "category": "CMS",
+      "cookies": {
+        "^exp_": ""
+      },
+      "implies": [
+        "PHP"
+      ]
+    },
+    {
+      "name": "Keystone",
+      "category": "CMS",
+      "cookies": {
+        "^keystone\\.sid$": "",
+        "^keystonejs-session$": ""
+      },
+      "implies": [
+        "Node.js"
+      ]
+    },
+    {
+      "name": "Zope / Plone",
+      "category": "CMS",
+      "cookies": {
+        "^__ac$": "",
+        "^_ZopeId$": ""
+      },
+      "implies": [
+        "Python"
+      ]
+    },
+    {
+      "name": "Liferay",
+      "category": "CMS",
+      "cookies": {
+        "^LFR_SESSION_STATE_\\d+$": "",
+        "^GUEST_LANGUAGE_ID$": "",
+        "^COOKIE_SUPPORT$": ""
+      },
+      "implies": [
+        "Java"
+      ]
+    },
+    {
+      "name": "Adobe Experience Manager (AEM)",
+      "category": "CMS",
+      "cookies": {
+        "^login-token$": "",
+        "^cq-authoring-mode$": ""
+      },
+      "implies": [
+        "Java"
+      ]
+    },
+    {
+      "name": "Alfresco",
+      "category": "CMS",
+      "cookies": {
+        "^alfLogin$": "",
+        "^alfUsername3$": "",
+        "^ALF_": ""
+      },
+      "implies": [
+        "Java"
+      ]
+    },
+    {
+      "name": "DNN (DotNetNuke)",
+      "category": "CMS",
+      "cookies": {
+        "^dnn_IsMobile$": "",
+        "^DNNPersonalization": "",
+        "^\\.DOTNETNUKE$": ""
+      },
+      "implies": [
+        "ASP.NET"
+      ]
+    },
+    {
+      "name": "Kentico",
+      "category": "CMS",
+      "cookies": {
+        "^CMSPreferredCulture$": "",
+        "^CMSCsrfCookie$": "",
+        "^CMSCookieLevel$": "",
+        "^CMSCurrentTheme$": ""
+      },
+      "implies": [
+        "ASP.NET"
+      ]
+    },
+    {
+      "name": "Episerver / Optimizely CMS",
+      "category": "CMS",
+      "cookies": {
+        "^EPiServer": "",
+        "^\\.EPiForm_": ""
+      },
+      "implies": [
+        "ASP.NET"
+      ]
+    },
+    {
+      "name": "Orchard CMS",
+      "category": "CMS",
+      "cookies": {
+        "^\\.Orchard\\.": ""
+      },
+      "implies": [
+        "ASP.NET"
+      ]
+    },
+    {
+      "name": "Bitrix",
+      "category": "CMS",
+      "cookies": {
+        "^BITRIX_SM_": "",
+        "^BX_USER_ID$": "",
+        "^BITRIX_CONVERSION": ""
+      },
+      "implies": [
+        "PHP"
+      ]
+    },
+    {
+      "name": "MODX",
+      "category": "CMS",
+      "cookies": {
+        "^LOGINLICENSE$": "",
+        "^modx": ""
+      },
+      "implies": [
+        "PHP"
+      ]
+    },
+    {
+      "name": "SilverStripe",
+      "category": "CMS",
+      "cookies": {
+        "^SilverStripe": ""
+      },
+      "implies": [
+        "PHP"
+      ]
+    },
+    {
+      "name": "October CMS",
+      "category": "CMS",
+      "cookies": {
+        "^october_session$": "",
+        "^admin_auth$": ""
+      },
+      "implies": [
+        "Laravel"
+      ]
+    },
+    {
+      "name": "Strapi",
+      "category": "CMS",
+      "cookies": {
+        "^strapi_": ""
+      },
+      "implies": [
+        "Node.js"
+      ]
+    }
+  ]
+}
