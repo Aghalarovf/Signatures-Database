@@ -1,0 +1,133 @@
+{
+  "technologies": [
+    {
+      "name": "Auth0",
+      "category": "Identity Provider",
+      "cookies": {
+        "^auth0$": "",
+        "^a0:session$": ""
+      }
+    },
+    {
+      "name": "Keycloak",
+      "category": "Identity Provider",
+      "cookies": {
+        "^KEYCLOAK_SESSION": "",
+        "^KEYCLOAK_IDENTITY": "",
+        "^AUTH_SESSION_ID": ""
+      }
+    },
+    {
+      "name": "Okta",
+      "category": "Identity Provider",
+      "cookies": {
+        "^okta-oauth-": ""
+      }
+    },
+    {
+      "name": "Microsoft ADFS / SharePoint Claims Auth",
+      "category": "Identity Provider",
+      "cookies": {
+        "^FedAuth$": "",
+        "^rtFa$": ""
+      },
+      "implies": [
+        ".NET"
+      ]
+    },
+    {
+      "name": "Azure AD B2C",
+      "category": "Identity Provider",
+      "cookies": {
+        "^x-ms-cpim-": ""
+      }
+    },
+    {
+      "name": "Microsoft Entra ID / Azure AD",
+      "category": "Identity Provider",
+      "cookies": {
+        "^ESTSAUTH$": "",
+        "^ESTSAUTHPERSISTENT$": "",
+        "^ESTSAUTHLIGHT$": "",
+        "^esctx": "",
+        "^buid$": "",
+        "^stsservicecookie$": ""
+      }
+    },
+    {
+      "name": "ForgeRock AM / OpenAM",
+      "category": "Identity Provider",
+      "cookies": {
+        "^iPlanetDirectoryPro$": "",
+        "^amlbcookie$": ""
+      },
+      "implies": [
+        "Java"
+      ]
+    },
+    {
+      "name": "Shibboleth SP",
+      "category": "Identity Provider",
+      "cookies": {
+        "^_shibsession_": "",
+        "^_shibstate_": ""
+      }
+    },
+    {
+      "name": "Apereo CAS",
+      "category": "Identity Provider",
+      "cookies": {
+        "^CASTGC$": "",
+        "^CASPRIVACY$": ""
+      },
+      "implies": [
+        "Java"
+      ]
+    },
+    {
+      "name": "CA SiteMinder",
+      "category": "Identity Provider",
+      "cookies": {
+        "^SMSESSION$": "",
+        "^SMCHALLENGE$": "",
+        "^SMIDENTITY$": ""
+      }
+    },
+    {
+      "name": "Oracle Access Manager",
+      "category": "Identity Provider",
+      "cookies": {
+        "^ObSSOCookie$": "",
+        "^OAMAuthnCookie": "",
+        "^OAM_ID$": ""
+      },
+      "implies": [
+        "Java"
+      ]
+    },
+    {
+      "name": "OneLogin",
+      "category": "Identity Provider",
+      "cookies": {
+        "^sub_session_onelogin$": ""
+      }
+    },
+    {
+      "name": "Google Account",
+      "category": "Identity Provider",
+      "cookies": {
+        "^__Secure-1PSID$": "",
+        "^__Secure-3PSID$": "",
+        "^__Secure-1PAPISID$": "",
+        "^__Secure-3PAPISID$": "",
+        "^__Secure-1PSIDTS$": "",
+        "^__Secure-3PSIDTS$": "",
+        "^__Secure-1PSIDCC$": "",
+        "^__Secure-3PSIDCC$": "",
+        "^SAPISID$": "",
+        "^APISID$": "",
+        "^SIDCC$": ""
+      }
+    }
+  ]
+}
