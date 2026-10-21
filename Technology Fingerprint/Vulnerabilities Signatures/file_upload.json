@@ -1,0 +1,699 @@
+{
+  "vulnerabilities": [
+    {
+      "name": "Unrestricted File Upload in PHP (move_uploaded_file Without Validation)",
+      "category": "File Upload Vulnerability",
+      "upload_type": "Code-level",
+      "cwe": "CWE-434",
+      "severity": "Critical",
+      "description": "A PHP handler moves an uploaded file to a web-accessible directory using the client-supplied name, with no allow-list of extensions, no content verification, and no renaming. An attacker can upload a server-executable script and request it.",
+      "headers": {
+        "request": {
+          "^Content-Type$": "^multipart/form-data"
+        },
+        "response": {}
+      },
+      "html": {
+        "sinks": {
+          "move_uploaded_file\\s*\\(\\s*\\$_FILES\\s*\\[[^\\]]+\\]\\s*\\[\\s*[\"']tmp_name[\"']\\s*\\]\\s*,\\s*[^)]*\\$_FILES\\s*\\[[^\\]]+\\]\\s*\\[\\s*[\"']name[\"']\\s*\\]": "",
+          "move_uploaded_file\\s*\\(": "",
+          "copy\\s*\\(\\s*\\$_FILES\\s*\\[": "",
+          "file_put_contents\\s*\\([^)]*\\$_FILES\\s*\\[[^\\]]+\\]\\s*\\[\\s*[\"']name[\"']\\s*\\]": "",
+          "->move\\s*\\(\\s*[^,)]*,\\s*\\$\\w+->getClientOriginalName\\s*\\(\\s*\\)": "",
+          "->storeAs\\s*\\([^)]*getClientOriginalName\\s*\\(": "",
+          "\\$_FILES\\s*\\[[^\\]]+\\]\\s*\\[\\s*[\"']name[\"']\\s*\\]": ""
+        },
+        "sources": {
+          "\\$_FILES": "",
+          "\\$request->file\\s*\\(": "",
+          "\\$request->hasFile\\s*\\(": "",
+          "UploadedFile": ""
+        }
+      },
+      "notes": "Flag when the stored file name or extension comes from the client and no allow-list check, content inspection, or randomized renaming precedes the move. Safe pattern: generate a random name, force a server-chosen extension that matches verified content, and store outside the web root.",
+      "references": [
+        "https://portswigger.net/web-security/file-upload",
+        "https://cwe.mitre.org/data/definitions/434.html"
+      ]
+    },
+    {
+      "name": "Unrestricted File Upload in Node.js (multer, formidable, express-fileupload, busboy)",
+      "category": "File Upload Vulnerability",
+      "upload_type": "Code-level",
+      "cwe": "CWE-434",
+      "severity": "Critical",
+      "description": "A Node.js upload middleware is configured with no fileFilter, no size limits, or a storage engine that preserves the original file name and writes into a publicly served directory (for example Express static).",
+      "headers": {
+        "request": {
+          "^Content-Type$": "^multipart/form-data"
+        },
+        "response": {}
+      },
+      "html": {
+        "sinks": {
+          "multer\\s*\\(\\s*\\{\\s*dest\\s*:\\s*[\"'][^\"']*(public|static|www|uploads?)[^\"']*[\"']\\s*\\}\\s*\\)": "",
+          "multer\\s*\\(\\s*\\)": "",
+          "multer\\s*\\(\\s*\\{(?![^}]*fileFilter)[^}]*\\}\\s*\\)": "",
+          "filename\\s*:\\s*(function\\s*)?\\([^)]*\\)\\s*(=>)?\\s*\\{?[^}]*file\\.originalname": "",
+          "\\.mv\\s*\\(\\s*[^)]*(\\.name|originalname|originalFilename)": "",
+          "fileUpload\\s*\\(\\s*\\)": "",
+          "createWriteStream\\s*\\([^)]*(filename|originalname|info\\.filename)": "",
+          "formidable\\s*\\(\\s*\\{(?![^}]*(filter|allowEmptyFiles|maxFileSize))[^}]*\\}": "",
+          "app\\.use\\s*\\(\\s*express\\.static\\s*\\(\\s*[\"'][^\"']*(upload|files|media)": ""
+        },
+        "sources": {
+          "req\\.files?": "",
+          "req\\.file\\b": "",
+          "file\\.originalname": "",
+          "info\\.filename": "",
+          "req\\.pipe\\s*\\(\\s*busboy": ""
+        }
+      },
+      "notes": "Flag middleware without a fileFilter or allow-list, especially when the destination folder is also exposed through express.static. Node servers do not execute uploaded scripts by default, so severity rises when the file is served as HTML/SVG or when other components (reverse proxies, PHP, CGI) execute it.",
+      "references": [
+        "https://cheatsheetseries.owasp.org/cheatsheets/File_Upload_Cheat_Sheet.html",
+        "https://cwe.mitre.org/data/definitions/434.html"
+      ]
+    },
+    {
+      "name": "Unrestricted File Upload in Java, .NET, Python, and Ruby Handlers",
+      "category": "File Upload Vulnerability",
+      "upload_type": "Code-level",
+      "cwe": "CWE-434",
+      "severity": "Critical",
+      "description": "Server-side handlers in Spring, Servlet, ASP.NET, Django, Flask, and Rails save uploaded content under a client-controlled name or extension without an allow-list, content check, or secure storage location.",
+      "headers": {
+        "request": {
+          "^Content-Type$": "^multipart/form-data"
+        },
+        "response": {}
+      },
+      "html": {
+        "sinks": {
+          "\\.transferTo\\s*\\([^)]*getOriginalFilename\\s*\\(": "",
+          "Files\\.(copy|write)\\s*\\([^)]*(getOriginalFilename|getSubmittedFileName)\\s*\\(": "",
+          "part\\.write\\s*\\([^)]*getSubmittedFileName\\s*\\(": "",
+          "new\\s+File\\s*\\([^)]*(getOriginalFilename|getSubmittedFileName)\\s*\\(": "",
+          "\\.SaveAs\\s*\\([^)]*(\\.FileName|Path\\.Combine[^)]*FileName)": "",
+          "IFormFile[\\s\\S]{0,300}CopyTo(Async)?\\s*\\(": "",
+          "Path\\.Combine\\s*\\([^)]*\\.FileName\\s*\\)": "",
+          "\\.save\\s*\\(\\s*(os\\.path\\.join\\s*\\([^)]*)?(f|file|upload)\\.filename": "",
+          "open\\s*\\([^)]*\\.(name|filename)[^)]*,\\s*[\"']wb[\"']\\s*\\)": "",
+          "default_storage\\.save\\s*\\([^)]*\\.name": "",
+          "File\\.(open|binwrite|write)\\s*\\([^)]*original_filename": "",
+          "uploaded_io\\.original_filename": ""
+        },
+        "sources": {
+          "MultipartFile": "",
+          "request\\.getPart\\s*\\(": "",
+          "Request\\.Files": "",
+          "IFormFile": "",
+          "request\\.files": "",
+          "request\\.FILES": "",
+          "params\\s*\\[\\s*:?[\"']?(file|upload|attachment|image|avatar)": ""
+        }
+      },
+      "notes": "Flag when the saved path is built from the client-supplied file name or extension. Verify that the storage directory is outside the web root or on a non-executing origin. Django's FileField with validators and Rails Active Storage with content-type checks are safer defaults.",
+      "references": [
+        "https://cheatsheetseries.owasp.org/cheatsheets/File_Upload_Cheat_Sheet.html",
+        "https://cwe.mitre.org/data/definitions/434.html"
+      ]
+    },
+    {
+      "name": "Client-Side Only File Type Validation",
+      "category": "File Upload Vulnerability",
+      "upload_type": "Validation Weakness",
+      "cwe": "CWE-602",
+      "severity": "Medium",
+      "description": "File type or size restrictions are enforced only in the browser (the accept attribute, JavaScript extension checks, or front-end libraries). An attacker can bypass these by sending the request directly or by modifying it in a proxy.",
+      "headers": {
+        "request": {
+          "^Content-Type$": "^multipart/form-data"
+        },
+        "response": {}
+      },
+      "html": {
+        "sinks": {
+          "<input[^>]+type\\s*=\\s*[\"']file[\"'][^>]+accept\\s*=\\s*[\"'][^\"']+[\"']": "",
+          "\\.(files\\[0\\]|files\\.item\\(0\\))\\.(name|type)\\.(match|test|endsWith|indexOf|split)": "",
+          "(allowedExtensions|validExtensions|allowedTypes|validTypes|allowed_types|fileTypes)\\s*=\\s*\\[": "",
+          "acceptedFiles\\s*:\\s*[\"'][^\"']+[\"']": "",
+          "beforeUpload\\s*[:=]\\s*(\\(|function)": "",
+          "file\\.type\\s*(===?|!==?)\\s*[\"']image/": "",
+          "(maxSize|maxFileSize|maxFilesize)\\s*[:=]\\s*\\d+": ""
+        },
+        "sources": {
+          "<form[^>]+enctype\\s*=\\s*[\"']multipart/form-data[\"']": "",
+          "new\\s+FormData\\s*\\(": "",
+          "formData\\.append\\s*\\(\\s*[\"']\\w+[\"']\\s*,\\s*\\w*\\.?files?": ""
+        }
+      },
+      "notes": "Confirm by uploading a file whose extension and content type are disallowed by the front end, sent directly with a raw HTTP client. If the server accepts it, validation exists only on the client. Server-side validation is mandatory; client checks are only user-experience helpers.",
+      "references": [
+        "https://owasp.org/www-project-web-security-testing-guide/latest/4-Web_Application_Security_Testing/10-Business_Logic_Testing/09-Test_Upload_of_Malicious_Files",
+        "https://cwe.mitre.org/data/definitions/602.html"
+      ]
+    },
+    {
+      "name": "Weak Extension Validation (Blacklist, Substring Match, Case or Double-Extension Bypass)",
+      "category": "File Upload Vulnerability",
+      "upload_type": "Validation Weakness",
+      "cwe": "CWE-434",
+      "severity": "High",
+      "description": "The server rejects only a short blacklist of dangerous extensions, or uses substring, split, or case-sensitive checks. Alternative executable extensions (.phtml, .php5, .phar, .jspx, .asa, .cer), mixed case, double extensions, trailing dots or spaces, and null-byte tricks may slip through.",
+      "headers": {
+        "request": {
+          "^Content-Type$": "^multipart/form-data",
+          "^Content-Disposition$": "filename\\s*=\\s*\"[^\"]*\\.(php\\d?|phtml|phar|jsp|jspx|asp|aspx|cer|asa|cgi|pl|py|sh)(\\.[^\"]*)?\""
+        },
+        "response": {}
+      },
+      "html": {
+        "sinks": {
+          "(blacklist|blocklist|forbidden|disallowed|denied|banned|badExtensions|bad_extensions|blockedExt)\\w*\\s*[=:]\\s*(\\[|array\\s*\\(|\\{)": "",
+          "in_array\\s*\\(\\s*\\$\\w*(ext|extension)\\w*\\s*,\\s*\\$?\\w*(black|forbid|bad|disallow|block)": "",
+          "strpos\\s*\\(\\s*\\$\\w*(name|file)\\w*\\s*,\\s*[\"']\\.(php|jsp|asp)": "",
+          "(explode|split)\\s*\\(\\s*[\"']\\.[\"']\\s*,\\s*\\$?\\w*\\)\\s*\\[\\s*1\\s*\\]": "",
+          "\\.split\\s*\\(\\s*[\"']\\.[\"']\\s*\\)\\s*\\[\\s*1\\s*\\]": "",
+          "\\.indexOf\\s*\\(\\s*[\"']\\.(php|jsp|asp|exe|sh)[\"']": "",
+          "\\.(endsWith|EndsWith)\\s*\\(\\s*[\"']\\.(php|jsp|asp|aspx|exe|sh)[\"']": "",
+          "(pathinfo|os\\.path\\.splitext|Path\\.GetExtension)\\s*\\([^)]*\\)(?![\\s\\S]{0,150}(lower|tolower|casefold|strtolower))": "",
+          "preg_match\\s*\\(\\s*[\"']/\\\\\\.(php|jsp|asp)[^\"']*[\"'](?![^)]*\\$/)": ""
+        },
+        "sources": {
+          "\\$_FILES\\s*\\[[^\\]]+\\]\\s*\\[\\s*[\"']name[\"']\\s*\\]": "",
+          "getOriginalFilename\\s*\\(": "",
+          "\\.FileName\\b": "",
+          "file\\.originalname": "",
+          "(f|file)\\.filename": ""
+        }
+      },
+      "notes": "Test with alternative executable extensions, mixed case (.pHp), double extensions (shell.php.jpg and shell.jpg.php), trailing characters, and the case where the server executes files by Apache AddHandler patterns rather than the final extension. Replace blacklists with an allow-list of expected extensions compared after lower-casing and normalization.",
+      "references": [
+        "https://portswigger.net/web-security/file-upload",
+        "https://cwe.mitre.org/data/definitions/434.html"
+      ]
+    },
+    {
+      "name": "Trusting Client-Supplied Content-Type or MIME Header for Upload Validation",
+      "category": "File Upload Vulnerability",
+      "upload_type": "Validation Weakness",
+      "cwe": "CWE-345",
+      "severity": "High",
+      "description": "The server decides whether a file is safe using the Content-Type value sent with the multipart part (or the browser's file.type), which the attacker fully controls, instead of inspecting actual file content.",
+      "headers": {
+        "request": {
+          "^Content-Type$": "^multipart/form-data"
+        },
+        "response": {}
+      },
+      "html": {
+        "sinks": {
+          "\\$_FILES\\s*\\[[^\\]]+\\]\\s*\\[\\s*[\"']type[\"']\\s*\\]\\s*(==|===|!=|!==)": "",
+          "in_array\\s*\\(\\s*\\$_FILES\\s*\\[[^\\]]+\\]\\s*\\[\\s*[\"']type[\"']\\s*\\]": "",
+          "(file|f|req\\.file)\\.mimetype\\s*(===?|!==?|\\.match|\\.startsWith|\\.includes|\\.test)": "",
+          "allowedMimeTypes?\\s*\\.(includes|indexOf)\\s*\\(\\s*(file|f|req\\.file)\\.mimetype": "",
+          "(getContentType|getHeader\\s*\\(\\s*[\"']content-type[\"']\\s*\\))\\s*\\(?\\s*\\)?\\s*\\.(equals|startsWith|contains)": "",
+          "(file|f|upload)\\.content_type\\s*(==|in|\\.startswith)": "",
+          "\\.ContentType\\s*(==|\\.Equals|\\.StartsWith|\\.Contains)": "",
+          "content_type\\s*(==|in|\\.start_with\\?)": ""
+        },
+        "sources": {
+          "\\$_FILES": "",
+          "req\\.file(s)?": "",
+          "request\\.files": "",
+          "Request\\.Files": "",
+          "MultipartFile": ""
+        }
+      },
+      "notes": "Confirm by sending a non-image file with Content-Type: image/jpeg in the multipart part and checking if the server accepts it. Prefer server-side content detection (magic bytes via libmagic or finfo) combined with an extension allow-list and re-encoding of images.",
+      "references": [
+        "https://portswigger.net/web-security/file-upload",
+        "https://cwe.mitre.org/data/definitions/345.html"
+      ]
+    },
+    {
+      "name": "Magic-Byte or Image-Library-Only Validation (Polyglot File Bypass)",
+      "category": "File Upload Vulnerability",
+      "upload_type": "Validation Weakness",
+      "cwe": "CWE-434",
+      "severity": "High",
+      "description": "The server confirms a file is an image only by checking its header bytes, getimagesize(), imghdr, or the ability to open it, then stores it unchanged. Polyglot files that are both a valid image and contain script content (for example in a metadata comment) pass these checks and may execute if served or included.",
+      "headers": {
+        "request": {
+          "^Content-Type$": "^multipart/form-data"
+        },
+        "response": {}
+      },
+      "html": {
+        "sinks": {
+          "getimagesize\\s*\\(\\s*\\$_FILES": "",
+          "exif_imagetype\\s*\\(": "",
+          "imghdr\\.what\\s*\\(": "",
+          "Image\\.open\\s*\\([^)]*\\)\\s*\\.verify\\s*\\(": "",
+          "ImageIO\\.read\\s*\\([^)]*\\)\\s*(==|!=)\\s*null": "",
+          "image-size|sizeOf\\s*\\(\\s*(req\\.file|file)": "",
+          "file-type|fileTypeFromBuffer|fileType\\s*\\(": "",
+          "substr\\s*\\(\\s*\\$\\w+\\s*,\\s*0\\s*,\\s*[2-8]\\s*\\)\\s*(==|===)": "",
+          "(startswith|startsWith|StartsWith)\\s*\\(\\s*(b)?[\"']?(\\\\xff\\\\xd8|\\\\x89PNG|GIF8|%PDF)": "",
+          "mime_content_type\\s*\\(": ""
+        },
+        "sources": {
+          "\\$_FILES": "",
+          "req\\.file": "",
+          "request\\.files": "",
+          "MultipartFile": ""
+        }
+      },
+      "notes": "Header-only checks are necessary but insufficient. Remediate by re-encoding images through a library (which strips embedded payloads), storing files with server-chosen extensions, and serving them from a non-executing static origin with nosniff.",
+      "references": [
+        "https://cheatsheetseries.owasp.org/cheatsheets/File_Upload_Cheat_Sheet.html",
+        "https://cwe.mitre.org/data/definitions/434.html"
+      ]
+    },
+    {
+      "name": "Path Traversal Through Uploaded File Name",
+      "category": "File Upload Vulnerability",
+      "upload_type": "Path Handling",
+      "cwe": "CWE-22",
+      "severity": "High",
+      "description": "The upload handler uses the multipart filename directly in a filesystem path without stripping directory components. Sequences such as ../ or encoded variants in the filename can write files outside the intended upload directory and overwrite application files or place content in an executable location.",
+      "headers": {
+        "request": {
+          "^Content-Type$": "^multipart/form-data",
+          "^Content-Disposition$": "filename\\s*=\\s*\"[^\"]*(\\.\\./|\\.\\.\\\\|%2e%2e|%252e|\\.\\.%2f|\\.\\.%5c)[^\"]*\""
+        },
+        "response": {}
+      },
+      "html": {
+        "sinks": {
+          "(os\\.path\\.join|Path\\.Combine|path\\.join|Paths\\.get|new\\s+File|File\\.join)\\s*\\([^)]*(filename|originalname|FileName|getOriginalFilename|original_filename|getSubmittedFileName)": "",
+          "\\$\\w*(dir|path|target|dest)\\w*\\s*\\.\\s*\\$_FILES\\s*\\[[^\\]]+\\]\\s*\\[\\s*[\"']name[\"']\\s*\\]": "",
+          "(upload_?dir|target_?dir|dest_?dir|UPLOAD_FOLDER|uploadPath)[^;\\n]{0,60}\\+\\s*(file|f|part)?\\.?(filename|name|originalname|getOriginalFilename)": "",
+          "f?[\"'][^\"']*\\{(file|f|upload)\\.(filename|name)\\}[^\"']*[\"']": "",
+          "secure_filename|basename\\s*\\(|Path\\.GetFileName\\s*\\(|path\\.basename\\s*\\(|FilenameUtils\\.getName\\s*\\(": ""
+        },
+        "sources": {
+          "\\$_FILES": "",
+          "request\\.files": "",
+          "req\\.files?": "",
+          "MultipartFile": "",
+          "Request\\.Files": ""
+        }
+      },
+      "notes": "Flag when a client-supplied name is joined to a directory without passing through basename/secure_filename/GetFileName or being replaced by a generated name. The final list item in sinks is a mitigation marker: its presence near the join lowers risk, so treat the rule as a flag only when it is absent.",
+      "references": [
+        "https://portswigger.net/web-security/file-upload",
+        "https://cwe.mitre.org/data/definitions/22.html"
+      ]
+    },
+    {
+      "name": "Uploaded Files Stored Inside Web Root or Executable Directory",
+      "category": "File Upload Vulnerability",
+      "upload_type": "Storage Location",
+      "cwe": "CWE-552",
+      "severity": "High",
+      "description": "Uploaded files are written to a directory that the web server maps directly to URLs, and the server is configured to execute or render scripts there. Combined with weak validation, this allows direct execution of uploaded content.",
+      "headers": {
+        "request": {},
+        "response": {
+          "^Content-Type$": "text/html|application/(x-httpd-php|x-php|x-jsp)|image/svg\\+xml",
+          "^X-Content-Type-Options$": "^$",
+          "^Content-Disposition$": "^$"
+        }
+      },
+      "html": {
+        "sinks": {
+          "(upload_?dir|upload_?path|UPLOAD_FOLDER|uploadDir|target_?dir|dest_?dir)\\s*[=:]\\s*[\"'`]?[^\"'`;\\n]*(public_html|htdocs|www|wwwroot|webroot|public|static|\\$_SERVER\\s*\\[\\s*[\"']DOCUMENT_ROOT)": "",
+          "\\$_SERVER\\s*\\[\\s*[\"']DOCUMENT_ROOT[\"']\\s*\\]\\s*\\.\\s*[\"']/?(uploads?|files|images|media|attachments|userfiles)": "",
+          "(MEDIA_ROOT|STATIC_ROOT)\\s*=\\s*os\\.path\\.join\\s*\\([^)]*(static|public|www)": "",
+          "Server\\.MapPath\\s*\\(\\s*[\"']~/(uploads?|files|images|media)": "",
+          "getServletContext\\(\\)\\.getRealPath\\s*\\(\\s*[\"']/?(uploads?|files|images|media)": "",
+          "AddHandler\\s+(application/x-httpd-php|php[0-9-]*-script)\\s+[^\\n]*\\.(php|phtml|php5)": "",
+          "<FilesMatch[^>]*php": "",
+          "php_admin_flag\\s+engine\\s+off": ""
+        },
+        "sources": {},
+        "reflection_indicators": {
+          "(?i)(https?:)?//[^\\s\"'<>]+/(uploads?|files|userfiles|attachments|media|images)/[^\\s\"'<>]+\\.(php\\d?|phtml|phar|jsp|jspx|asp|aspx|cgi)\\b": "response reveals a public URL to an uploaded file with a server-executable extension",
+          "(?i)(file|image|document) (has been )?uploaded (successfully|to)[^<]{0,150}(/var/www|/home/|C:\\\\|inetpub|htdocs)": "upload success message disclosing the absolute storage path"
+        }
+      },
+      "notes": "Uploads should live outside the document root or on a separate static origin/bucket with script execution disabled (php_admin_flag engine off, no handlers mapped). Confirm by checking whether a harmless uploaded text file with an executable-looking extension is rendered or executed rather than downloaded.",
+      "references": [
+        "https://cheatsheetseries.owasp.org/cheatsheets/File_Upload_Cheat_Sheet.html",
+        "https://cwe.mitre.org/data/definitions/552.html"
+      ]
+    },
+    {
+      "name": "Upload of Server Configuration Files (.htaccess, web.config, .user.ini)",
+      "category": "File Upload Vulnerability",
+      "upload_type": "Validation Weakness",
+      "cwe": "CWE-434",
+      "severity": "High",
+      "description": "The upload feature accepts configuration files that a web server or runtime reads per directory. An attacker can redefine how files in the upload folder are handled, for instance by mapping a harmless extension to an executable handler.",
+      "headers": {
+        "request": {
+          "^Content-Type$": "^multipart/form-data",
+          "^Content-Disposition$": "filename\\s*=\\s*\"(\\.htaccess|\\.htpasswd|web\\.config|\\.user\\.ini|php\\.ini|\\.env|\\.config)\""
+        },
+        "response": {}
+      },
+      "html": {
+        "sinks": {
+          "AllowOverride\\s+(All|FileInfo)": "",
+          "AllowOverride\\s+All[\\s\\S]{0,200}(upload|files|media)": "",
+          "<Directory[^>]*(upload|files|media)[^>]*>[\\s\\S]{0,300}AllowOverride\\s+(All|FileInfo)": "",
+          "user_ini\\.filename\\s*=\\s*[\"']?\\.user\\.ini": "",
+          "allowOverride|enableOverride": ""
+        },
+        "sources": {
+          "\\$_FILES": "",
+          "request\\.files": "",
+          "req\\.files?": ""
+        }
+      },
+      "notes": "Check that the extension allow-list excludes dotfiles and config names, and that upload directories are served with AllowOverride None (Apache) or without per-directory config processing. This rule flags the permissive server configuration and the upload attempt, so confirm exploitability separately.",
+      "references": [
+        "https://portswigger.net/web-security/file-upload",
+        "https://cwe.mitre.org/data/definitions/434.html"
+      ]
+    },
+    {
+      "name": "Stored XSS via Uploaded SVG or HTML File Served Inline",
+      "category": "File Upload Vulnerability",
+      "upload_type": "Active Content",
+      "cwe": "CWE-79",
+      "severity": "High",
+      "description": "SVG, HTML, XML, or similar active-content files uploaded by a user are served from the application origin with a renderable Content-Type and without Content-Disposition: attachment or a restrictive CSP. Script inside the file executes in the application's origin when a victim opens the URL.",
+      "headers": {
+        "request": {},
+        "response": {
+          "^Content-Type$": "image/svg\\+xml|text/html|application/xhtml\\+xml|text/xml|application/xml",
+          "^Content-Disposition$": "^$|^inline",
+          "^X-Content-Type-Options$": "^$",
+          "^Content-Security-Policy$": "^$|^(?!.*(sandbox|script-src)).*$"
+        }
+      },
+      "html": {
+        "sinks": {
+          "accept\\s*=\\s*[\"'][^\"']*(image/svg\\+xml|\\.svg|text/html|\\.html?)[^\"']*[\"']": "",
+          "(allowed|valid|accepted)\\w*\\s*[=:]\\s*[\\[(][^\\])]*[\"'](svg|html?|xml|xhtml)[\"']": "",
+          "(mimetype|content_type|contentType|ContentType)\\s*[=:]\\s*[\"']image/svg\\+xml[\"']": "",
+          "<(img|object|embed|iframe)[^>]+(src|data)\\s*=\\s*[\"'][^\"']*/(uploads?|files|media|attachments|userfiles)/[^\"']*\\.(svg|html?)": "",
+          "(send_file|send_from_directory|FileResponse|sendFile|File\\()\\s*\\([^)]*(upload|media)": "",
+          "res\\.sendFile\\s*\\([^)]*(upload|file|media)": ""
+        },
+        "sources": {
+          "\\$_FILES": "",
+          "request\\.files": "",
+          "req\\.files?": ""
+        },
+        "reflection_indicators": {
+          "<svg[^>]*>[\\s\\S]{0,2000}<script": "SVG document containing an embedded script element served to the browser",
+          "<svg[^>]+on(load|error|click|mouseover)\\s*=": "SVG root or child element with an inline event handler attribute",
+          "<(foreignObject|iframe|object|embed)[^>]*>": "active or foreign-content elements inside an uploaded document"
+        }
+      },
+      "notes": "SVG referenced through <img> does not run scripts, but opening the SVG URL directly does. Mitigations: sanitize SVG (strip script, event handlers, foreignObject), serve user content from a separate sandbox domain, and add Content-Disposition: attachment plus a CSP with sandbox.",
+      "references": [
+        "https://cheatsheetseries.owasp.org/cheatsheets/File_Upload_Cheat_Sheet.html",
+        "https://cwe.mitre.org/data/definitions/79.html"
+      ]
+    },
+    {
+      "name": "XXE and Document Parsing Risks in Uploaded Office, SVG, and XML Files",
+      "category": "File Upload Vulnerability",
+      "upload_type": "Content Processing",
+      "cwe": "CWE-611",
+      "severity": "High",
+      "description": "The application parses uploaded DOCX, XLSX, PPTX, SVG, GPX, or XML files (preview, import, metadata extraction, conversion), and the underlying XML parser may resolve external entities, load DTDs, or expand entities, exposing local files or enabling SSRF and denial of service.",
+      "headers": {
+        "request": {
+          "^Content-Type$": "^multipart/form-data|application/vnd\\.openxmlformats|image/svg\\+xml|application/xml"
+        },
+        "response": {}
+      },
+      "html": {
+        "sinks": {
+          "openpyxl\\.load_workbook\\s*\\(": "",
+          "docx\\.Document\\s*\\(": "",
+          "XSSFWorkbook\\s*\\(|XWPFDocument\\s*\\(|WorkbookFactory\\.create\\s*\\(": "",
+          "PhpSpreadsheet\\\\IOFactory::load\\s*\\(": "",
+          "new\\s+ZipArchive\\s*\\(\\s*\\)[\\s\\S]{0,200}->open\\s*\\(": "",
+          "simplexml_load_(string|file)\\s*\\(|->loadXML\\s*\\(": "",
+          "(librsvg|rsvg-convert|cairosvg|svglib|Inkscape|inkscape)": "",
+          "lxml\\.etree\\.(parse|fromstring)\\s*\\(": "",
+          "DocumentBuilderFactory\\.newInstance\\s*\\(": "",
+          "XmlDocument\\s*\\(\\s*\\)\\.Load(Xml)?\\s*\\(": ""
+        },
+        "sources": {
+          "\\$_FILES": "",
+          "request\\.files": "",
+          "req\\.files?": "",
+          "MultipartFile": "",
+          "Request\\.Files": ""
+        }
+      },
+      "notes": "See the XML rules file for detailed XXE sink patterns. For uploads, check that the parser disables DTDs and external entities and that document libraries are current. Use the out-of-band callback method for blind testing.",
+      "references": [
+        "https://portswigger.net/web-security/xxe",
+        "https://cwe.mitre.org/data/definitions/611.html"
+      ]
+    },
+    {
+      "name": "Archive Extraction Without Path Validation (Zip Slip) and Decompression Bombs",
+      "category": "File Upload Vulnerability",
+      "upload_type": "Content Processing",
+      "cwe": "CWE-22",
+      "severity": "High",
+      "description": "The application extracts uploaded ZIP, TAR, or similar archives without verifying that every entry's resolved path stays inside the destination directory, allowing files to be written outside it (Zip Slip). Missing limits on total size, file count, and compression ratio also expose the service to decompression bombs.",
+      "headers": {
+        "request": {
+          "^Content-Type$": "^multipart/form-data|application/(zip|x-zip-compressed|x-tar|gzip|x-gzip|x-7z-compressed)"
+        },
+        "response": {}
+      },
+      "html": {
+        "sinks": {
+          "\\.extractall\\s*\\(": "",
+          "tarfile\\.open\\s*\\([^)]*\\)[\\s\\S]{0,200}\\.extract(all)?\\s*\\(": "",
+          "zipfile\\.ZipFile\\s*\\([^)]*\\)[\\s\\S]{0,200}\\.extract(all)?\\s*\\(": "",
+          "shutil\\.unpack_archive\\s*\\(": "",
+          "getNextEntry\\s*\\(\\s*\\)[\\s\\S]{0,300}new\\s+File\\s*\\([^)]*getName\\s*\\(": "",
+          "ZipEntry[\\s\\S]{0,200}new\\s+File\\s*\\([^)]*\\.getName\\s*\\(\\s*\\)": "",
+          "ZipFile\\.ExtractToDirectory\\s*\\(": "",
+          "entry\\.(FullName|Name)[\\s\\S]{0,150}Path\\.Combine\\s*\\(": "",
+          "ZipArchive\\s*\\(\\s*\\)[\\s\\S]{0,150}->extractTo\\s*\\(": "",
+          "(unzipper|adm-zip|extract-zip|decompress|tar)\\.(Extract|extractAllTo|extract)\\s*\\(": "",
+          "require\\s*\\(\\s*[\"'](unzipper|adm-zip|extract-zip|decompress|tar)[\"']\\s*\\)": "",
+          "(unzip|tar\\s+-?x|7z\\s+x|gunzip)\\s+[^\\n]*\\$": ""
+        },
+        "sources": {
+          "\\$_FILES": "",
+          "request\\.files": "",
+          "req\\.files?": "",
+          "MultipartFile": "",
+          "Request\\.Files": ""
+        }
+      },
+      "notes": "Safe extraction normalizes each entry path, rejects absolute paths and parent-directory components, rejects symlinks, and enforces limits on total uncompressed size, entry count, and nesting depth. Recent Python (3.12+) tarfile filters provide safer defaults when explicitly selected.",
+      "references": [
+        "https://security.snyk.io/research/zip-slip-vulnerability",
+        "https://cwe.mitre.org/data/definitions/22.html"
+      ]
+    },
+    {
+      "name": "Unsafe Server-Side Processing of Uploaded Images and Media (ImageMagick, Ghostscript, FFmpeg, ExifTool)",
+      "category": "File Upload Vulnerability",
+      "upload_type": "Content Processing",
+      "cwe": "CWE-78",
+      "severity": "High",
+      "description": "Uploaded images, PDFs, or videos are passed to native conversion tools via shell commands or bindings without restricting accepted formats or policies. Format delegates and parser bugs in these tools have repeatedly led to command execution, file disclosure, and SSRF.",
+      "headers": {
+        "request": {
+          "^Content-Type$": "^multipart/form-data"
+        },
+        "response": {}
+      },
+      "html": {
+        "sinks": {
+          "(exec|shell_exec|system|passthru|popen|proc_open)\\s*\\(\\s*[\"'][^\"']*\\b(convert|magick|identify|mogrify|gs|ghostscript|ffmpeg|ffprobe|exiftool|pdftoppm|libreoffice|soffice|unoconv)\\b[^\"']*[\"']\\s*\\.\\s*\\$": "",
+          "(subprocess\\.(run|call|Popen|check_output)|os\\.(system|popen))\\s*\\([^)]*\\b(convert|magick|identify|gs|ffmpeg|exiftool|libreoffice|soffice)\\b": "",
+          "child_process\\.(exec|execSync|spawn)\\s*\\(\\s*[`\"'][^`\"']*\\b(convert|magick|gs|ffmpeg|exiftool|libreoffice)\\b[^`\"']*\\$\\{": "",
+          "Runtime\\.getRuntime\\(\\)\\.exec\\s*\\([^)]*\\b(convert|magick|gs|ffmpeg|exiftool)\\b": "",
+          "new\\s+(Imagick|Gmagick)\\s*\\(": "",
+          "gm\\s*\\(\\s*(req\\.file|file|path)": "",
+          "imagemagick\\.(convert|resize|identify)\\s*\\(": "",
+          "Wand\\.image|wand\\.image\\.Image\\s*\\(": "",
+          "MagickImage\\s*\\(": "",
+          "policy\\.xml": ""
+        },
+        "sources": {
+          "\\$_FILES": "",
+          "request\\.files": "",
+          "req\\.files?": "",
+          "MultipartFile": "",
+          "Request\\.Files": ""
+        }
+      },
+      "notes": "Mitigations: restrict accepted formats with an allow-list, set ImageMagick policy.xml to disable risky coders (MVG, MSL, URL, HTTP, EPS, PS, PDF, XPS, TEXT), prefix format specifiers explicitly (for example png:input), process in a sandbox without network access, and keep tools patched. Never pass the client-supplied file name to a shell.",
+      "references": [
+        "https://cheatsheetseries.owasp.org/cheatsheets/File_Upload_Cheat_Sheet.html",
+        "https://cwe.mitre.org/data/definitions/78.html"
+      ]
+    },
+    {
+      "name": "Missing File Size, Count, and Rate Limits on Uploads (Resource Exhaustion)",
+      "category": "File Upload Vulnerability",
+      "upload_type": "Denial of Service",
+      "cwe": "CWE-770",
+      "severity": "Medium",
+      "description": "The upload endpoint or server configuration has no effective cap on file size, number of files, request body size, or upload rate, so an attacker can exhaust disk space, memory, bandwidth, or worker capacity.",
+      "headers": {
+        "request": {
+          "^Content-Type$": "^multipart/form-data"
+        },
+        "response": {
+          "^Content-Length$": ".+"
+        }
+      },
+      "html": {
+        "sinks": {
+          "upload_max_filesize\\s*=\\s*(0|[0-9]{3,}[MG])": "",
+          "post_max_size\\s*=\\s*(0|[0-9]{3,}[MG])": "",
+          "max_file_uploads\\s*=\\s*([0-9]{3,}|0)": "",
+          "client_max_body_size\\s+(0|[0-9]{3,}[mMgG])\\s*;": "",
+          "LimitRequestBody\\s+0\\b": "",
+          "maxRequestLength\\s*=\\s*[\"']?[0-9]{7,}": "",
+          "maxAllowedContentLength\\s*=\\s*[\"']?[0-9]{9,}": "",
+          "MAX_UPLOAD_SIZE\\s*=\\s*(None|0|[0-9]{10,})": "",
+          "DATA_UPLOAD_MAX_MEMORY_SIZE\\s*=\\s*None": "",
+          "MAX_CONTENT_LENGTH\\s*=\\s*(None|0)": "",
+          "limits\\s*:\\s*\\{\\s*(fileSize|files)\\s*:\\s*(Infinity|0)\\b": "",
+          "multer\\s*\\(\\s*\\{(?![^}]*limits)[^}]*\\}\\s*\\)": "",
+          "spring\\.servlet\\.multipart\\.max-(file|request)-size\\s*=\\s*-1": "",
+          "maxFileSize\\s*[=:]\\s*(-1|0|Infinity)": ""
+        },
+        "sources": {}
+      },
+      "notes": "Test carefully with bounded sizes on non-production targets. Combine with limits at the reverse proxy and CDN, per-user quotas, and cleanup of orphaned temporary files. Also check whether the limit is enforced before the body is fully buffered.",
+      "references": [
+        "https://cheatsheetseries.owasp.org/cheatsheets/File_Upload_Cheat_Sheet.html",
+        "https://cwe.mitre.org/data/definitions/770.html"
+      ]
+    },
+    {
+      "name": "Predictable File Names, Overwrite, and Validate-After-Store Race Condition",
+      "category": "File Upload Vulnerability",
+      "upload_type": "Storage Location",
+      "cwe": "CWE-367",
+      "severity": "Medium",
+      "description": "Files are stored under predictable names (original name, timestamp, sequence), can overwrite existing files, or are written to a public location before validation or malware scanning finishes and deleted afterwards. During that window an attacker can request or execute the file, or guess and overwrite another user's file.",
+      "headers": {
+        "request": {},
+        "response": {}
+      },
+      "html": {
+        "sinks": {
+          "(basename|filename|file_?name|saveName|newName)\\s*=\\s*(time|date|microtime|uniqid|Date\\.now|System\\.currentTimeMillis|DateTime\\.Now)[^;\\n]*(?!random|uuid|rand|guid)": "",
+          "(basename|filename|file_?name|saveName|newName)\\s*=\\s*(md5|sha1|crc32|hashlib\\.md5|hashlib\\.sha1)\\s*\\(\\s*(\\$?_?FILES|file\\.name|originalname|filename)": "",
+          "(unlink|os\\.remove|fs\\.unlink(Sync)?|File\\.Delete|Files\\.delete)\\s*\\([^)]*\\)[\\s\\S]{0,120}(invalid|not allowed|rejected|virus|infected|malware)": "",
+          "(move_uploaded_file|\\.save\\s*\\(|\\.mv\\s*\\(|transferTo)[\\s\\S]{0,250}(validate|scan|check|clamav|clamscan|isValid|verify)": "",
+          "(file_exists|os\\.path\\.exists|fs\\.existsSync|File\\.Exists)\\s*\\([^)]*\\)[\\s\\S]{0,100}(upload|move|save|write)": "",
+          "(fopen|open)\\s*\\([^)]*[\"'](w|wb|w\\+)[\"']\\s*\\)(?![\\s\\S]{0,60}(x|wx|exclusive))": ""
+        },
+        "sources": {
+          "\\$_FILES": "",
+          "request\\.files": "",
+          "req\\.files?": "",
+          "MultipartFile": ""
+        }
+      },
+      "notes": "Preferred design: stream to a private quarantine location with a random identifier (UUID), validate and scan there, then move to the final private or static-origin location. Use exclusive-create flags to prevent overwrites, and never expose the file until all checks pass.",
+      "references": [
+        "https://portswigger.net/web-security/file-upload/race-conditions",
+        "https://cwe.mitre.org/data/definitions/367.html"
+      ]
+    },
+    {
+      "name": "Insecure Direct-to-Cloud Upload Configuration (Presigned URLs, Public Buckets, Missing Conditions)",
+      "category": "File Upload Vulnerability",
+      "upload_type": "Cloud Storage",
+      "cwe": "CWE-732",
+      "severity": "High",
+      "description": "Presigned upload URLs or POST policies are issued without constraints on key prefix, content type, and size, or uploaded objects are written with public ACLs or into a bucket that also serves site content. Attackers can upload arbitrary content, overwrite other users' objects, or host malicious files on the application's domain.",
+      "headers": {
+        "request": {
+          "^Content-Type$": "^multipart/form-data|application/octet-stream",
+          "^x-amz-acl$": "public-read(-write)?",
+          "^x-goog-acl$": "public-read"
+        },
+        "response": {
+          "^Access-Control-Allow-Origin$": "^\\*$",
+          "^Access-Control-Allow-Methods$": "(?i).*(PUT|POST).*"
+        }
+      },
+      "html": {
+        "sinks": {
+          "getSignedUrl(Promise)?\\s*\\(\\s*[\"']putObject[\"']": "",
+          "generate_presigned_(url|post)\\s*\\(": "",
+          "createPresignedPost\\s*\\(": "",
+          "PutObjectCommand[\\s\\S]{0,200}getSignedUrl": "",
+          "ACL\\s*[:=]\\s*[\"']public-read(-write)?[\"']": "",
+          "x-amz-acl[\"']?\\s*[:=]\\s*[\"']public-read": "",
+          "\\.generate_signed_url\\s*\\([^)]*method\\s*=\\s*[\"']PUT[\"']": "",
+          "\\bConditions\\s*[:=]\\s*\\[\\s*\\]": "",
+          "[\"']Key[\"']\\s*:\\s*(req\\.|request\\.|f[\"']|`)": "",
+          "\"Principal\"\\s*:\\s*\"\\*\"[\\s\\S]{0,150}s3:(PutObject|\\*)": "",
+          "allUsers|allAuthenticatedUsers": "",
+          "AllowedOrigins[\"']?\\s*[:=]\\s*\\[\\s*[\"']\\*[\"']\\s*\\][\\s\\S]{0,150}(PUT|POST)": ""
+        },
+        "sources": {
+          "req\\.(body|query|params)\\.(key|filename|contentType|fileName|fileType)": "",
+          "request\\.(json|args|form)\\.get\\s*\\(\\s*[\"'](key|filename|content_type)[\"']": "",
+          "\\$_(GET|POST)\\s*\\[\\s*[\"'](key|filename|content_?type)[\"']": ""
+        }
+      },
+      "notes": "Safe pattern: server-generated object keys under a per-user prefix, signed content-length-range and content-type conditions, short expiry, private ACLs, a separate bucket or domain for user content, and validation or scanning after upload before the object is made available.",
+      "references": [
+        "https://docs.aws.amazon.com/AmazonS3/latest/userguide/PresignedUrlUploadObject.html",
+        "https://cwe.mitre.org/data/definitions/732.html"
+      ]
+    },
+    {
+      "name": "Upload Endpoint Behavioral Indicators: Success Responses Revealing Paths or Executable Handling",
+      "category": "File Upload Vulnerability",
+      "upload_type": "Attack Surface",
+      "cwe": "CWE-200",
+      "severity": "Info",
+      "description": "A multipart upload form or endpoint returns responses that reveal where files are stored, whether a file was accepted despite its type, or which validation rule rejected it. These details help assess how validation and storage work and guide further safe testing.",
+      "headers": {
+        "request": {
+          "^Content-Type$": "^multipart/form-data"
+        },
+        "response": {
+          "^Content-Type$": "text/html|application/json|text/plain",
+          "^Location$": "(?i)/(uploads?|files|media|attachments|userfiles|assets)/"
+        }
+      },
+      "html": {
+        "reflection_indicators": {
+          "(?i)(file|image|photo|document|avatar|attachment)\\s+(has been\\s+)?(was\\s+)?uploaded\\s+successfully": "upload success message",
+          "(?i)\"(url|path|location|filepath|file_path|filename|file_name|fileUrl|file_url|href|link|src)\"\\s*:\\s*\"[^\"]*(/uploads?/|/files/|/media/|/attachments/|/userfiles/)[^\"]*\"": "JSON response returning the stored file URL or path",
+          "(?i)(invalid|unsupported|not allowed|forbidden|disallowed)\\s+(file\\s+)?(type|extension|format|mime)": "validation error revealing the rule that rejected the file",
+          "(?i)only\\s+(\\.?[a-z]{2,5}[,\\s/]+(or\\s+)?){2,}[^<]{0,60}(files\\s+)?(are\\s+)?allowed": "validation message disclosing the extension allow-list",
+          "(?i)(maximum|max(imum)?|exceed(s|ed)?)\\s+(file\\s+)?size[^<]{0,80}\\d+\\s*(kb|mb|gb|bytes)": "size limit message disclosing the configured cap",
+          "(?i)(move_uploaded_file|failed to open stream|Permission denied|No such file or directory|ENOENT|EACCES)[^<]{0,200}(/[\\w.-]+){2,}": "error message leaking a server path during upload",
+          "(?i)(getimagesize|exif_imagetype|finfo_file|imagecreatefrom\\w+|libmagic|Pillow|PIL\\.UnidentifiedImageError)[^<]{0,150}": "error revealing the image or content validation library in use",
+          "<input[^>]+type\\s*=\\s*[\"']file[\"']": "file input present in the page (upload surface)"
+        }
+      },
+      "notes": "Informational. Catalog every upload endpoint, the accepted types, the storage URL pattern, and the validation messages, then apply the code-level, validation, storage, and content-processing rules above. Use only harmless test files, such as a text file with a new extension and a unique marker, when probing.",
+      "references": [
+        "https://owasp.org/www-project-web-security-testing-guide/latest/4-Web_Application_Security_Testing/10-Business_Logic_Testing/09-Test_Upload_of_Malicious_Files",
+        "https://cwe.mitre.org/data/definitions/200.html"
+      ]
+    }
+  ]
+}
