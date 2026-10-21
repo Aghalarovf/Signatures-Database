@@ -1,0 +1,286 @@
+{
+  "vulnerabilities": [
+    {
+      "name": "Unvalidated URL-Fetching Parameter",
+      "category": "SSRF Vulnerability",
+      "cwe": "CWE-918",
+      "severity": "High",
+      "description": "A request parameter that causes the server to fetch a remote resource (url, uri, path, src, feed, avatar, image, webhook, callback, target, endpoint, proxy) accepts an arbitrary attacker-supplied host without validation against an allow-list of permitted destinations.",
+      "url": [
+        "?url=",
+        "?uri=",
+        "?path=",
+        "?src=",
+        "?feed=",
+        "?avatar=",
+        "?image=",
+        "?webhook=",
+        "?callback=",
+        "?target=",
+        "?endpoint=",
+        "?proxy=",
+        "?fetch=",
+        "?load="
+      ],
+      "headers": {
+        "request": {
+          "^Content-Type$": "application/json|application/x-www-form-urlencoded"
+        },
+        "response": {
+          "^Server-Timing$": "",
+          "^X-Fetched-From$": ""
+        },
+        "indicators": {
+          "^X-Powered-By$": "",
+          "^Via$": ""
+        }
+      },
+      "html": {},
+      "notes": "Confirmed by supplying a URL pointing to a server-controlled listener and observing an inbound request (full SSRF), or by observing response-time/error differences between reachable and unreachable internal hosts (blind SSRF).",
+      "references": [
+        "https://portswigger.net/web-security/ssrf",
+        "https://cwe.mitre.org/data/definitions/918.html"
+      ]
+    },
+    {
+      "name": "SSRF to Cloud Instance Metadata Endpoint",
+      "category": "SSRF Vulnerability",
+      "cwe": "CWE-918",
+      "severity": "Critical",
+      "description": "A server-side URL fetch is not restricted from reaching the cloud provider's link-local instance-metadata service, which on most clouds returns temporary IAM/service-account credentials and instance configuration without authentication.",
+      "url": [
+        "?url=http://169.254.169.254/",
+        "?url=http://metadata.google.internal/",
+        "?url=http://100.100.100.200/"
+      ],
+      "headers": {
+        "request": {},
+        "response": {
+          "^Content-Type$": "application/json|text/plain"
+        },
+        "indicators": {
+          "metadata_hosts": [
+            "169.254.169.254",
+            "metadata.google.internal",
+            "100.100.100.200",
+            "fd00:ec2::254"
+          ]
+        }
+      },
+      "html": {},
+      "notes": "Severity depends on whether the metadata service requires a hop-limiting header (e.g. IMDSv2 token) that the vulnerable fetch would also need to forge; flag as Critical only after confirming an actual metadata response body, not just reachability.",
+      "references": [
+        "https://owasp.org/www-community/attacks/Server_Side_Request_Forgery",
+        "https://cwe.mitre.org/data/definitions/918.html"
+      ]
+    },
+    {
+      "name": "Allow-List Bypass via Alternate IP Encoding",
+      "category": "SSRF Vulnerability",
+      "cwe": "CWE-918",
+      "severity": "High",
+      "description": "The destination-host validator compares the input against a denylist of textual forms (e.g. '127.0.0.1', 'localhost') but does not normalize alternate representations of the same address before comparing, such as decimal (2130706433), octal (0177.0.0.1), hexadecimal (0x7f000001), or IPv4-mapped IPv6 (::ffff:127.0.0.1).",
+      "url": [
+        "?url=http://2130706433/",
+        "?url=http://0177.0.0.1/",
+        "?url=http://0x7f000001/",
+        "?url=http://[::ffff:127.0.0.1]/"
+      ],
+      "headers": {
+        "request": {},
+        "response": {}
+      },
+      "html": {},
+      "notes": "Confirmed by comparing the validator's behavior for the literal denylisted string versus each alternate encoding of the same address.",
+      "references": [
+        "https://portswigger.net/web-security/ssrf/url-validation-bypass-cheat-sheet",
+        "https://cwe.mitre.org/data/definitions/918.html"
+      ]
+    },
+    {
+      "name": "Allow-List Bypass via Open Redirect / HTTP Redirect Following",
+      "category": "SSRF Vulnerability",
+      "cwe": "CWE-918",
+      "severity": "High",
+      "description": "The host validator checks only the initially supplied URL, but the server-side HTTP client follows redirects, so a URL on an allow-listed domain that issues a 3xx redirect to an internal address is followed to the forbidden destination.",
+      "url": [
+        "?url=https://allowed-domain-under-test/redirect?to=internal"
+      ],
+      "headers": {
+        "request": {},
+        "response": {
+          "^Location$": "^https?://(127\\.|10\\.|172\\.(1[6-9]|2[0-9]|3[01])\\.|192\\.168\\.|169\\.254\\.|localhost)"
+        }
+      },
+      "html": {},
+      "notes": "Cross-reference open_redirect.json — any confirmed open redirect on an allow-listed domain is a direct SSRF allow-list bypass vector if the fetching client follows redirects.",
+      "references": [
+        "https://portswigger.net/web-security/ssrf/url-validation-bypass-cheat-sheet",
+        "https://cwe.mitre.org/data/definitions/918.html"
+      ]
+    },
+    {
+      "name": "DNS Rebinding Bypass of Allow-List (TOCTOU)",
+      "category": "SSRF Vulnerability",
+      "cwe": "CWE-918",
+      "severity": "High",
+      "description": "The validator resolves and checks the hostname's IP at validation time, but the server's HTTP client performs its own DNS resolution at fetch time; if these are separate lookups, an attacker-controlled DNS record with a very short TTL can resolve to a public IP during validation and to an internal IP during the actual fetch.",
+      "url": [
+        "?url=http://attacker-controlled-rebinding-domain/"
+      ],
+      "headers": {
+        "request": {},
+        "response": {}
+      },
+      "html": {},
+      "notes": "Confirmed via timing: a validator/fetch pair separated by a measurable delay combined with a DNS record TTL of 0-1s is the classic signature of a rebinding-exploitable implementation.",
+      "references": [
+        "https://portswigger.net/web-security/ssrf/blind",
+        "https://cwe.mitre.org/data/definitions/918.html"
+      ]
+    },
+    {
+      "name": "SSRF via Webhook / Callback URL Configuration",
+      "category": "SSRF Vulnerability",
+      "cwe": "CWE-918",
+      "severity": "High",
+      "description": "A feature that lets the user register a webhook, callback, or notification URL (to be called by the server on an event) stores and later fetches an attacker-supplied internal address, turning a legitimate integration feature into a persistent, repeatable SSRF primitive.",
+      "url": [
+        "/settings/webhooks",
+        "/api/integrations/callback",
+        "/notifications/url"
+      ],
+      "headers": {
+        "request": {
+          "^Content-Type$": "application/json"
+        },
+        "response": {}
+      },
+      "html": {},
+      "notes": "Higher severity than a one-shot SSRF because the fetch is typically repeated on every triggering event, giving the attacker multiple attempts and potentially a feedback channel via retry/error payloads.",
+      "references": [
+        "https://owasp.org/www-community/attacks/Server_Side_Request_Forgery",
+        "https://cwe.mitre.org/data/definitions/918.html"
+      ]
+    },
+    {
+      "name": "SSRF via Server-Side Document/PDF/Screenshot Rendering",
+      "category": "SSRF Vulnerability",
+      "cwe": "CWE-918",
+      "severity": "High",
+      "description": "A feature that converts a URL or user-supplied HTML to PDF, an image, or a thumbnail renders the content in a server-side headless browser or renderer that itself fetches external resources (images, iframes, stylesheets), making any injectable URL or HTML an SSRF vector through the renderer's own network access.",
+      "url": [
+        "?url=",
+        "/export/pdf",
+        "/thumbnail",
+        "/screenshot"
+      ],
+      "headers": {
+        "request": {},
+        "response": {
+          "^Content-Type$": "application/pdf|image/"
+        }
+      },
+      "html": {
+        "sinks": {
+          "<iframe[^>]+src=": "",
+          "<img[^>]+src=": "",
+          "@import\\s+url\\(": ""
+        }
+      },
+      "notes": "Test both the direct url= parameter (if present) and any user-controlled HTML/markdown input that is passed to the renderer, since <img>/<iframe>/CSS @import tags inside that content are independent SSRF vectors even if the top-level URL parameter is validated.",
+      "references": [
+        "https://github.com/jonluca/awesome-ssrf",
+        "https://cwe.mitre.org/data/definitions/918.html"
+      ]
+    },
+    {
+      "name": "SSRF via Remote File Import / 'Fetch from URL' Upload Feature",
+      "category": "SSRF Vulnerability",
+      "cwe": "CWE-918",
+      "severity": "High",
+      "description": "An upload or import feature offers a 'fetch from URL' option (import avatar from URL, import document from link, RSS/feed subscription) that the server fetches directly, with the same validation gaps as other URL-fetching parameters but often overlooked because the entry point is a file-upload UI rather than an obvious API parameter.",
+      "url": [
+        "?import_url=",
+        "?source_url=",
+        "?feed_url=",
+        "/import/url"
+      ],
+      "headers": {
+        "request": {},
+        "response": {}
+      },
+      "html": {},
+      "notes": "",
+      "references": [
+        "https://owasp.org/www-community/attacks/Server_Side_Request_Forgery",
+        "https://cwe.mitre.org/data/definitions/918.html"
+      ]
+    },
+    {
+      "name": "Blind SSRF Confirmed via Out-of-Band Interaction",
+      "category": "SSRF Vulnerability",
+      "cwe": "CWE-918",
+      "severity": "Medium",
+      "description": "The application fetches a server-supplied URL but returns no part of the response body to the client, so exploitation/confirmation relies on an out-of-band channel (DNS lookup or HTTP callback to an externally-controlled collaborator host) rather than response content.",
+      "url": [
+        "?url=http://attacker-controlled-collaborator-subdomain/"
+      ],
+      "headers": {
+        "request": {},
+        "response": {
+          "^Content-Length$": "^0$"
+        }
+      },
+      "html": {},
+      "notes": "Confirmed purely by out-of-band DNS/HTTP interaction logs, independent of any observable difference in the HTTP response; still exploitable for internal port scanning and, via chaining, for metadata/internal-service access even without response reflection.",
+      "references": [
+        "https://portswigger.net/web-security/ssrf/blind",
+        "https://cwe.mitre.org/data/definitions/918.html"
+      ]
+    },
+    {
+      "name": "SSRF Enabling Internal Port Scanning / Service Enumeration",
+      "category": "SSRF Vulnerability",
+      "cwe": "CWE-918",
+      "severity": "Medium",
+      "description": "Differences in response time, status code, or error message when the fetched URL targets different internal host:port combinations allow an attacker to map which internal hosts and ports are reachable from the server, even without full response disclosure.",
+      "url": [
+        "?url=http://127.0.0.1:PORT/",
+        "?url=http://internal-host:PORT/"
+      ],
+      "headers": {
+        "request": {},
+        "response": {}
+      },
+      "html": {},
+      "notes": "Confirmed by diffing responses (timing, status, error text) across a range of internal host:port combinations; consistent 'connection refused'-style errors versus consistent timeouts versus a distinct 'success' response each indicate closed, filtered, and open respectively.",
+      "references": [
+        "https://portswigger.net/web-security/ssrf",
+        "https://cwe.mitre.org/data/definitions/918.html"
+      ]
+    },
+    {
+      "name": "SSRF via Scheme Other Than HTTP(S) (file://, gopher://, dict://)",
+      "category": "SSRF Vulnerability",
+      "cwe": "CWE-918",
+      "severity": "Critical",
+      "description": "The URL-fetching component does not restrict the accepted scheme to http/https, so a non-HTTP scheme (file://, gopher://, dict://, ftp://) is accepted, enabling local file disclosure (file://) or raw protocol interaction with internal services (gopher:// for crafting arbitrary TCP payloads against services like Redis/Memcached).",
+      "url": [
+        "?url=file:///etc/passwd",
+        "?url=gopher://127.0.0.1:",
+        "?url=dict://127.0.0.1:"
+      ],
+      "headers": {
+        "request": {},
+        "response": {}
+      },
+      "html": {},
+      "notes": "Confirmed by observing file content disclosure in the response (file://) or a behavioral/timing signature consistent with a raw protocol handshake (gopher/dict) against a known internal service.",
+      "references": [
+        "https://portswigger.net/web-security/ssrf",
+        "https://cwe.mitre.org/data/definitions/918.html"
+      ]
+    }
+  ]
+}
