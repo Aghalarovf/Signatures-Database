@@ -1,0 +1,363 @@
+{
+  "vulnerabilities": [
+    {
+      "name": "SSTI via Python String Template Rendering (Jinja2/Mako/Tornado/Django)",
+      "category": "SSTI Vulnerability",
+      "ssti_type": "Code-level",
+      "cwe": "CWE-1336",
+      "severity": "Critical",
+      "description": "Attacker-influenced input is concatenated or formatted into a template string that is then compiled and rendered by a Python template engine, instead of being passed as a context variable. The engine evaluates attacker-supplied expressions on the server.",
+      "headers": {
+        "request": {},
+        "response": {}
+      },
+      "html": {
+        "sinks": {
+          "render_template_string\\s*\\(": "",
+          "Environment\\s*\\([^)]*\\)\\.from_string\\s*\\(": "",
+          "jinja2\\.Template\\s*\\(": "",
+          "(?<![\\w.])Template\\s*\\(": "",
+          "mako\\.template\\.Template\\s*\\(": "",
+          "tornado\\.template\\.Template\\s*\\(": "",
+          "django\\.template\\.Template\\s*\\(": "",
+          "Engine\\(\\)\\.from_string\\s*\\(": ""
+        },
+        "sources": {
+          "request\\.(args|form|values|json|cookies|headers|data|files)": "",
+          "request\\.(GET|POST|COOKIES|META)": "",
+          "self\\.get_argument\\s*\\(": "",
+          "flask\\.request": ""
+        }
+      },
+      "notes": "Flag when a source feeds the template string argument (via concatenation, f-string, % or .format()) rather than the render context. render_template_string('Hello {{ name }}', name=user_input) is safe; render_template_string('Hello ' + user_input) is not.",
+      "references": [
+        "https://portswigger.net/web-security/server-side-template-injection",
+        "https://cwe.mitre.org/data/definitions/1336.html"
+      ]
+    },
+    {
+      "name": "SSTI via PHP Template Engines (Twig/Smarty/Blade)",
+      "category": "SSTI Vulnerability",
+      "ssti_type": "Code-level",
+      "cwe": "CWE-1336",
+      "severity": "Critical",
+      "description": "User-controlled data is used to build a template string that is loaded through createTemplate(), a string: resource, or an in-memory loader, so the PHP template engine parses attacker-supplied expressions.",
+      "headers": {
+        "request": {},
+        "response": {}
+      },
+      "html": {
+        "sinks": {
+          "->createTemplate\\s*\\(": "",
+          "Twig\\\\Loader\\\\ArrayLoader\\s*\\(": "",
+          "Twig_Loader_Array\\s*\\(": "",
+          "->fetch\\s*\\(\\s*[\"']string:": "",
+          "->display\\s*\\(\\s*[\"']string:": "",
+          "Blade::compileString\\s*\\(": "",
+          "->renderString\\s*\\(": ""
+        },
+        "sources": {
+          "\\$_(GET|POST|REQUEST|COOKIE|SERVER)\\s*\\[": "",
+          "\\$request->(input|query|get|post|all)\\s*\\(": "",
+          "file_get_contents\\s*\\(\\s*[\"']php://input": ""
+        }
+      },
+      "notes": "Confirmed when the string passed to the template loader contains a source variable. Passing user data only as a render() context variable is not a finding.",
+      "references": [
+        "https://portswigger.net/web-security/server-side-template-injection",
+        "https://cwe.mitre.org/data/definitions/1336.html"
+      ]
+    },
+    {
+      "name": "SSTI via Java Template Engines (FreeMarker/Velocity/Thymeleaf/SpEL)",
+      "category": "SSTI Vulnerability",
+      "ssti_type": "Code-level",
+      "cwe": "CWE-1336",
+      "severity": "Critical",
+      "description": "Untrusted input is used as template source, as a Thymeleaf preprocessed expression, or as a Spring Expression Language string, so the Java engine evaluates attacker-controlled expressions.",
+      "headers": {
+        "request": {},
+        "response": {}
+      },
+      "html": {
+        "sinks": {
+          "new\\s+Template\\s*\\(": "",
+          "Velocity\\.evaluate\\s*\\(": "",
+          "VelocityEngine\\s*\\(\\)\\.evaluate\\s*\\(": "",
+          "StringTemplateLoader": "",
+          "parseExpression\\s*\\(": "",
+          "SpelExpressionParser": "",
+          "__\\$\\{[^}]*\\}__": "",
+          "return\\s+\"[^\"]*\"\\s*\\+\\s*\\w+\\s*;\\s*//\\s*view": ""
+        },
+        "sources": {
+          "request\\.getParameter\\s*\\(": "",
+          "@RequestParam": "",
+          "@PathVariable": "",
+          "@RequestBody": "",
+          "request\\.getHeader\\s*\\(": ""
+        }
+      },
+      "notes": "For Spring MVC, returning a view name built from user input (e.g. return \"user/\" + param) lets Thymeleaf evaluate preprocessed expressions. Flag when the source reaches the template source, view name, or expression string.",
+      "references": [
+        "https://portswigger.net/web-security/server-side-template-injection",
+        "https://cwe.mitre.org/data/definitions/1336.html"
+      ]
+    },
+    {
+      "name": "SSTI via Node.js Template Engines (EJS/Pug/Handlebars/Nunjucks/Lodash)",
+      "category": "SSTI Vulnerability",
+      "ssti_type": "Code-level",
+      "cwe": "CWE-1336",
+      "severity": "Critical",
+      "description": "Request data is passed as the template source to compile/render functions of a Node.js template engine, or spread into engine options, allowing server-side expression and code evaluation.",
+      "headers": {
+        "request": {},
+        "response": {}
+      },
+      "html": {
+        "sinks": {
+          "ejs\\.render\\s*\\(": "",
+          "pug\\.(compile|render)\\s*\\(": "",
+          "jade\\.(compile|render)\\s*\\(": "",
+          "Handlebars\\.compile\\s*\\(": "",
+          "nunjucks\\.renderString\\s*\\(": "",
+          "dust\\.compile\\s*\\(": "",
+          "_\\.template\\s*\\(": "",
+          "doT\\.template\\s*\\(": "",
+          "res\\.render\\s*\\([^,]+,\\s*(req\\.(body|query)|\\{\\s*\\.\\.\\.req\\.)": ""
+        },
+        "sources": {
+          "req\\.(query|body|params|headers|cookies)": "",
+          "request\\.(query|body|params)": "",
+          "ctx\\.(query|request\\.body)": ""
+        }
+      },
+      "notes": "res.render(view, req.query) can also be dangerous: some engines read options such as outputFunctionName or settings from the data object. Flag both direct template-source flows and unfiltered option spreading.",
+      "references": [
+        "https://portswigger.net/web-security/server-side-template-injection",
+        "https://cwe.mitre.org/data/definitions/1336.html"
+      ]
+    },
+    {
+      "name": "SSTI via Ruby ERB/Slim/Liquid String Templates",
+      "category": "SSTI Vulnerability",
+      "ssti_type": "Code-level",
+      "cwe": "CWE-1336",
+      "severity": "Critical",
+      "description": "User-supplied data is interpolated into a string given to ERB.new, Slim, Haml, or inline render, so Ruby code embedded in the input is evaluated on the server.",
+      "headers": {
+        "request": {},
+        "response": {}
+      },
+      "html": {
+        "sinks": {
+          "ERB\\.new\\s*\\(": "",
+          "render\\s+inline:": "",
+          "render\\s*\\(\\s*inline:": "",
+          "Slim::Template\\.new": "",
+          "Haml::Engine\\.new\\s*\\(": "",
+          "Tilt\\.new\\s*\\(": "",
+          "Liquid::Template\\.parse\\s*\\(": ""
+        },
+        "sources": {
+          "params\\s*\\[": "",
+          "request\\.(params|headers|cookies)": "",
+          "cookies\\s*\\[": ""
+        }
+      },
+      "notes": "Liquid is sandboxed by design, so treat it as lower risk unless custom filters or tags expose unsafe functionality.",
+      "references": [
+        "https://portswigger.net/web-security/server-side-template-injection",
+        "https://cwe.mitre.org/data/definitions/1336.html"
+      ]
+    },
+    {
+      "name": "SSTI via Go text/template Parse With Untrusted Input",
+      "category": "SSTI Vulnerability",
+      "ssti_type": "Code-level",
+      "cwe": "CWE-1336",
+      "severity": "High",
+      "description": "A Go program builds a template from user-controlled text via template.New(...).Parse(...). The attacker can then read fields and call methods of any object in the template's data context, disclosing secrets or invoking dangerous methods.",
+      "headers": {
+        "request": {},
+        "response": {}
+      },
+      "html": {
+        "sinks": {
+          "template\\.New\\s*\\([^)]*\\)\\.Parse\\s*\\(": "",
+          "\\.Parse\\s*\\(\\s*fmt\\.Sprintf": "",
+          "\\.Parse\\s*\\(\\s*[^\"`)][^)]*\\+": "",
+          "text/template": ""
+        },
+        "sources": {
+          "r\\.URL\\.Query\\(\\)": "",
+          "r\\.FormValue\\s*\\(": "",
+          "r\\.PostFormValue\\s*\\(": "",
+          "r\\.Header\\.Get\\s*\\(": "",
+          "c\\.(Query|Param|PostForm)\\s*\\(": ""
+        }
+      },
+      "notes": "Severity depends on which objects are passed as template data. html/template escapes output but does not prevent template-source injection.",
+      "references": [
+        "https://portswigger.net/web-security/server-side-template-injection",
+        "https://cwe.mitre.org/data/definitions/1336.html"
+      ]
+    },
+    {
+      "name": "SSTI Behavioral Fingerprint: Arithmetic Probe Evaluated in Response",
+      "category": "SSTI Vulnerability",
+      "ssti_type": "Reflected",
+      "cwe": "CWE-1336",
+      "severity": "High",
+      "description": "A harmless arithmetic probe sent in a parameter (such as {{7*7}}, ${7*7}, <%= 7*7 %>, #{7*7}, {{7*'7'}}) is returned as its computed result instead of the literal text, proving the server evaluated template syntax. Differing outputs help fingerprint the engine family.",
+      "headers": {
+        "request": {},
+        "response": {
+          "^Content-Type$": "text/html|text/plain|application/json"
+        }
+      },
+      "html": {
+        "reflection_indicators": {
+          "(?<![\\d{$#<%])49(?![\\d}])": "response contains the computed value 49 where the literal probe string {{7*7}}, ${7*7}, <%= 7*7 %> or #{7*7} was sent and the literal is absent",
+          "7777777": "response contains 7777777 for the probe {{7*'7'}}, which indicates Jinja2 or a similar Python engine; Twig returns 49 for the same probe",
+          "(?<![\\d{$#<%])343(?![\\d}])": "response contains 343 for a {{7*7*7}} control probe, confirming expression evaluation rather than coincidence"
+        }
+      },
+      "notes": "Always use a unique canary (e.g. send {{1337*3}} and look for 4011) and a control request with the literal text to avoid false positives from numbers that already appear on the page. Confirm that the literal probe is NOT echoed back unchanged.",
+      "references": [
+        "https://portswigger.net/web-security/server-side-template-injection/exploiting",
+        "https://cwe.mitre.org/data/definitions/1336.html"
+      ]
+    },
+    {
+      "name": "SSTI Indicator: Template Engine Syntax Error Leaked in Response",
+      "category": "SSTI Vulnerability",
+      "ssti_type": "Error-based",
+      "cwe": "CWE-209",
+      "severity": "Medium",
+      "description": "Sending malformed template syntax (such as an unbalanced {{, ${, <% or #{) causes the server to return a template-engine parse or render error. This confirms user input reaches a template parser and reveals which engine is in use.",
+      "headers": {
+        "request": {},
+        "response": {
+          "^Content-Type$": "text/html|text/plain|application/json"
+        }
+      },
+      "html": {
+        "reflection_indicators": {
+          "jinja2\\.exceptions\\.(TemplateSyntaxError|UndefinedError)": "Jinja2 template error exposed in the response",
+          "django\\.template\\.exceptions\\.TemplateSyntaxError|TemplateSyntaxError at /": "Django template error page",
+          "mako\\.exceptions|SyntaxException: \\(SyntaxError\\)": "Mako template error",
+          "Twig\\\\Error\\\\(Syntax|Runtime)Error|Twig_Error_Syntax": "Twig template error",
+          "Smarty(_Compiler)?_?Exception|Smarty Compiler: Syntax error": "Smarty template error",
+          "freemarker\\.core\\.(ParseException|InvalidReferenceException)|FreeMarker template error": "FreeMarker template error",
+          "org\\.apache\\.velocity\\.exception\\.(ParseErrorException|MethodInvocationException)": "Velocity template error",
+          "org\\.thymeleaf\\.exceptions\\.TemplateProcessingException|SpelEvaluationException|SpelParseException": "Thymeleaf/SpEL expression error",
+          "Parse error on line \\d+:[\\s\\S]{0,200}Expecting": "Handlebars parse error",
+          "SyntaxError: Unexpected (token|identifier)[\\s\\S]{0,300}(ejs|pug|nunjucks)": "Node.js template engine syntax error",
+          "Template render error|Template Error: unexpected token": "Nunjucks template error",
+          "template: [\\w./-]+:\\d+: (unexpected|function .* not defined)": "Go text/template error",
+          "\\(erb\\):\\d+: syntax error|ActionView::Template::Error": "Ruby ERB/ActionView template error"
+        }
+      },
+      "notes": "A leaked error alone does not prove exploitability, but it confirms that user input reaches a template parser. Treat it as a strong lead and follow up with the arithmetic-probe check.",
+      "references": [
+        "https://portswigger.net/web-security/server-side-template-injection/exploiting",
+        "https://cwe.mitre.org/data/definitions/209.html"
+      ]
+    },
+    {
+      "name": "Client-Side Template Injection (AngularJS Expression Evaluation)",
+      "category": "SSTI Vulnerability",
+      "ssti_type": "Client-side (CSTI)",
+      "cwe": "CWE-79",
+      "severity": "High",
+      "description": "A page running AngularJS 1.x (inside an ng-app scope) reflects user input into the DOM. Angular evaluates {{ }} expressions found in the reflected text, so the input can execute in the browser even when HTML special characters are encoded.",
+      "headers": {
+        "request": {},
+        "response": {
+          "^Content-Type$": "text/html",
+          "^Content-Security-Policy$": "^(?!.*script-src).*$"
+        }
+      },
+      "html": {
+        "sinks": {
+          "ng-app": "",
+          "data-ng-app": "",
+          "angular(\\.min)?\\.js": "",
+          "ng-bind-html": "",
+          "\\$compile\\s*\\(": ""
+        },
+        "sources": {
+          "location\\.(search|hash)": "",
+          "\\$location\\.(search|hash)\\s*\\(": "",
+          "\\$routeParams": "",
+          "\\$stateParams": ""
+        }
+      },
+      "notes": "Confirm by reflecting {{7*7}} inside the ng-app scope and checking whether 49 is rendered in the DOM. Only AngularJS 1.x is affected; modern Angular (2+) does not evaluate template expressions from the DOM.",
+      "references": [
+        "https://portswigger.net/web-security/cross-site-scripting/contexts/client-side-template-injection",
+        "https://cwe.mitre.org/data/definitions/79.html"
+      ]
+    },
+    {
+      "name": "Template Debug Mode / Verbose Error Pages Enabled",
+      "category": "SSTI Vulnerability",
+      "ssti_type": "Mitigation Gap",
+      "cwe": "CWE-489",
+      "severity": "Medium",
+      "description": "The application runs with debug or verbose-error settings that expose stack traces, template source snippets, and an interactive console. This helps attackers discover and fingerprint SSTI and can by itself allow code execution.",
+      "headers": {
+        "request": {},
+        "response": {
+          "^Server$": "Werkzeug",
+          "^X-Debug-Token(-Link)?$": ".+",
+          "^X-Powered-By$": "Express|PHP|ASP\\.NET"
+        }
+      },
+      "html": {
+        "reflection_indicators": {
+          "Werkzeug Debugger|The debugger caught an exception in your WSGI application": "Flask/Werkzeug interactive debugger exposed",
+          "You're seeing this error because you have <code>DEBUG = True</code>": "Django debug mode enabled",
+          "Whoops! There was an error|Symfony Exception|Twig\\\\Error": "Symfony/Laravel debug error page with template context",
+          "Whitelabel Error Page": "Spring Boot default error page (check whether stack traces are exposed)"
+        }
+      },
+      "notes": "This is a mitigation-gap finding. Pair it with an SSTI sink or probe finding to assess real exploitability. Debug mode should never be reachable in production.",
+      "references": [
+        "https://flask.palletsprojects.com/en/latest/debugging/",
+        "https://cwe.mitre.org/data/definitions/489.html"
+      ]
+    },
+    {
+      "name": "Template Engine Sandbox Disabled or Unsafe Configuration",
+      "category": "SSTI Vulnerability",
+      "ssti_type": "Mitigation Gap",
+      "cwe": "CWE-693",
+      "severity": "Medium",
+      "description": "The template engine is configured without a sandbox or with unsafe options (autoescape off, unrestricted object exposure, dangerous globals), so any template injection that occurs can escalate directly to code execution.",
+      "headers": {
+        "request": {},
+        "response": {}
+      },
+      "html": {
+        "sinks": {
+          "autoescape\\s*=\\s*(False|false)": "",
+          "jinja2\\.Environment\\s*\\((?![^)]*SandboxedEnvironment)": "",
+          "setAPIBuiltinEnabled\\s*\\(\\s*true": "",
+          "setNewBuiltinClassResolver\\s*\\(\\s*TemplateClassResolver\\.UNRESTRICTED": "",
+          "->enableAutoReload|Twig.*'strict_variables'\\s*=>\\s*false": "",
+          "allowPrototypeAccess|allowProtoPropertiesByDefault\\s*:\\s*true": "",
+          "\\$smarty->(php_handling|security)\\s*=\\s*(PHP_ALLOW|false)": ""
+        },
+        "sources": {}
+      },
+      "notes": "Prefer jinja2.sandbox.SandboxedEnvironment, FreeMarker's SAFER_RESOLVER, Twig's SandboxExtension, and Smarty's security policy. Sandboxes reduce impact but do not replace keeping user input out of template source.",
+      "references": [
+        "https://jinja.palletsprojects.com/en/latest/sandbox/",
+        "https://cwe.mitre.org/data/definitions/693.html"
+      ]
+    }
+  ]
+}
