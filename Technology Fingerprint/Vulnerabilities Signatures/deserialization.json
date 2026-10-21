@@ -1,0 +1,588 @@
+{
+  "vulnerabilities": [
+    {
+      "name": "Insecure Deserialization via Java ObjectInputStream / readObject",
+      "category": "Deserialization Vulnerability",
+      "deser_type": "Native Object Deserialization",
+      "cwe": "CWE-502",
+      "severity": "Critical",
+      "description": "Untrusted bytes are passed to Java's native ObjectInputStream (or a subclass) without a class allow-list or serialization filter, so an attacker can instantiate arbitrary classes available on the classpath and trigger unintended code paths during deserialization.",
+      "headers": {
+        "request": {
+          "^Content-Type$": "application/(x-java-serialized-object|octet-stream)"
+        },
+        "response": {}
+      },
+      "html": {
+        "sinks": {
+          "new\\s+ObjectInputStream\\s*\\(": "",
+          "\\.readObject\\s*\\(\\s*\\)": "",
+          "\\.readUnshared\\s*\\(\\s*\\)": "",
+          "extends\\s+ObjectInputStream": "",
+          "SerializationUtils\\.deserialize\\s*\\(": "",
+          "HessianInput\\s*\\(|Hessian2Input\\s*\\(": "",
+          "new\\s+XMLDecoder\\s*\\(": "",
+          "ObjectInputFilter\\.Config\\.setSerialFilter\\s*\\(\\s*null": ""
+        },
+        "sources": {
+          "request\\.getInputStream\\s*\\(": "",
+          "@RequestBody": "",
+          "request\\.getParameter\\s*\\(": "",
+          "Base64\\.getDecoder\\s*\\(\\)\\.decode\\s*\\(": "",
+          "getCookies\\s*\\(": "",
+          "MultipartFile": ""
+        }
+      },
+      "notes": "Not a finding if an ObjectInputFilter allow-list, a resolveClass override restricting classes, or an HMAC integrity check precedes deserialization. Prefer data-only formats (JSON without polymorphic typing).",
+      "references": [
+        "https://cheatsheetseries.owasp.org/cheatsheets/Deserialization_Cheat_Sheet.html",
+        "https://cwe.mitre.org/data/definitions/502.html"
+      ]
+    },
+    {
+      "name": "Java Serialized Object Magic Bytes in Request, Cookie, or Parameter",
+      "category": "Deserialization Vulnerability",
+      "deser_type": "Serialized Data Indicator",
+      "cwe": "CWE-502",
+      "severity": "Medium",
+      "description": "A request or response carries a Java serialized stream, recognizable by the magic bytes AC ED 00 05 (hex) or rO0AB (Base64) or H4sIAAAAAAAA followed by rO0 (gzip + Base64). This shows that the application exchanges native serialized objects with the client and deserializes them server-side.",
+      "headers": {
+        "request": {
+          "^Content-Type$": "application/(x-java-serialized-object|octet-stream)",
+          "^Cookie$": "(rO0AB|H4sIAAAAAAAA|%72%4F%30%41%42)"
+        },
+        "response": {
+          "^Set-Cookie$": "(rO0AB|H4sIAAAAAAAA)",
+          "^Content-Type$": "application/x-java-serialized-object"
+        }
+      },
+      "html": {
+        "reflection_indicators": {
+          "rO0AB[A-Za-z0-9+/=]{10,}": "Base64-encoded Java serialized stream in a hidden field, parameter, or response body",
+          "(%AC%ED%00%05|\\\\xac\\\\xed\\\\x00\\\\x05|ACED0005)": "raw or hex-encoded Java serialization header",
+          "H4sIAAAAAAAA[A-Za-z0-9+/=]{20,}": "gzip-compressed Base64 blob that may wrap a serialized object (decode to check)"
+        }
+      },
+      "notes": "Indicator only. Decode the value and check for the AC ED 00 05 header. A match justifies deeper testing of the consuming endpoint but is not proof of exploitability.",
+      "references": [
+        "https://portswigger.net/web-security/deserialization",
+        "https://cwe.mitre.org/data/definitions/502.html"
+      ]
+    },
+    {
+      "name": "Insecure Deserialization via Python pickle/marshal/shelve/dill",
+      "category": "Deserialization Vulnerability",
+      "deser_type": "Native Object Deserialization",
+      "cwe": "CWE-502",
+      "severity": "Critical",
+      "description": "Untrusted data is loaded with pickle, cPickle, dill, shelve, marshal, or joblib/numpy loaders that execute pickle opcodes. The pickle format can invoke arbitrary callables during load, so any attacker-controlled input yields code execution.",
+      "headers": {
+        "request": {
+          "^Content-Type$": "application/(x-python-pickle|octet-stream)"
+        },
+        "response": {}
+      },
+      "html": {
+        "sinks": {
+          "pickle\\.(loads?|Unpickler)\\s*\\(": "",
+          "cPickle\\.loads?\\s*\\(": "",
+          "_pickle\\.loads?\\s*\\(": "",
+          "dill\\.loads?\\s*\\(": "",
+          "cloudpickle\\.loads?\\s*\\(": "",
+          "shelve\\.open\\s*\\(": "",
+          "marshal\\.loads?\\s*\\(": "",
+          "joblib\\.load\\s*\\(": "",
+          "numpy\\.load\\s*\\([^)]*allow_pickle\\s*=\\s*True": "",
+          "torch\\.load\\s*\\((?![^)]*weights_only\\s*=\\s*True)": "",
+          "pandas\\.read_pickle\\s*\\(|pd\\.read_pickle\\s*\\(": ""
+        },
+        "sources": {
+          "request\\.(data|body|files|get_data|cookies|args|form)": "",
+          "base64\\.b64decode\\s*\\(": "",
+          "flask\\.request": "",
+          "request\\.(POST|GET|COOKIES|FILES)": "",
+          "redis[^\\n]{0,40}\\.get\\s*\\(": "",
+          "socket\\.recv\\s*\\(": ""
+        }
+      },
+      "notes": "Also flag pickle loads of data from shared caches (Redis, Memcached), message queues, and user-uploaded model files, because anyone able to write to those stores controls the payload. Use HMAC-signed payloads or a safe format such as JSON or safetensors.",
+      "references": [
+        "https://docs.python.org/3/library/pickle.html",
+        "https://cwe.mitre.org/data/definitions/502.html"
+      ]
+    },
+    {
+      "name": "Python Pickle Stream Indicator in Request, Cookie, or Response",
+      "category": "Deserialization Vulnerability",
+      "deser_type": "Serialized Data Indicator",
+      "cwe": "CWE-502",
+      "severity": "Medium",
+      "description": "A cookie, parameter, or body value looks like a Base64-encoded Python pickle (protocol 2 to 5 headers such as gAJ, gASV, gANj, or the ASCII protocol-0 prefix), indicating that the application round-trips pickled objects through the client.",
+      "headers": {
+        "request": {
+          "^Cookie$": "(gASV|gAJ|gANj|gAN9|KGRw|Y3B5)",
+          "^Content-Type$": "application/(x-python-pickle|octet-stream)"
+        },
+        "response": {
+          "^Set-Cookie$": "(gASV|gAJ|gANj|gAN9)"
+        }
+      },
+      "html": {
+        "reflection_indicators": {
+          "gASV[A-Za-z0-9+/=]{12,}": "Base64 of a protocol-4 pickle (starts with 0x80 0x04 0x95)",
+          "gAJ[A-Za-z0-9+/=]{12,}": "Base64 of a protocol-2 pickle (starts with 0x80 0x02)",
+          "gANj[A-Za-z0-9+/=]{8,}": "Base64 of a protocol-3 pickle that begins by importing a global",
+          "(\\\\x80\\\\x0[2-5]|%80%0[2-5])": "raw or percent-encoded pickle protocol header"
+        }
+      },
+      "notes": "Indicator only. Decode the Base64 value and inspect the first bytes. Server-side session storage with a signed ID is safe; client-side pickled sessions are not.",
+      "references": [
+        "https://portswigger.net/web-security/deserialization",
+        "https://cwe.mitre.org/data/definitions/502.html"
+      ]
+    },
+    {
+      "name": "Insecure Deserialization via PHP unserialize() and phar:// Wrapper",
+      "category": "Deserialization Vulnerability",
+      "deser_type": "Native Object Deserialization",
+      "cwe": "CWE-502",
+      "severity": "Critical",
+      "description": "User-controlled data reaches PHP unserialize(), enabling PHP object injection through magic methods (__wakeup, __destruct, __toString). File functions that accept an attacker-influenced path can also trigger deserialization of phar archive metadata through the phar:// stream wrapper.",
+      "headers": {
+        "request": {},
+        "response": {}
+      },
+      "html": {
+        "sinks": {
+          "\\bunserialize\\s*\\(": "",
+          "\\bunserialize\\s*\\([^)]*allowed_classes\\s*['\"]?\\s*=>\\s*true": "",
+          "(file_exists|is_file|is_dir|file_get_contents|fopen|copy|getimagesize|md5_file|filesize|unlink)\\s*\\(\\s*\\$": "",
+          "phar://": "",
+          "new\\s+Phar\\s*\\(": "",
+          "yaml_parse\\s*\\([^)]*Ndocs": "",
+          "igbinary_unserialize\\s*\\(": ""
+        },
+        "sources": {
+          "\\$_(GET|POST|REQUEST|COOKIE|FILES|SERVER)\\s*\\[": "",
+          "\\$request->(input|get|cookie|query|post)\\s*\\(": "",
+          "base64_decode\\s*\\(\\s*\\$": "",
+          "file_get_contents\\s*\\(\\s*[\"']php://input": ""
+        }
+      },
+      "notes": "Safer: unserialize($data, ['allowed_classes' => false]) or JSON. For phar issues, validate and normalize user-supplied paths and block the phar:// scheme. Exploitability depends on available classes with dangerous magic methods (autoloaded frameworks and libraries).",
+      "references": [
+        "https://portswigger.net/web-security/deserialization",
+        "https://cwe.mitre.org/data/definitions/502.html"
+      ]
+    },
+    {
+      "name": "PHP Serialized Object Indicator in Request, Cookie, or Response",
+      "category": "Deserialization Vulnerability",
+      "deser_type": "Serialized Data Indicator",
+      "cwe": "CWE-502",
+      "severity": "Medium",
+      "description": "A parameter, cookie, or response field matches PHP's serialize() format (for example O:4:\"User\":2:{...}, a:2:{...}) either in plain text, URL-encoded, or Base64, showing that PHP objects are exchanged with the client.",
+      "headers": {
+        "request": {
+          "^Cookie$": "(O%3A\\d+%3A%22|O:\\d+:\"|a%3A\\d+%3A%7B|a:\\d+:\\{|Tzo\\d+OiI|YTo\\d+OnN)"
+        },
+        "response": {
+          "^Set-Cookie$": "(O%3A\\d+%3A%22|O:\\d+:\"|Tzo\\d+OiI|YTo\\d+OnN)"
+        }
+      },
+      "html": {
+        "reflection_indicators": {
+          "O:\\d+:\"[A-Za-z_\\\\][A-Za-z0-9_\\\\]*\":\\d+:\\{": "PHP serialized object in plain text",
+          "a:\\d+:\\{(i:\\d+|s:\\d+:\"[^\"]*\");": "PHP serialized array in plain text",
+          "Tzo[0-9]+OiI[A-Za-z0-9+/=]{8,}": "Base64 of a PHP serialized object (prefix O:)",
+          "YTo[0-9]+OnN[A-Za-z0-9+/=]{4,}|YToy[A-Za-z0-9+/=]{6,}": "Base64 of a PHP serialized array (prefix a:)",
+          "O%3A\\d+%3A%22[A-Za-z0-9_%5C]+%22%3A\\d+%3A%7B": "URL-encoded PHP serialized object"
+        }
+      },
+      "notes": "Indicator only. Modify a harmless field (such as a string length or a boolean) and observe the application's behavior or error output to confirm that the value is deserialized.",
+      "references": [
+        "https://portswigger.net/web-security/deserialization/exploiting",
+        "https://cwe.mitre.org/data/definitions/502.html"
+      ]
+    },
+    {
+      "name": "Insecure Deserialization via .NET BinaryFormatter, NetDataContractSerializer, LosFormatter, SoapFormatter, ObjectStateFormatter",
+      "category": "Deserialization Vulnerability",
+      "deser_type": "Native Object Deserialization",
+      "cwe": "CWE-502",
+      "severity": "Critical",
+      "description": "Untrusted data is deserialized by a .NET formatter that can instantiate arbitrary types. BinaryFormatter is considered dangerous and cannot be made safe; the other listed formatters carry the same class of risk.",
+      "headers": {
+        "request": {
+          "^Content-Type$": "application/(octet-stream|soap\\+xml)"
+        },
+        "response": {}
+      },
+      "html": {
+        "sinks": {
+          "new\\s+BinaryFormatter\\s*\\(": "",
+          "BinaryFormatter\\s*\\(\\)\\.Deserialize\\s*\\(": "",
+          "\\.Deserialize\\s*\\(\\s*(stream|ms|memoryStream|fs|input)": "",
+          "new\\s+NetDataContractSerializer\\s*\\(": "",
+          "new\\s+SoapFormatter\\s*\\(": "",
+          "new\\s+LosFormatter\\s*\\(": "",
+          "new\\s+ObjectStateFormatter\\s*\\(": "",
+          "new\\s+DataContractSerializer\\s*\\([^)]*typeof\\s*\\(\\s*object": "",
+          "new\\s+JavaScriptSerializer\\s*\\(\\s*new\\s+SimpleTypeResolver": "",
+          "new\\s+XmlSerializer\\s*\\(\\s*Type\\.GetType\\s*\\(": "",
+          "TypeNameHandling\\s*=\\s*TypeNameHandling\\.(All|Auto|Objects|Arrays)": "",
+          "SerializationBinder\\s*=\\s*null": ""
+        },
+        "sources": {
+          "Request\\.(InputStream|Form|QueryString|Cookies|Body)": "",
+          "HttpContext\\.Request": "",
+          "\\[FromBody\\]": "",
+          "Convert\\.FromBase64String\\s*\\(": ""
+        }
+      },
+      "notes": "Json.NET with TypeNameHandling other than None is unsafe on untrusted input unless a restrictive SerializationBinder (allow-list) is used. Microsoft recommends removing BinaryFormatter entirely; it is disabled by default in recent .NET versions.",
+      "references": [
+        "https://learn.microsoft.com/en-us/dotnet/standard/serialization/binaryformatter-security-guide",
+        "https://cwe.mitre.org/data/definitions/502.html"
+      ]
+    },
+    {
+      "name": "ASP.NET ViewState Without MAC Protection or With Exposed Machine Keys",
+      "category": "Deserialization Vulnerability",
+      "deser_type": "Integrity Check Failure",
+      "cwe": "CWE-502",
+      "severity": "High",
+      "description": "ASP.NET __VIEWSTATE is deserialized on postback. If MAC validation is disabled, ViewState encryption is off, or the machineKey validation/decryption keys are weak, default, or leaked, an attacker can forge a malicious ViewState that is deserialized by the server.",
+      "headers": {
+        "request": {},
+        "response": {
+          "^X-AspNet-Version$": ".+",
+          "^X-Powered-By$": "ASP\\.NET"
+        }
+      },
+      "html": {
+        "sinks": {
+          "enableViewStateMac\\s*=\\s*[\"']false[\"']": "",
+          "viewStateEncryptionMode\\s*=\\s*[\"']Never[\"']": "",
+          "ViewStateUserKey\\s*=\\s*null": "",
+          "<machineKey[^>]+validationKey\\s*=\\s*[\"'][A-Fa-f0-9]{16,}[\"']": "",
+          "<machineKey[^>]+decryptionKey\\s*=\\s*[\"'][A-Fa-f0-9]{16,}[\"']": "",
+          "<machineKey[^>]+validation\\s*=\\s*[\"'](MD5|SHA1)[\"']": "",
+          "EnableEventValidation\\s*=\\s*[\"']?false": ""
+        },
+        "sources": {},
+        "reflection_indicators": {
+          "<input[^>]+name=[\"']__VIEWSTATE[\"'][^>]+value=[\"']/wEP[A-Za-z0-9+/=]{20,}": "unencrypted ViewState (/wEP prefix) exposed in the page, which indicates encryption is not enabled",
+          "<input[^>]+name=[\"']__VIEWSTATEGENERATOR[\"']": "ViewState generator field present (page uses ViewState)",
+          "<input[^>]+name=[\"']__VIEWSTATE[\"'](?![^>]*__VIEWSTATEMAC)[^>]+value=[\"'][^\"']{1,60}[\"']": "very short ViewState value that may indicate disabled or weak protection"
+        }
+      },
+      "notes": "A ViewState beginning with /wEP is not encrypted, and decoding it can disclose application data. Exploitability needs a missing MAC or access to the machine keys (for example from a leaked web.config or published sample key).",
+      "references": [
+        "https://learn.microsoft.com/en-us/aspnet/core/security/data-protection/introduction",
+        "https://cwe.mitre.org/data/definitions/502.html"
+      ]
+    },
+    {
+      "name": "Unsafe Polymorphic Deserialization in Java JSON/XML Libraries (Jackson, Fastjson, XStream, SnakeYAML)",
+      "category": "Deserialization Vulnerability",
+      "deser_type": "Polymorphic Type Handling",
+      "cwe": "CWE-502",
+      "severity": "Critical",
+      "description": "A Java data-binding library is configured to honor type information from the input (default typing, @class/@type fields, autoType, or unrestricted XStream/SnakeYAML constructors), so an attacker can pick which class gets instantiated and which setters or constructors run.",
+      "headers": {
+        "request": {
+          "^Content-Type$": "application/(json|xml|x-yaml|yaml)|text/(xml|yaml)"
+        },
+        "response": {}
+      },
+      "html": {
+        "sinks": {
+          "enableDefaultTyping\\s*\\(": "",
+          "activateDefaultTyping\\s*\\(": "",
+          "DefaultTyping\\.(NON_FINAL|OBJECT_AND_NON_CONCRETE|EVERYTHING)": "",
+          "@JsonTypeInfo\\s*\\(\\s*use\\s*=\\s*JsonTypeInfo\\.Id\\.CLASS": "",
+          "JsonTypeInfo\\.Id\\.MINIMAL_CLASS": "",
+          "ParserConfig\\.getGlobalInstance\\(\\)\\.setAutoTypeSupport\\s*\\(\\s*true": "",
+          "JSON\\.parse(Object)?\\s*\\([^)]*Feature\\.SupportAutoType": "",
+          "new\\s+XStream\\s*\\(\\s*\\)(?![\\s\\S]{0,300}(allowTypes|addPermission|setupDefaultSecurity))": "",
+          "xstream\\.fromXML\\s*\\(": "",
+          "new\\s+Yaml\\s*\\(\\s*\\)(?![^;]*SafeConstructor)": "",
+          "yaml\\.load\\s*\\(": "",
+          "new\\s+Kryo\\s*\\([^)]*\\)[\\s\\S]{0,200}setRegistrationRequired\\s*\\(\\s*false": ""
+        },
+        "sources": {
+          "@RequestBody": "",
+          "request\\.getInputStream\\s*\\(": "",
+          "ObjectMapper\\s*\\(\\)\\.readValue\\s*\\(": "",
+          "request\\.getReader\\s*\\(": ""
+        }
+      },
+      "notes": "Safe patterns: PolymorphicTypeValidator with an explicit allow-list for Jackson, SafeConstructor for SnakeYAML, XStream security framework with an allow-list, and no autoType for Fastjson (or Fastjson 2 safe mode).",
+      "references": [
+        "https://cheatsheetseries.owasp.org/cheatsheets/Deserialization_Cheat_Sheet.html",
+        "https://cwe.mitre.org/data/definitions/502.html"
+      ]
+    },
+    {
+      "name": "Insecure YAML Deserialization (Python/Ruby/PHP/Node Unsafe Loaders)",
+      "category": "Deserialization Vulnerability",
+      "deser_type": "Native Object Deserialization",
+      "cwe": "CWE-502",
+      "severity": "High",
+      "description": "Untrusted YAML is parsed with a loader that supports language-specific object tags (such as !!python/object or !ruby/object), letting an attacker instantiate arbitrary objects or call functions during parsing.",
+      "headers": {
+        "request": {
+          "^Content-Type$": "(application|text)/(x-)?ya?ml"
+        },
+        "response": {}
+      },
+      "html": {
+        "sinks": {
+          "yaml\\.load\\s*\\((?![^)]*Loader\\s*=\\s*(yaml\\.)?(Safe|CSafe)Loader)": "",
+          "yaml\\.(unsafe_load|full_load)\\s*\\(": "",
+          "yaml\\.load_all\\s*\\((?![^)]*SafeLoader)": "",
+          "Loader\\s*=\\s*(yaml\\.)?(Loader|UnsafeLoader|FullLoader)\\b": "",
+          "YAML\\.(load|unsafe_load|load_file)\\s*\\(": "",
+          "Psych\\.(load|unsafe_load)\\s*\\(": "",
+          "yaml\\.load\\s*\\([^)]*schema\\s*:\\s*yaml\\.DEFAULT_FULL_SCHEMA": "",
+          "js-yaml[^\\n]{0,80}\\.load\\s*\\(": "",
+          "yaml_parse\\s*\\(": ""
+        },
+        "sources": {
+          "request\\.(data|body|files|form|args)": "",
+          "params\\s*\\[": "",
+          "req\\.(body|query|files)": "",
+          "\\$_(POST|GET|REQUEST|FILES)": ""
+        }
+      },
+      "notes": "Use yaml.safe_load in Python, YAML.safe_load with permitted_classes in Ruby (Psych 4 makes load safe by default), and js-yaml 4+ (safe by default). Flag third-party config or upload endpoints that accept YAML.",
+      "references": [
+        "https://cheatsheetseries.owasp.org/cheatsheets/Deserialization_Cheat_Sheet.html",
+        "https://cwe.mitre.org/data/definitions/502.html"
+      ]
+    },
+    {
+      "name": "Insecure Deserialization via Ruby Marshal.load",
+      "category": "Deserialization Vulnerability",
+      "deser_type": "Native Object Deserialization",
+      "cwe": "CWE-502",
+      "severity": "Critical",
+      "description": "Untrusted data is passed to Marshal.load/Marshal.restore (or a cookie store that uses Marshal), allowing attacker-chosen objects to be instantiated. Rails applications with a leaked secret_key_base and a Marshal cookie serializer are especially exposed.",
+      "headers": {
+        "request": {
+          "^Cookie$": "(BAh[A-Za-z0-9+/=%-]{8,}|_session[^=]*=[A-Za-z0-9%+/=_-]{60,}--[a-f0-9]{40})"
+        },
+        "response": {
+          "^Set-Cookie$": "(BAh[A-Za-z0-9+/=%-]{8,}|_session[^=]*=[A-Za-z0-9%+/=_-]{60,}--[a-f0-9]{40})"
+        }
+      },
+      "html": {
+        "sinks": {
+          "Marshal\\.(load|restore)\\s*\\(": "",
+          "cookies_serializer\\s*=\\s*:(marshal|hybrid)": "",
+          "ActiveSupport::MessageVerifier[^\\n]{0,80}serializer\\s*:\\s*Marshal": "",
+          "Oj\\.load\\s*\\((?![^)]*mode\\s*:\\s*:strict)": "",
+          "secret_key_base\\s*=\\s*[\"'][a-f0-9]{16,}[\"']": ""
+        },
+        "sources": {
+          "params\\s*\\[": "",
+          "cookies\\s*\\[": "",
+          "request\\.(body|raw_post)": "",
+          "Base64\\.(decode64|strict_decode64)\\s*\\(": "",
+          "Rails\\.cache\\.read\\s*\\(": ""
+        },
+        "reflection_indicators": {
+          "BAh[A-Za-z0-9+/=%-]{8,}": "Base64 of a Ruby Marshal stream (starts with 0x04 0x08)"
+        }
+      },
+      "notes": "Use :json as the cookies serializer and keep secret_key_base secret and out of version control. A hard-coded secret_key_base in a repository is a finding by itself.",
+      "references": [
+        "https://cheatsheetseries.owasp.org/cheatsheets/Ruby_on_Rails_Cheat_Sheet.html",
+        "https://cwe.mitre.org/data/definitions/502.html"
+      ]
+    },
+    {
+      "name": "Unsafe Deserialization and Prototype Pollution in Node.js (node-serialize, serialize-to-js, Object Merging)",
+      "category": "Deserialization Vulnerability",
+      "deser_type": "Native Object Deserialization",
+      "cwe": "CWE-502",
+      "severity": "Critical",
+      "description": "Untrusted data is passed to libraries that evaluate serialized functions (node-serialize, serialize-to-js, funcster) or is recursively merged into existing objects without blocking __proto__, constructor, and prototype keys, leading to code execution or global object tampering.",
+      "headers": {
+        "request": {
+          "^Content-Type$": "application/json|application/x-www-form-urlencoded",
+          "^Cookie$": "(eyJ[A-Za-z0-9_-]{10,}|_\\$\\$ND_FUNC\\$\\$_)"
+        },
+        "response": {}
+      },
+      "html": {
+        "sinks": {
+          "require\\s*\\(\\s*[\"']node-serialize[\"']\\s*\\)": "",
+          "serialize\\.unserialize\\s*\\(": "",
+          "unserialize\\s*\\(\\s*(req|request|data|body)": "",
+          "require\\s*\\(\\s*[\"'](serialize-to-js|funcster|serialize-javascript)[\"']\\s*\\)": "",
+          "_\\.(merge|mergeWith|defaultsDeep|set|setWith|zipObjectDeep)\\s*\\(": "",
+          "\\$\\.extend\\s*\\(\\s*true\\s*,": "",
+          "Object\\.assign\\s*\\(\\s*\\w+\\s*,\\s*JSON\\.parse": "",
+          "(merge|deepMerge|deepExtend|extend)\\s*\\(\\s*\\w+\\s*,\\s*(req\\.body|req\\.query|JSON\\.parse\\s*\\()": "",
+          "new\\s+Function\\s*\\(|\\beval\\s*\\(": "",
+          "vm\\.(runInNewContext|runInThisContext|runInContext)\\s*\\(": ""
+        },
+        "sources": {
+          "req\\.(body|query|params|cookies|headers)": "",
+          "ctx\\.(request\\.body|query)": "",
+          "Buffer\\.from\\s*\\([^)]*[\"']base64[\"']\\s*\\)": ""
+        },
+        "reflection_indicators": {
+          "_\\$\\$ND_FUNC\\$\\$_": "node-serialize function marker present in a cookie or parameter"
+        }
+      },
+      "notes": "For prototype pollution, flag merges where keys come from untrusted JSON without filtering __proto__, constructor, and prototype (or without using Object.create(null) or a safe merge library). Confirm behavior safely by checking whether a harmless property set through __proto__ appears on unrelated objects.",
+      "references": [
+        "https://portswigger.net/web-security/prototype-pollution",
+        "https://cwe.mitre.org/data/definitions/1321.html"
+      ]
+    },
+    {
+      "name": "Insecure Deserialization via Python jsonpickle / PyYAML-like Object-Restoring JSON",
+      "category": "Deserialization Vulnerability",
+      "deser_type": "Polymorphic Type Handling",
+      "cwe": "CWE-502",
+      "severity": "Critical",
+      "description": "jsonpickle.decode (and similar libraries) rebuild Python objects from JSON that includes type markers such as py/object and py/reduce. Untrusted JSON can therefore instantiate arbitrary classes and call arbitrary functions.",
+      "headers": {
+        "request": {
+          "^Content-Type$": "application/json"
+        },
+        "response": {}
+      },
+      "html": {
+        "sinks": {
+          "jsonpickle\\.(decode|loads)\\s*\\(": "",
+          "jsonpickle\\.unpickler": "",
+          "jsonpickle\\.set_decoder_options": "",
+          "py/(object|reduce|type|state|newargs)": "",
+          "(simplejson|json)\\.loads\\s*\\([^)]*object_hook\\s*=\\s*[^)]*(import_module|__import__|getattr)": ""
+        },
+        "sources": {
+          "request\\.(data|json|get_json|body|form)": "",
+          "flask\\.request": "",
+          "request\\.(POST|GET)": ""
+        }
+      },
+      "notes": "Replace jsonpickle with plain json plus explicit schema validation (for example pydantic or marshmallow) for any data that crosses a trust boundary.",
+      "references": [
+        "https://cheatsheetseries.owasp.org/cheatsheets/Deserialization_Cheat_Sheet.html",
+        "https://cwe.mitre.org/data/definitions/502.html"
+      ]
+    },
+    {
+      "name": "Deserialization Error Message Disclosure",
+      "category": "Deserialization Vulnerability",
+      "deser_type": "Error-based",
+      "cwe": "CWE-209",
+      "severity": "Medium",
+      "description": "Modified or malformed serialized data triggers a language-specific deserialization error in the response. This confirms that the input reaches a deserializer and often reveals the library, class names, and file paths that guide further testing.",
+      "headers": {
+        "request": {},
+        "response": {}
+      },
+      "html": {
+        "reflection_indicators": {
+          "java\\.io\\.(InvalidClassException|StreamCorruptedException|OptionalDataException|NotSerializableException|InvalidObjectException)": "Java native deserialization error",
+          "java\\.lang\\.ClassNotFoundException|ClassCastException[^\\n]{0,120}(cannot be cast|incompatible)": "Java class resolution or cast error during deserialization",
+          "invalid stream header: [0-9A-Fa-f]{8}": "Java ObjectInputStream rejected the stream header (confirms native deserialization)",
+          "com\\.fasterxml\\.jackson\\.databind\\.(exc\\.)?(InvalidTypeIdException|InvalidDefinitionException|MismatchedInputException)": "Jackson type handling error",
+          "com\\.alibaba\\.fastjson\\.JSONException|autoType is not support": "Fastjson error",
+          "com\\.thoughtworks\\.xstream\\.(security\\.ForbiddenClassException|converters\\.ConversionException)": "XStream error",
+          "_pickle\\.UnpicklingError|pickle\\.UnpicklingError|invalid load key|pickle data was truncated": "Python pickle error",
+          "yaml\\.constructor\\.ConstructorError|could not determine a constructor for the tag": "PyYAML constructor error",
+          "unserialize\\(\\): Error at offset \\d+ of \\d+ bytes": "PHP unserialize error",
+          "__PHP_Incomplete_Class": "PHP object of an unknown class was created by unserialize",
+          "System\\.Runtime\\.Serialization\\.SerializationException|Unable to find assembly|Newtonsoft\\.Json\\.JsonSerializationException": ".NET deserialization error",
+          "Invalid length for a Base-64 char array|The state information is invalid for this page|Validation of viewstate MAC failed": "ASP.NET ViewState or Base64 decoding error",
+          "TypeError: incorrect data check|marshal data too short|ArgumentError \\(marshal data too short\\)|incompatible marshal file format": "Ruby Marshal error",
+          "SyntaxError: Unexpected token[^\\n]{0,80}in JSON at position": "Node.js JSON parse error on user-controlled data"
+        }
+      },
+      "notes": "Errors help distinguish deserialization from other parsing layers. An error such as 'invalid stream header' after changing the first bytes of a Base64 value is a strong sign of native Java deserialization.",
+      "references": [
+        "https://portswigger.net/web-security/deserialization/exploiting",
+        "https://cwe.mitre.org/data/definitions/209.html"
+      ]
+    },
+    {
+      "name": "Serialized Session or Cookie Data Without Integrity Protection",
+      "category": "Deserialization Vulnerability",
+      "deser_type": "Integrity Check Failure",
+      "cwe": "CWE-565",
+      "severity": "High",
+      "description": "Application state (user identity, roles, privileges) is stored client-side in a serialized or Base64-encoded structure with no HMAC or signature, or the signing secret is weak or default. An attacker can tamper with the serialized data to change privileges or to feed a malicious object to the deserializer.",
+      "headers": {
+        "request": {
+          "^Cookie$": "(session|sess|user|auth|data|profile|prefs|state)[^=]*=(rO0AB|gASV|gAJ|BAh|Tzo|YTo|O%3A|O:|eyJ)"
+        },
+        "response": {
+          "^Set-Cookie$": "(session|sess|user|auth|data|profile|prefs|state)[^=]*=(rO0AB|gASV|gAJ|BAh|Tzo|YTo|O%3A|O:)"
+        }
+      },
+      "html": {
+        "sinks": {
+          "SECRET_KEY\\s*=\\s*[\"'](secret|changeme|default|dev|test|password|12345\\d*|your[-_ ]?secret[-_ ]?key)[\"']": "",
+          "secret\\s*:\\s*[\"'](keyboard cat|secret|changeme|default|dev|test)[\"']": "",
+          "session_cookie_name|SESSION_COOKIE_NAME": "",
+          "SESSION_SERIALIZER\\s*=\\s*[\"']django\\.contrib\\.sessions\\.serializers\\.PickleSerializer[\"']": "",
+          "serialize\\s*\\(\\s*\\$_SESSION": "",
+          "base64_encode\\s*\\(\\s*serialize\\s*\\(": "",
+          "Base64\\.getEncoder\\s*\\(\\)\\.encodeToString\\s*\\([^)]*(ObjectOutputStream|toByteArray)": "",
+          "JsonConvert\\.SerializeObject\\s*\\([^)]*\\)[\\s\\S]{0,120}(Cookies\\.Append|Response\\.Cookies)": ""
+        },
+        "sources": {
+          "request\\.cookies": "",
+          "\\$_COOKIE": "",
+          "req\\.cookies": "",
+          "Request\\.Cookies": "",
+          "getCookies\\s*\\(": ""
+        }
+      },
+      "notes": "Flag cookie values that decode to an object structure and have no accompanying signature (for example a dot-separated HMAC segment or a separate signature cookie). Default or guessable secrets make signed values forgeable.",
+      "references": [
+        "https://portswigger.net/web-security/deserialization",
+        "https://cwe.mitre.org/data/definitions/565.html"
+      ]
+    },
+    {
+      "name": "Deserialization Hardening Gap: No Class Allow-List, Filter, or Integrity Check Near Deserialization",
+      "category": "Deserialization Vulnerability",
+      "deser_type": "Mitigation Gap",
+      "cwe": "CWE-502",
+      "severity": "Low",
+      "description": "The codebase or configuration lacks defense-in-depth for deserialization: no JEP 290 serial filter, no look-ahead ObjectInputStream, no signed payloads, no restricted loaders, and verbose errors enabled. Even if no exploitable gadget exists today, a future dependency update can introduce one.",
+      "headers": {
+        "request": {},
+        "response": {}
+      },
+      "html": {
+        "sinks": {
+          "-Djdk\\.serialFilter\\s*=\\s*\\*": "",
+          "jdk\\.serialFilter\\s*=\\s*(\\*|!?\\*)": "",
+          "ObjectInputFilter\\.Config\\.setSerialFilter\\s*\\(\\s*(null|info\\s*->\\s*ObjectInputFilter\\.Status\\.ALLOWED)": "",
+          "resolveClass\\s*\\([^)]*\\)\\s*\\{\\s*return\\s+super\\.resolveClass": "",
+          "yaml\\.load\\s*\\([^)]*,\\s*Loader\\s*=\\s*yaml\\.Loader": "",
+          "unserialize\\s*\\([^)]*\\)\\s*;(?![\\s\\S]{0,200}allowed_classes)": "",
+          "trusted_?packages\\s*[=:]\\s*[\"']\\*[\"']": "",
+          "spring\\.kafka\\.consumer\\.properties\\.spring\\.json\\.trusted\\.packages\\s*=\\s*\\*": "",
+          "setTrustedPackages\\s*\\(\\s*[\"']\\*[\"']": "",
+          "ActiveMQConnectionFactory\\s*\\([^)]*\\)[\\s\\S]{0,150}setTrustAllPackages\\s*\\(\\s*true": ""
+        },
+        "sources": {}
+      },
+      "notes": "Mitigation-gap finding, not a direct vulnerability. Combine with a confirmed deserialization sink and source. Wildcard trusted packages in messaging libraries (JMS, Kafka, ActiveMQ) are a common real-world cause of deserialization exposure.",
+      "references": [
+        "https://openjdk.org/jeps/290",
+        "https://cwe.mitre.org/data/definitions/502.html"
+      ]
+    }
+  ]
+}
