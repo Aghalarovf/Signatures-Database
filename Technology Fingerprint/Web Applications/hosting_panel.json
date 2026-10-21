@@ -1,0 +1,42 @@
+{
+  "technologies": [
+    {
+      "name": "cPanel / WHM",
+      "category": "Hosting Control Panel",
+      "cookies": {
+        "^cpsession$": "",
+        "^whostmgrsession$": "",
+        "^cprelogin$": "",
+        "^whostmgrrelogin$": "",
+        "^cp_security_token$": "",
+        "^whm_security_token$": ""
+      }
+    },
+    {
+      "name": "Plesk",
+      "category": "Hosting Control Panel",
+      "cookies": {
+        "^PLESKSESSID$": "",
+        "^plesk-securitytoken$": "",
+        "^plesk-": ""
+      }
+    },
+    {
+      "name": "DirectAdmin",
+      "category": "Hosting Control Panel",
+      "cookies": {
+        "^DirectAdmin": ""
+      }
+    },
+    {
+      "name": "ISPConfig",
+      "category": "Hosting Control Panel",
+      "cookies": {
+        "^ISPCSESS$": ""
+      },
+      "implies": [
+        "PHP"
+      ]
+    }
+  ]
+}
