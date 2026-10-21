@@ -1,0 +1,214 @@
+{
+  "technologies": [
+    {
+      "name": "Akamai Bot Manager",
+      "category": "Bot Management",
+      "cookies": {
+        "^ak_bmsc$": "",
+        "^bm_sz$": "",
+        "^_abck$": ""
+      }
+    },
+    {
+      "name": "Imperva",
+      "category": "WAF",
+      "cookies": {
+        "^incap_ses_": "",
+        "^visid_incap_": "",
+        "^nlbi_": ""
+      }
+    },
+    {
+      "name": "Sucuri",
+      "category": "WAF",
+      "cookies": {
+        "^sucuri_cloudproxy_uuid_": ""
+      }
+    },
+    {
+      "name": "Distil Networks",
+      "category": "Bot Management",
+      "cookies": {
+        "^D_SID$": "",
+        "^D_UID$": ""
+      }
+    },
+    {
+      "name": "PerimeterX",
+      "category": "Bot Management",
+      "cookies": {
+        "^_px$": "",
+        "^_pxvid$": "",
+        "^_pxhd$": ""
+      }
+    },
+    {
+      "name": "DataDome",
+      "category": "Bot Management",
+      "cookies": {
+        "^datadome$": ""
+      }
+    },
+    {
+      "name": "F5 BIG-IP ASM (Advanced WAF)",
+      "category": "WAF",
+      "cookies": {
+        "^TS[0-9a-f]{8}(?:[0-9a-f]{3})?(?:_\\d+)?$": "",
+        "^TS[0-9a-f]{8,}$": "",
+        "^f5avr\\d+_session_$": "",
+        "^f5_cspm$": "",
+        "^f5avraaaaaaaaaaaaaaaa_session_$": "",
+        "^MRHSession$": "",
+        "^LastMRH_Session$": "",
+        "^F5_ST$": "",
+        "^F5_HT_shrinked$": "",
+        "^F5_fullWT$": ""
+      }
+    },
+    {
+      "name": "F5 Shape Security",
+      "category": "Bot Management",
+      "cookies": {
+        "^_imp_apg_r_$": ""
+      }
+    },
+    {
+      "name": "Barracuda WAF",
+      "category": "WAF",
+      "cookies": {
+        "^barra_counter_session$": "",
+        "^BNI__BARRACUDA_LB_COOKIE$": "",
+        "^BNI_persistence$": ""
+      }
+    },
+    {
+      "name": "Fortinet FortiWeb",
+      "category": "WAF",
+      "cookies": {
+        "^cookiesession1$": "",
+        "^FORTIWAFSID$": ""
+      }
+    },
+    {
+      "name": "Radware AppWall",
+      "category": "WAF",
+      "cookies": {
+        "^rdwr_": ""
+      }
+    },
+    {
+      "name": "Radware Bot Manager (ShieldSquare)",
+      "category": "Bot Management",
+      "cookies": {
+        "^__uzma$": "",
+        "^__uzmb$": "",
+        "^__uzmc$": "",
+        "^__uzmd$": "",
+        "^__uzme$": ""
+      }
+    },
+    {
+      "name": "Akamai Bot Manager Premier",
+      "category": "Bot Management",
+      "cookies": {
+        "^bm_sv$": "",
+        "^bm_mi$": "",
+        "^bm_lso$": ""
+      }
+    },
+    {
+      "name": "Reblaze",
+      "category": "WAF",
+      "cookies": {
+        "^rbzid$": "",
+        "^rbzsessionid$": ""
+      }
+    },
+    {
+      "name": "Cloudflare Challenge",
+      "category": "Bot Management",
+      "cookies": {
+        "^cf_chl_": "",
+        "^__cf_chl_": "",
+        "^cf_chl_rc_": ""
+      }
+    },
+    {
+      "name": "Imperva (extended)",
+      "category": "WAF",
+      "cookies": {
+        "^___utmvc$": "",
+        "^___utmvm$": "",
+        "^___utmvb$": "",
+        "^___utmva$": "",
+        "^reese84$": "",
+        "^incap_sh_": ""
+      }
+    },
+    {
+      "name": "Kasada",
+      "category": "Bot Management",
+      "cookies": {
+        "^x-kpsdk-": "",
+        "^KP_UIDz$": "",
+        "^KP_UIDz-ssn$": ""
+      }
+    },
+    {
+      "name": "Netacea",
+      "category": "Bot Management",
+      "cookies": {
+        "^_mitata$": "",
+        "^_mitataexp$": ""
+      }
+    },
+    {
+      "name": "Alibaba Cloud WAF",
+      "category": "WAF",
+      "cookies": {
+        "^acw_tc$": "",
+        "^acw_sc__v2$": "",
+        "^acw_sc__v3$": "",
+        "^aliyungf_tc$": ""
+      }
+    },
+    {
+      "name": "Huawei Cloud WAF",
+      "category": "WAF",
+      "cookies": {
+        "^HWWAFSESID$": "",
+        "^HWWAFSESTIME$": ""
+      }
+    },
+    {
+      "name": "Safedog",
+      "category": "WAF",
+      "cookies": {
+        "^safedog-flow-item": ""
+      }
+    },
+    {
+      "name": "Yunsuo",
+      "category": "WAF",
+      "cookies": {
+        "^yunsuo_session_verify$": "",
+        "^security_session_verify$": "",
+        "^security_session_mid_verify$": ""
+      }
+    },
+    {
+      "name": "360 Web Application Firewall",
+      "category": "WAF",
+      "cookies": {
+        "^__jsluid_[hs]$": ""
+      }
+    },
+    {
+      "name": "Knownsec Jiasule",
+      "category": "WAF",
+      "cookies": {
+        "^__jsl_clearance": ""
+      }
+    }
+  ]
+}
