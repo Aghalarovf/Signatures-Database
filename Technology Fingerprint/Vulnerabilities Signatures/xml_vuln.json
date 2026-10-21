@@ -1,0 +1,500 @@
+{
+  "vulnerabilities": [
+    {
+      "name": "XXE via Python XML Parsers With Untrusted Input",
+      "category": "XML Vulnerability",
+      "xml_type": "XXE",
+      "cwe": "CWE-611",
+      "severity": "High",
+      "description": "Untrusted XML is parsed by a Python XML library configured to resolve DTDs or external entities, so a crafted DOCTYPE can make the server read local files or issue network requests.",
+      "headers": {
+        "request": {
+          "^Content-Type$": "^(application|text)/(.+\\+)?xml"
+        },
+        "response": {}
+      },
+      "html": {
+        "sinks": {
+          "etree\\.(XMLParser|fromstring|parse)\\s*\\([^)]*resolve_entities\\s*=\\s*True": "",
+          "etree\\.XMLParser\\s*\\([^)]*(load_dtd|no_network)\\s*=\\s*(True|False)": "",
+          "lxml\\.etree\\.(fromstring|XML|parse)\\s*\\(": "",
+          "xml\\.dom\\.minidom\\.parse(String)?\\s*\\(": "",
+          "xml\\.sax\\.(parse|parseString|make_parser)\\s*\\(": "",
+          "setFeature\\s*\\(\\s*feature_external_ges\\s*,\\s*True": "",
+          "xmlrpc\\.client|xmlrpclib": ""
+        },
+        "sources": {
+          "request\\.(data|body|get_data|files|stream)": "",
+          "request\\.POST|request\\.FILES": "",
+          "flask\\.request": ""
+        }
+      },
+      "notes": "Python's standard xml.etree.ElementTree does not resolve external entities by default, but lxml with resolve_entities=True or load_dtd=True does. Recommend defusedxml. Flag when untrusted data reaches a parser with unsafe options.",
+      "references": [
+        "https://portswigger.net/web-security/xxe",
+        "https://cwe.mitre.org/data/definitions/611.html"
+      ]
+    },
+    {
+      "name": "XXE via Java XML Parsers Without Secure Processing",
+      "category": "XML Vulnerability",
+      "xml_type": "XXE",
+      "cwe": "CWE-611",
+      "severity": "High",
+      "description": "A Java DocumentBuilderFactory, SAXParserFactory, XMLInputFactory, TransformerFactory, SchemaFactory, or XMLReader processes untrusted XML without disabling DOCTYPE declarations or external entity resolution.",
+      "headers": {
+        "request": {
+          "^Content-Type$": "^(application|text)/(.+\\+)?xml"
+        },
+        "response": {}
+      },
+      "html": {
+        "sinks": {
+          "DocumentBuilderFactory\\.newInstance\\s*\\(": "",
+          "SAXParserFactory\\.newInstance\\s*\\(": "",
+          "XMLInputFactory\\.(newInstance|newFactory)\\s*\\(": "",
+          "TransformerFactory\\.newInstance\\s*\\(": "",
+          "SchemaFactory\\.newInstance\\s*\\(": "",
+          "XMLReaderFactory\\.createXMLReader\\s*\\(": "",
+          "new\\s+SAXBuilder\\s*\\(": "",
+          "new\\s+SAXReader\\s*\\(": "",
+          "Unmarshaller\\s*\\.\\s*unmarshal\\s*\\(": ""
+        },
+        "sources": {
+          "request\\.getInputStream\\s*\\(": "",
+          "request\\.getReader\\s*\\(": "",
+          "@RequestBody": "",
+          "MultipartFile": ""
+        }
+      },
+      "notes": "Not a finding if the factory sets disallow-doctype-decl=true, or disables external-general-entities and external-parameter-entities, or enables FEATURE_SECURE_PROCESSING together with the accessExternalDTD/accessExternalSchema restrictions. Check for these calls near the sink.",
+      "references": [
+        "https://cheatsheetseries.owasp.org/cheatsheets/XML_External_Entity_Prevention_Cheat_Sheet.html",
+        "https://cwe.mitre.org/data/definitions/611.html"
+      ]
+    },
+    {
+      "name": "XXE via PHP libxml/SimpleXML/DOM Parsing",
+      "category": "XML Vulnerability",
+      "xml_type": "XXE",
+      "cwe": "CWE-611",
+      "severity": "High",
+      "description": "Untrusted XML is parsed by SimpleXML, DOMDocument, or XMLReader with LIBXML_NOENT or LIBXML_DTDLOAD, or on a PHP/libxml combination where entity substitution is enabled.",
+      "headers": {
+        "request": {
+          "^Content-Type$": "^(application|text)/(.+\\+)?xml"
+        },
+        "response": {}
+      },
+      "html": {
+        "sinks": {
+          "simplexml_load_(string|file)\\s*\\(": "",
+          "->loadXML\\s*\\(": "",
+          "->load\\s*\\(\\s*\\$": "",
+          "new\\s+SimpleXMLElement\\s*\\(": "",
+          "LIBXML_NOENT": "",
+          "LIBXML_DTDLOAD": "",
+          "XMLReader::(xml|open)\\s*\\(": "",
+          "libxml_disable_entity_loader\\s*\\(\\s*false": ""
+        },
+        "sources": {
+          "file_get_contents\\s*\\(\\s*[\"']php://input": "",
+          "\\$_(GET|POST|REQUEST|FILES)\\s*\\[": "",
+          "\\$request->(getContent|input)\\s*\\(": ""
+        }
+      },
+      "notes": "libxml2 >= 2.9 does not substitute entities by default, so the main risk comes from explicit LIBXML_NOENT/LIBXML_DTDLOAD flags or very old environments.",
+      "references": [
+        "https://www.php.net/manual/en/function.libxml-disable-entity-loader.php",
+        "https://cwe.mitre.org/data/definitions/611.html"
+      ]
+    },
+    {
+      "name": "XXE via .NET XmlDocument/XmlTextReader/XmlReader Misconfiguration",
+      "category": "XML Vulnerability",
+      "xml_type": "XXE",
+      "cwe": "CWE-611",
+      "severity": "High",
+      "description": "A .NET XML parser is used on untrusted input with DtdProcessing set to Parse or a non-null XmlResolver, which allows external entity resolution.",
+      "headers": {
+        "request": {
+          "^Content-Type$": "^(application|text)/(.+\\+)?xml"
+        },
+        "response": {}
+      },
+      "html": {
+        "sinks": {
+          "DtdProcessing\\s*=\\s*DtdProcessing\\.Parse": "",
+          "ProhibitDtd\\s*=\\s*false": "",
+          "XmlResolver\\s*=\\s*new\\s+XmlUrlResolver": "",
+          "new\\s+XmlTextReader\\s*\\(": "",
+          "new\\s+XmlDocument\\s*\\(": "",
+          "XmlDocument\\s*\\(\\)\\.(Load|LoadXml)\\s*\\(": "",
+          "XmlSerializer\\s*\\([^)]*\\)\\.Deserialize\\s*\\(": "",
+          "XDocument\\.(Load|Parse)\\s*\\(": ""
+        },
+        "sources": {
+          "Request\\.(InputStream|Form|Files|Body)": "",
+          "HttpContext\\.Request": "",
+          "\\[FromBody\\]": ""
+        }
+      },
+      "notes": "Modern .NET (4.5.2+) defaults to a null resolver for most readers. Confirm explicit unsafe settings or legacy target frameworks.",
+      "references": [
+        "https://cheatsheetseries.owasp.org/cheatsheets/XML_External_Entity_Prevention_Cheat_Sheet.html",
+        "https://cwe.mitre.org/data/definitions/611.html"
+      ]
+    },
+    {
+      "name": "XXE via Node.js/Ruby XML Libraries With Entity Substitution",
+      "category": "XML Vulnerability",
+      "xml_type": "XXE",
+      "cwe": "CWE-611",
+      "severity": "High",
+      "description": "Untrusted XML is parsed by libxmljs, node-xml2js-based wrappers, or Ruby's Nokogiri/REXML with entity substitution or DTD loading enabled.",
+      "headers": {
+        "request": {
+          "^Content-Type$": "^(application|text)/(.+\\+)?xml"
+        },
+        "response": {}
+      },
+      "html": {
+        "sinks": {
+          "libxmljs\\.parseXml(String)?\\s*\\([^)]*noent\\s*:\\s*true": "",
+          "parseXml\\s*\\([^)]*(noent|dtdload)\\s*:\\s*true": "",
+          "Nokogiri::XML\\s*\\([^)]*(NOENT|DTDLOAD)": "",
+          "Nokogiri::XML::ParseOptions::(NOENT|DTDLOAD)": "",
+          "REXML::Document\\.new\\s*\\(": "",
+          "xml2js\\.parseString\\s*\\(": ""
+        },
+        "sources": {
+          "req\\.(body|rawBody|files|query)": "",
+          "params\\s*\\[": "",
+          "request\\.(body|raw_post)": ""
+        }
+      },
+      "notes": "Flag primarily when noent/NOENT/DTDLOAD options are explicitly set on untrusted input. REXML is vulnerable to entity-expansion DoS even when external entities are not resolved.",
+      "references": [
+        "https://portswigger.net/web-security/xxe",
+        "https://cwe.mitre.org/data/definitions/611.html"
+      ]
+    },
+    {
+      "name": "XXE Behavioral Indicator: Local File Content Reflected in Response",
+      "category": "XML Vulnerability",
+      "xml_type": "XXE",
+      "cwe": "CWE-611",
+      "severity": "Critical",
+      "description": "After a benign external-entity test is sent in an XML body, the response contains the content of a well-known local file, which proves the server resolved the external entity and returned its contents.",
+      "headers": {
+        "request": {
+          "^Content-Type$": "^(application|text)/(.+\\+)?xml"
+        },
+        "response": {
+          "^Content-Type$": "xml|html|plain|json"
+        }
+      },
+      "html": {
+        "reflection_indicators": {
+          "root:[x*]:0:0:": "first field of a Unix /etc/passwd entry appears in the response",
+          "\\[(fonts|extensions|mci extensions)\\]": "section header of the Windows win.ini file appears in the response",
+          "\\[boot loader\\]": "section header of the legacy Windows boot.ini file appears in the response",
+          "daemon:[x*]:\\d+:\\d+:": "second /etc/passwd entry pattern appears in the response"
+        }
+      },
+      "notes": "Confirm with a control request that has no DOCTYPE and verify that the file markers appear only when the entity reference is present. For blind XXE, use a unique out-of-band callback hostname instead.",
+      "references": [
+        "https://portswigger.net/web-security/xxe",
+        "https://cwe.mitre.org/data/definitions/611.html"
+      ]
+    },
+    {
+      "name": "XML Parser Error Message Disclosure",
+      "category": "XML Vulnerability",
+      "xml_type": "Error-based",
+      "cwe": "CWE-209",
+      "severity": "Medium",
+      "description": "Malformed XML or DOCTYPE content triggers a verbose parser error in the response. It confirms that user input reaches an XML parser, may reveal file paths, and shows whether DTD processing is allowed or blocked.",
+      "headers": {
+        "request": {
+          "^Content-Type$": "^(application|text)/(.+\\+)?xml"
+        },
+        "response": {}
+      },
+      "html": {
+        "reflection_indicators": {
+          "org\\.xml\\.sax\\.SAXParseException|javax\\.xml\\.parsers\\.ParserConfigurationException": "Java SAX/JAXP parser error",
+          "DOCTYPE is disallowed when the feature \"http://apache\\.org/xml/features/disallow-doctype-decl\" set to true": "Java parser with DOCTYPE blocked (good hardening signal, but confirms an XML parser)",
+          "lxml\\.etree\\.XMLSyntaxError|xml\\.parsers\\.expat\\.ExpatError": "Python XML parser error",
+          "simplexml_load_string\\(\\): .*parser error|DOMDocument::loadXML\\(\\): .*(Entity|parser) error": "PHP libxml error",
+          "System\\.Xml\\.XmlException|DTD is prohibited": ".NET XML parser error",
+          "Entity '[^']+' not defined|Failed to load external entity|I/O warning : failed to load": "libxml2 entity resolution message",
+          "Nokogiri::XML::SyntaxError|REXML::ParseException": "Ruby XML parser error",
+          "XML Parsing Error|This page contains the following errors:": "Browser or server XML parse error page"
+        }
+      },
+      "notes": "Messages such as 'Failed to load external entity' strongly suggest that entity resolution is attempted and warrant a deeper XXE test. 'DOCTYPE is disallowed' indicates hardening.",
+      "references": [
+        "https://portswigger.net/web-security/xxe",
+        "https://cwe.mitre.org/data/definitions/209.html"
+      ]
+    },
+    {
+      "name": "XML Entity Expansion (Billion Laughs / Quadratic Blowup) Exposure",
+      "category": "XML Vulnerability",
+      "xml_type": "Denial of Service",
+      "cwe": "CWE-776",
+      "severity": "Medium",
+      "description": "The XML parser expands nested or repeated internal entities without limits on expansion depth, size, or count, so a small document can consume excessive memory and CPU.",
+      "headers": {
+        "request": {
+          "^Content-Type$": "^(application|text)/(.+\\+)?xml"
+        },
+        "response": {}
+      },
+      "html": {
+        "sinks": {
+          "setFeature\\s*\\(\\s*XMLConstants\\.FEATURE_SECURE_PROCESSING\\s*,\\s*false": "",
+          "entityExpansionLimit\\s*=\\s*0|jdk\\.xml\\.entityExpansionLimit\\s*=\\s*0": "",
+          "huge_tree\\s*=\\s*True": "",
+          "LIBXML_PARSEHUGE": "",
+          "MaxCharactersFromEntities\\s*=\\s*0": "",
+          "resolve_entities\\s*=\\s*True": ""
+        },
+        "sources": {
+          "request\\.(data|body|getInputStream)": "",
+          "req\\.(body|rawBody)": "",
+          "\\$_(POST|REQUEST)": ""
+        }
+      },
+      "notes": "Test safely with a small, bounded entity-expansion document and measure response time and size. Do not send high-amplification payloads to production systems.",
+      "references": [
+        "https://cheatsheetseries.owasp.org/cheatsheets/XML_External_Entity_Prevention_Cheat_Sheet.html",
+        "https://cwe.mitre.org/data/definitions/776.html"
+      ]
+    },
+    {
+      "name": "XInclude Processing Enabled on Untrusted XML",
+      "category": "XML Vulnerability",
+      "xml_type": "XXE",
+      "cwe": "CWE-611",
+      "severity": "High",
+      "description": "The parser has XInclude processing enabled, so an attacker who controls only part of the document (and cannot add a DOCTYPE) can still include local or remote resources.",
+      "headers": {
+        "request": {
+          "^Content-Type$": "^(application|text)/(.+\\+)?xml"
+        },
+        "response": {}
+      },
+      "html": {
+        "sinks": {
+          "setXIncludeAware\\s*\\(\\s*true": "",
+          "XInclude": "",
+          "xinclude\\s*=\\s*True": "",
+          "->xinclude\\s*\\(": "",
+          "process_xincludes\\s*\\(": "",
+          "XIncludeAware\\s*=\\s*true": ""
+        },
+        "sources": {
+          "request\\.(getParameter|getInputStream)\\s*\\(": "",
+          "req\\.(body|query)": "",
+          "\\$_(GET|POST|REQUEST)": ""
+        }
+      },
+      "notes": "Relevant when user input is embedded into a server-side XML document (for example SOAP wrappers) rather than being the whole document.",
+      "references": [
+        "https://portswigger.net/web-security/xxe",
+        "https://cwe.mitre.org/data/definitions/611.html"
+      ]
+    },
+    {
+      "name": "XPath Injection via Concatenated Query Strings",
+      "category": "XML Vulnerability",
+      "xml_type": "XPath Injection",
+      "cwe": "CWE-643",
+      "severity": "High",
+      "description": "User input is concatenated or formatted into an XPath expression, letting an attacker alter the query logic to bypass authentication or extract arbitrary nodes from the XML data store.",
+      "headers": {
+        "request": {},
+        "response": {}
+      },
+      "html": {
+        "sinks": {
+          "\\.xpath\\s*\\(\\s*[^)]*(\\+|%|\\.format|f[\"'])": "",
+          "selectNodes\\s*\\(": "",
+          "selectSingleNode\\s*\\(": "",
+          "XPath(Factory)?[^;]*\\.(evaluate|compile)\\s*\\(": "",
+          "SimpleXMLElement[^;]*->xpath\\s*\\(": "",
+          "DOMXPath[^;]*->(query|evaluate)\\s*\\(": "",
+          "document\\.evaluate\\s*\\(": "",
+          "XPathSelectElements?\\s*\\(": ""
+        },
+        "sources": {
+          "request\\.(args|form|values|GET|POST)": "",
+          "request\\.getParameter\\s*\\(": "",
+          "\\$_(GET|POST|REQUEST)\\s*\\[": "",
+          "req\\.(query|body|params)": "",
+          "Request\\.(QueryString|Form)": ""
+        }
+      },
+      "notes": "Confirmed when a source flows into the XPath string without parameterization (XPathVariableResolver, bound variables) or strict quote escaping. Sending a single quote and observing a parse error or changed result set is a common behavioral confirmation.",
+      "references": [
+        "https://owasp.org/www-community/attacks/XPATH_Injection",
+        "https://cwe.mitre.org/data/definitions/643.html"
+      ]
+    },
+    {
+      "name": "XPath Injection Error Indicator in Response",
+      "category": "XML Vulnerability",
+      "xml_type": "XPath Injection",
+      "cwe": "CWE-643",
+      "severity": "Medium",
+      "description": "A stray quote or bracket in a parameter causes the server to return an XPath syntax or evaluation error, which indicates that the input is placed inside an XPath expression.",
+      "headers": {
+        "request": {},
+        "response": {}
+      },
+      "html": {
+        "reflection_indicators": {
+          "XPathException|javax\\.xml\\.xpath\\.XPathExpressionException": "Java XPath error",
+          "XPathEvalError|lxml\\.etree\\.XPathSyntaxError|Invalid expression": "Python/lxml XPath error",
+          "DOMXPath::(query|evaluate)\\(\\): Invalid (expression|predicate)": "PHP DOMXPath error",
+          "SimpleXMLElement::xpath\\(\\): (Invalid|Unregistered)": "PHP SimpleXML XPath error",
+          "System\\.Xml\\.XPath\\.XPathException|has an invalid token": ".NET XPath error",
+          "Expression must evaluate to a node-set|Unfinished literal expression|Unterminated string": "Generic XPath engine error"
+        }
+      },
+      "notes": "Pair this with the source-code rule above, or confirm with a boolean-differential test (two inputs that should produce different true/false outcomes).",
+      "references": [
+        "https://owasp.org/www-community/attacks/XPATH_Injection",
+        "https://cwe.mitre.org/data/definitions/643.html"
+      ]
+    },
+    {
+      "name": "XSLT Injection / Unsafe Stylesheet Processing",
+      "category": "XML Vulnerability",
+      "xml_type": "XSLT Injection",
+      "cwe": "CWE-91",
+      "severity": "High",
+      "description": "Untrusted data controls an XSLT stylesheet (or its parameters/URL) that is processed server-side. Depending on the processor and its features, this can lead to file read, SSRF, or code execution through extension functions.",
+      "headers": {
+        "request": {},
+        "response": {}
+      },
+      "html": {
+        "sinks": {
+          "TransformerFactory\\.newInstance\\s*\\(\\)\\.newTransformer\\s*\\(": "",
+          "XSLTProcessor\\s*\\(\\)": "",
+          "->importStylesheet\\s*\\(": "",
+          "etree\\.XSLT\\s*\\(": "",
+          "XslCompiledTransform\\s*\\(": "",
+          "XslTransform\\s*\\(": "",
+          "xsltproc|xmlsec|saxon": "",
+          "EnableScript\\s*=\\s*true|EnableDocumentFunction\\s*=\\s*true": ""
+        },
+        "sources": {
+          "request\\.(args|form|files|data)": "",
+          "request\\.getParameter\\s*\\(": "",
+          "\\$_(GET|POST|REQUEST|FILES)": "",
+          "req\\.(query|body|files)": ""
+        }
+      },
+      "notes": "Flag when the stylesheet source, stylesheet URL, or an XSLT parameter is attacker-influenced. Processors with document(), script blocks, or Java/PHP extension functions are the highest risk.",
+      "references": [
+        "https://cwe.mitre.org/data/definitions/91.html",
+        "https://owasp.org/www-project-web-security-testing-guide/"
+      ]
+    },
+    {
+      "name": "XML Accepted Where JSON Expected (Content-Type Switching Exposure)",
+      "category": "XML Vulnerability",
+      "xml_type": "Attack Surface",
+      "cwe": "CWE-611",
+      "severity": "Low",
+      "description": "An endpoint that normally accepts JSON also accepts and parses application/xml or text/xml bodies, exposing a hidden XML parser to XXE and entity-expansion attacks.",
+      "headers": {
+        "request": {
+          "^Content-Type$": "^(application|text)/(.+\\+)?xml"
+        },
+        "response": {
+          "^Content-Type$": "json|xml",
+          "^Allow$": ""
+        }
+      },
+      "html": {
+        "reflection_indicators": {
+          "<\\?xml\\s+version=": "response returned as XML after the request Content-Type was switched from JSON",
+          "<(error|fault|response|result)\\b[^>]*>": "XML-formatted error or result element returned for an XML request"
+        }
+      },
+      "notes": "Resend a known-good JSON request converted to equivalent XML with the Content-Type header changed. If the request is processed, test the endpoint for XXE.",
+      "references": [
+        "https://portswigger.net/web-security/xxe",
+        "https://cwe.mitre.org/data/definitions/611.html"
+      ]
+    },
+    {
+      "name": "XXE via File Upload (SVG/DOCX/XLSX/XML Documents)",
+      "category": "XML Vulnerability",
+      "xml_type": "XXE",
+      "cwe": "CWE-611",
+      "severity": "High",
+      "description": "The application parses uploaded SVG, Office Open XML (docx/xlsx/pptx), GPX, RSS, or generic XML files server-side (thumbnailing, preview, import, metadata extraction) with an XML parser that resolves external entities.",
+      "headers": {
+        "request": {
+          "^Content-Type$": "multipart/form-data|image/svg\\+xml|application/(vnd\\.openxmlformats|xml)"
+        },
+        "response": {}
+      },
+      "html": {
+        "sinks": {
+          "ZipFile\\s*\\([^)]*\\)[\\s\\S]{0,200}(\\.xml|document\\.xml|sharedStrings)": "",
+          "openpyxl\\.load_workbook\\s*\\(": "",
+          "docx\\.Document\\s*\\(": "",
+          "XSSFWorkbook\\s*\\(|XWPFDocument\\s*\\(": "",
+          "PhpSpreadsheet\\\\IOFactory::load\\s*\\(": "",
+          "rsvg|librsvg|ImageMagick|convert\\s+[^|]*\\.svg": "",
+          "<input[^>]+type=[\"']file[\"'][^>]+accept=[\"'][^\"']*(svg|xml|docx|xlsx)": ""
+        },
+        "sources": {
+          "request\\.files|\\$_FILES|MultipartFile|req\\.files|Request\\.Files": ""
+        }
+      },
+      "notes": "Parsers inside document libraries are frequent XXE sources because they are rarely hardened by the application developer. Keep libraries patched and verify their XML hardening defaults.",
+      "references": [
+        "https://portswigger.net/web-security/xxe",
+        "https://cwe.mitre.org/data/definitions/611.html"
+      ]
+    },
+    {
+      "name": "SOAP/XML-RPC Endpoint Exposing Verbose XML Processing",
+      "category": "XML Vulnerability",
+      "xml_type": "Attack Surface",
+      "cwe": "CWE-611",
+      "severity": "Medium",
+      "description": "A SOAP, WS-*, or XML-RPC endpoint accepts raw XML requests and returns detailed faults, which makes it a primary target for XXE, XPath, and entity-expansion testing.",
+      "headers": {
+        "request": {
+          "^Content-Type$": "^(application/soap\\+xml|text/xml|application/xml)",
+          "^SOAPAction$": ".*"
+        },
+        "response": {
+          "^Content-Type$": "application/soap\\+xml|text/xml|application/xml"
+        }
+      },
+      "html": {
+        "reflection_indicators": {
+          "<soap(env)?:Envelope|<s:Envelope|<SOAP-ENV:Envelope": "SOAP envelope returned in the response",
+          "<faultstring>[^<]*(Exception|at [\\w.$]+\\()": "SOAP fault containing a stack trace or exception class",
+          "<methodResponse>|<fault>\\s*<value>\\s*<struct>": "XML-RPC response or fault",
+          "\\?wsdl|<wsdl:definitions|<definitions[^>]+wsdl": "WSDL description exposed"
+        }
+      },
+      "notes": "Treat as an attack-surface finding. Combine with XXE and error-disclosure rules to assess exploitability. Disable verbose faults and WSDL exposure in production when not needed.",
+      "references": [
+        "https://owasp.org/www-project-web-security-testing-guide/latest/4-Web_Application_Security_Testing/12-API_Testing/",
+        "https://cwe.mitre.org/data/definitions/611.html"
+      ]
+    }
+  ]
+}
