@@ -1,0 +1,397 @@
+{
+  "vulnerabilities": [
+    {
+      "name": "DOM XSS via innerHTML/outerHTML Assignment",
+      "category": "XSS Vulnerability",
+      "xss_type": "DOM-based",
+      "cwe": "CWE-79",
+      "severity": "High",
+      "description": "An attacker-influenced value (URL fragment, query string, postMessage data, referrer) flows into .innerHTML, .outerHTML, or insertAdjacentHTML without sanitization, letting injected markup execute as script.",
+      "headers": {
+        "request": {},
+        "response": {
+          "^Content-Security-Policy$": "^$"
+        }
+      },
+      "html": {
+        "sinks": {
+          "\\.innerHTML\\s*=": "",
+          "\\.outerHTML\\s*=": "",
+          "\\.insertAdjacentHTML\\s*\\(": "",
+          "document\\.write(ln)?\\s*\\(": ""
+        },
+        "sources": {
+          "location\\.(href|search|hash|pathname)": "",
+          "document\\.(URL|documentURI|baseURI|referrer)": "",
+          "window\\.name": "",
+          "document\\.cookie": ""
+        }
+      },
+      "notes": "Flag when a source pattern feeds, directly or via a short variable chain, into a sink pattern within the same script/function without an intervening encode/sanitize call (e.g. textContent, DOMPurify.sanitize, encodeURIComponent).",
+      "references": [
+        "https://portswigger.net/web-security/cross-site-scripting/dom-based",
+        "https://cwe.mitre.org/data/definitions/79.html"
+      ]
+    },
+    {
+      "name": "DOM XSS via eval / Function Constructor / Timer String Argument",
+      "category": "XSS Vulnerability",
+      "xss_type": "DOM-based",
+      "cwe": "CWE-79",
+      "severity": "Critical",
+      "description": "Untrusted data is passed as a string into eval(), new Function(), setTimeout(string), or setInterval(string), causing it to be parsed and executed as JavaScript.",
+      "headers": {
+        "request": {},
+        "response": {
+          "^Content-Security-Policy$": "^(?!.*'unsafe-eval').*$"
+        }
+      },
+      "html": {
+        "sinks": {
+          "\\beval\\s*\\(": "",
+          "new\\s+Function\\s*\\(": "",
+          "setTimeout\\s*\\(\\s*[\"'`]": "",
+          "setInterval\\s*\\(\\s*[\"'`]": ""
+        },
+        "sources": {
+          "location\\.(href|search|hash)": "",
+          "document\\.referrer": "",
+          "window\\.name": "",
+          "URLSearchParams": ""
+        }
+      },
+      "notes": "A CSP without unsafe-eval blocks this sink class at runtime even if the pattern exists in source; check CSP first before flagging as exploitable.",
+      "references": [
+        "https://portswigger.net/web-security/cross-site-scripting/dom-based",
+        "https://cwe.mitre.org/data/definitions/79.html"
+      ]
+    },
+    {
+      "name": "DOM XSS via javascript: URI in Location/Href Sink",
+      "category": "XSS Vulnerability",
+      "xss_type": "DOM-based",
+      "cwe": "CWE-79",
+      "severity": "High",
+      "description": "Untrusted input is concatenated into location, location.href, location.assign(), location.replace(), window.open(), or an anchor's href without validating the scheme, allowing a javascript: URI to execute on click or immediately.",
+      "headers": {
+        "request": {},
+        "response": {}
+      },
+      "html": {
+        "sinks": {
+          "location(\\.href)?\\s*=": "",
+          "location\\.(assign|replace)\\s*\\(": "",
+          "window\\.open\\s*\\(": "",
+          "\\.setAttribute\\s*\\(\\s*[\"']href[\"']": ""
+        },
+        "sources": {
+          "location\\.(search|hash|pathname)": "",
+          "document\\.referrer": "",
+          "URLSearchParams": ""
+        }
+      },
+      "notes": "Confirmed when no allow-list scheme check (e.g. startsWith('http')) precedes assignment to the sink.",
+      "references": [
+        "https://portswigger.net/web-security/cross-site-scripting/dom-based",
+        "https://cwe.mitre.org/data/definitions/79.html"
+      ]
+    },
+    {
+      "name": "DOM XSS via jQuery html()/append()/before()/after()",
+      "category": "XSS Vulnerability",
+      "xss_type": "DOM-based",
+      "cwe": "CWE-79",
+      "severity": "High",
+      "description": "jQuery DOM-manipulation methods that parse their argument as HTML are called with attacker-influenced data, mirroring the native innerHTML sink risk.",
+      "headers": {
+        "request": {},
+        "response": {}
+      },
+      "html": {
+        "sinks": {
+          "\\$\\([^)]*\\)\\.html\\s*\\(": "",
+          "\\.append\\s*\\(": "",
+          "\\.prepend\\s*\\(": "",
+          "\\.before\\s*\\(": "",
+          "\\.after\\s*\\(": "",
+          "\\.wrap\\s*\\(": ""
+        },
+        "sources": {
+          "location\\.(href|search|hash)": "",
+          "\\$\\.urlParam": "",
+          "document\\.referrer": ""
+        }
+      },
+      "notes": "jQuery's .text() is the safe counterpart; flag only the HTML-parsing variants listed in sinks.",
+      "references": [
+        "https://portswigger.net/web-security/cross-site-scripting/dom-based",
+        "https://cwe.mitre.org/data/definitions/79.html"
+      ]
+    },
+    {
+      "name": "DOM XSS via postMessage Listener Without Origin Validation",
+      "category": "XSS Vulnerability",
+      "xss_type": "DOM-based",
+      "cwe": "CWE-79",
+      "severity": "High",
+      "description": "A message event listener consumes event.data and writes it into a dangerous sink without first checking event.origin against an allow-list, letting any embedding/framing page or popup inject content.",
+      "headers": {
+        "request": {},
+        "response": {
+          "^X-Frame-Options$": "^$",
+          "^Content-Security-Policy$": "^(?!.*frame-ancestors).*$"
+        }
+      },
+      "html": {
+        "sinks": {
+          "\\.innerHTML\\s*=": "",
+          "\\beval\\s*\\(": "",
+          "document\\.write(ln)?\\s*\\(": ""
+        },
+        "sources": {
+          "addEventListener\\s*\\(\\s*[\"']message[\"']": "",
+          "event\\.data": "",
+          "e\\.data": ""
+        }
+      },
+      "notes": "Flag when the listener body uses event.data/e.data without a preceding `if (event.origin !== ...)` or `=== ` allow-list check.",
+      "references": [
+        "https://portswigger.net/web-security/dom-based/controlling-the-web-message-source",
+        "https://cwe.mitre.org/data/definitions/79.html"
+      ]
+    },
+    {
+      "name": "Angular bypassSecurityTrust* Misuse",
+      "category": "XSS Vulnerability",
+      "xss_type": "DOM-based",
+      "cwe": "CWE-79",
+      "severity": "High",
+      "description": "Angular's DomSanitizer.bypassSecurityTrustHtml/Script/Style/Url/ResourceUrl is called with attacker-influenced data, deliberately opting the value out of Angular's built-in auto-sanitization.",
+      "headers": {
+        "request": {},
+        "response": {}
+      },
+      "html": {
+        "sinks": {
+          "bypassSecurityTrustHtml\\s*\\(": "",
+          "bypassSecurityTrustScript\\s*\\(": "",
+          "bypassSecurityTrustStyle\\s*\\(": "",
+          "bypassSecurityTrustUrl\\s*\\(": "",
+          "bypassSecurityTrustResourceUrl\\s*\\(": "",
+          "\\[innerHTML\\]\\s*=": ""
+        },
+        "sources": {
+          "ActivatedRoute": "",
+          "queryParams": "",
+          "location\\.(search|hash)": ""
+        }
+      },
+      "notes": "",
+      "references": [
+        "https://angular.io/guide/security#trusting-safe-values",
+        "https://cwe.mitre.org/data/definitions/79.html"
+      ]
+    },
+    {
+      "name": "React dangerouslySetInnerHTML with Unsanitized Data",
+      "category": "XSS Vulnerability",
+      "xss_type": "DOM-based",
+      "cwe": "CWE-79",
+      "severity": "High",
+      "description": "A React component passes attacker-influenced data into the dangerouslySetInnerHTML prop without first passing it through a sanitizer such as DOMPurify.",
+      "headers": {
+        "request": {},
+        "response": {}
+      },
+      "html": {
+        "sinks": {
+          "dangerouslySetInnerHTML\\s*=\\s*\\{\\{\\s*__html:": ""
+        },
+        "sources": {
+          "props\\.": "",
+          "useSearchParams": "",
+          "window\\.location": ""
+        }
+      },
+      "notes": "Not a finding if the __html value is wrapped in DOMPurify.sanitize(...) or an equivalent allow-listing sanitizer.",
+      "references": [
+        "https://react.dev/reference/react-dom/components/common#dangerously-setting-the-inner-html",
+        "https://cwe.mitre.org/data/definitions/79.html"
+      ]
+    },
+    {
+      "name": "Vue v-html Directive with Unsanitized Binding",
+      "category": "XSS Vulnerability",
+      "xss_type": "DOM-based",
+      "cwe": "CWE-79",
+      "severity": "High",
+      "description": "A Vue template binds v-html to a value derived from route params, query strings, or API responses without sanitization, rendering it as raw HTML.",
+      "headers": {
+        "request": {},
+        "response": {}
+      },
+      "html": {
+        "sinks": {
+          "v-html\\s*=": ""
+        },
+        "sources": {
+          "\\$route\\.(query|params)": "",
+          "this\\.\\$route": ""
+        }
+      },
+      "notes": "",
+      "references": [
+        "https://vuejs.org/guide/best-practices/security.html#html-content",
+        "https://cwe.mitre.org/data/definitions/79.html"
+      ]
+    },
+    {
+      "name": "DOM XSS via iframe srcdoc Built From Untrusted Input",
+      "category": "XSS Vulnerability",
+      "xss_type": "DOM-based",
+      "cwe": "CWE-79",
+      "severity": "High",
+      "description": "An iframe's srcdoc attribute is constructed by string concatenation/template literal using attacker-influenced data, executing injected markup inside the iframe's document.",
+      "headers": {
+        "request": {},
+        "response": {}
+      },
+      "html": {
+        "sinks": {
+          "\\.srcdoc\\s*=": "",
+          "setAttribute\\s*\\(\\s*[\"']srcdoc[\"']": ""
+        },
+        "sources": {
+          "location\\.(search|hash)": "",
+          "URLSearchParams": ""
+        }
+      },
+      "notes": "",
+      "references": [
+        "https://portswigger.net/web-security/cross-site-scripting/dom-based",
+        "https://cwe.mitre.org/data/definitions/79.html"
+      ]
+    },
+    {
+      "name": "DOM XSS via localStorage/sessionStorage Read Into Sink (Stored-DOM Hybrid)",
+      "category": "XSS Vulnerability",
+      "xss_type": "DOM-based",
+      "cwe": "CWE-79",
+      "severity": "Medium",
+      "description": "A value previously written to localStorage/sessionStorage (potentially by an attacker via a separate same-origin weakness, or shared across subdomains) is read back and passed into a dangerous sink without sanitization.",
+      "headers": {
+        "request": {},
+        "response": {}
+      },
+      "html": {
+        "sinks": {
+          "\\.innerHTML\\s*=": "",
+          "document\\.write(ln)?\\s*\\(": ""
+        },
+        "sources": {
+          "localStorage\\.getItem\\s*\\(": "",
+          "sessionStorage\\.getItem\\s*\\(": ""
+        }
+      },
+      "notes": "",
+      "references": [
+        "https://portswigger.net/web-security/cross-site-scripting/dom-based",
+        "https://cwe.mitre.org/data/definitions/79.html"
+      ]
+    },
+    {
+      "name": "Reflected XSS: Unescaped Parameter Echoed in HTML Body",
+      "category": "XSS Vulnerability",
+      "xss_type": "Reflected",
+      "cwe": "CWE-79",
+      "severity": "High",
+      "description": "A query-string or form parameter is written back into the server-rendered HTML response without context-appropriate encoding, so angle brackets and quotes in the input pass through unescaped.",
+      "headers": {
+        "request": {
+          "^Cookie$": "^(?!.*httponly).*$"
+        },
+        "response": {
+          "^Content-Type$": "text/html",
+          "^X-Content-Type-Options$": "^$",
+          "^Content-Security-Policy$": "^$"
+        }
+      },
+      "html": {
+        "reflection_indicators": {
+          "<[^>]*>": "raw angle-bracket markup echoing a request parameter's literal value, unescaped, inside the HTML body or an attribute"
+        }
+      },
+      "notes": "Confirmed by injecting a unique marker containing <, >, \" and ' into each parameter and checking whether all four characters survive unescaped at the reflection point.",
+      "references": [
+        "https://portswigger.net/web-security/cross-site-scripting/reflected",
+        "https://cwe.mitre.org/data/definitions/79.html"
+      ]
+    },
+    {
+      "name": "Stored XSS: User-Supplied Content Rendered Without Sanitization",
+      "category": "XSS Vulnerability",
+      "xss_type": "Stored",
+      "cwe": "CWE-79",
+      "severity": "Critical",
+      "description": "Content submitted by one user (comment, profile field, support ticket, filename) is persisted and later rendered to other users' browsers without server-side sanitization or output encoding, so injected markup executes for every viewer.",
+      "headers": {
+        "request": {},
+        "response": {
+          "^Content-Type$": "text/html",
+          "^Content-Security-Policy$": "^$"
+        }
+      },
+      "html": {
+        "reflection_indicators": {
+          "<[^>]*>": "raw angle-bracket markup from a previously stored field appearing unescaped on a page viewed by a different session/user than the one who submitted it"
+        }
+      },
+      "notes": "Distinguish from reflected XSS by confirming the payload persists across requests/sessions and renders for a second, independent viewer.",
+      "references": [
+        "https://portswigger.net/web-security/cross-site-scripting/stored",
+        "https://cwe.mitre.org/data/definitions/79.html"
+      ]
+    },
+    {
+      "name": "Missing or Weak Content-Security-Policy Allowing Inline Script",
+      "category": "XSS Vulnerability",
+      "xss_type": "Mitigation Gap",
+      "cwe": "CWE-1021",
+      "severity": "Medium",
+      "description": "The response has no Content-Security-Policy header, or one that still permits 'unsafe-inline'/'unsafe-eval' or a wildcard script-src, removing the browser-side defense-in-depth layer that would otherwise block most XSS payloads from executing even if an injection point exists.",
+      "headers": {
+        "request": {},
+        "response": {
+          "^Content-Security-Policy$": "^$|.*'unsafe-inline'.*|.*'unsafe-eval'.*|script-src\\s+\\*"
+        }
+      },
+      "html": {},
+      "notes": "This is a mitigation-gap finding, not an injection point itself; pair it with a confirmed sink/source or reflection finding above to assess real exploitability.",
+      "references": [
+        "https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy",
+        "https://cwe.mitre.org/data/definitions/1021.html"
+      ]
+    },
+    {
+      "name": "Missing X-Content-Type-Options Enabling MIME Sniffing to HTML",
+      "category": "XSS Vulnerability",
+      "xss_type": "Mitigation Gap",
+      "cwe": "CWE-79",
+      "severity": "Low",
+      "description": "A response that returns user-influenced content with a non-HTML or missing Content-Type can be MIME-sniffed by the browser as text/html when X-Content-Type-Options: nosniff is absent, turning an otherwise inert download/response into an executable XSS vector.",
+      "headers": {
+        "request": {},
+        "response": {
+          "^X-Content-Type-Options$": "^$",
+          "^Content-Type$": "^$|text/plain|application/octet-stream"
+        }
+      },
+      "html": {},
+      "notes": "",
+      "references": [
+        "https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Content-Type-Options",
+        "https://cwe.mitre.org/data/definitions/79.html"
+      ]
+    }
+  ]
+}
