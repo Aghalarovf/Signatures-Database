@@ -19,7 +19,52 @@
       "html": [
         "data-reactroot",
         "data-reactid"
-      ]
+      ],
+      "body": [
+        "data-reactroot",
+        "data-reactid",
+        "data-react-helmet",
+        "data-rh=\"true\"",
+        "<!-- -->",
+        "__REACT_DEVTOOLS_GLOBAL_HOOK__",
+        "ReactDOM\\.(render|hydrate|createRoot|hydrateRoot)",
+        "Minified React error #\\d+",
+        "You need to enable JavaScript to run this app\\.",
+        "react(-dom)?(\\.production)?(\\.min)?\\.js",
+        "/static/js/(main|bundle)\\.[0-9a-f]{8}(\\.chunk)?\\.js"
+      ],
+      "dom": {
+        "[data-reactroot]": {
+          "exists": ""
+        },
+        "[data-reactid]": {
+          "exists": ""
+        },
+        "[data-react-helmet]": {
+          "exists": ""
+        },
+        "[data-rh]": {
+          "exists": ""
+        },
+        "noscript": {
+          "text": "You need to enable JavaScript to run this app"
+        },
+        "script[src*='react.production.min.js']": {
+          "attributes": {
+            "src": "react\\.production\\.min\\.js"
+          }
+        },
+        "script[src*='react-dom']": {
+          "attributes": {
+            "src": "react-dom(\\.production)?(\\.min)?\\.js"
+          }
+        },
+        "script[src*='/static/js/main.']": {
+          "attributes": {
+            "src": "/static/js/main\\.[0-9a-f]{8}(\\.chunk)?\\.js"
+          }
+        }
+      }
     },
     {
       "name": "Vue.js",
@@ -40,7 +85,47 @@
       "html": [
         "data-v-app",
         "v-cloak"
-      ]
+      ],
+      "body": [
+        "data-v-app",
+        "data-v-[0-9a-f]{8}",
+        "v-cloak",
+        "data-server-rendered=\"true\"",
+        "\\bv-(if|else|else-if|for|bind|model|on|show|html|text|slot)\\b",
+        "__VUE__|__VUE_DEVTOOLS_GLOBAL_HOOK__",
+        "new Vue\\(",
+        "Vue\\.(createApp|use|component|config)",
+        "<!--\\[-->|<!--\\]-->",
+        "vue(\\.runtime)?(\\.global|\\.esm-browser|\\.esm)?(\\.prod)?(\\.min)?\\.js"
+      ],
+      "dom": {
+        "[data-v-app]": {
+          "exists": ""
+        },
+        "[data-server-rendered='true']": {
+          "exists": ""
+        },
+        "[v-cloak]": {
+          "exists": ""
+        },
+        "[v-if]": {
+          "exists": ""
+        },
+        "[v-for]": {
+          "exists": ""
+        },
+        "[v-model]": {
+          "exists": ""
+        },
+        "[v-show]": {
+          "exists": ""
+        },
+        "script[src*='vue']": {
+          "attributes": {
+            "src": "vue(\\.runtime)?(\\.global|\\.esm-browser|\\.esm)?(\\.prod)?(\\.min)?\\.js|vue@[\\d.]+"
+          }
+        }
+      }
     },
     {
       "name": "Angular",
@@ -61,7 +146,67 @@
       "html": [
         "ng-version",
         "ng-app"
-      ]
+      ],
+      "body": [
+        "ng-version=\"[\\d.]+\"",
+        "ng-app",
+        "ng-(controller|model|repeat|click|if|bind|show|hide|class|submit)=",
+        "\\bng-(binding|scope|isolate-scope|pristine|valid|invalid|touched|dirty)\\b",
+        "<app-root",
+        "_ngcontent-[\\w\\-]+|_nghost-[\\w\\-]+",
+        "ng-reflect-",
+        "ng-star-inserted",
+        "ng-server-context",
+        "ng-state",
+        "ngsw(-worker)?\\.(js|json)",
+        "Please enable JavaScript to continue using this application",
+        "angular(\\.min)?\\.js|@angular/"
+      ],
+      "dom": {
+        "[ng-version]": {
+          "attributes": {
+            "ng-version": "^\\d+\\.\\d+\\.\\d+"
+          }
+        },
+        "app-root": {
+          "exists": ""
+        },
+        "[ng-app]": {
+          "exists": ""
+        },
+        "[ng-controller]": {
+          "exists": ""
+        },
+        "[ng-model]": {
+          "exists": ""
+        },
+        "[ng-repeat]": {
+          "exists": ""
+        },
+        "[ng-click]": {
+          "exists": ""
+        },
+        "[ng-server-context]": {
+          "exists": ""
+        },
+        "script#ng-state": {
+          "exists": ""
+        },
+        ".ng-star-inserted": {
+          "exists": ""
+        },
+        ".ng-binding": {
+          "exists": ""
+        },
+        "noscript": {
+          "text": "Please enable JavaScript to continue using this application"
+        },
+        "script[src*='angular']": {
+          "attributes": {
+            "src": "angular(\\.min)?\\.js|angular[\\w.\\-]*\\.js"
+          }
+        }
+      }
     },
     {
       "name": "Svelte",
@@ -77,7 +222,28 @@
       },
       "html": [
         "class=\"svelte-"
-      ]
+      ],
+      "body": [
+        "class=\"[^\"]*svelte-[a-z0-9]{4,}",
+        "svelte-[a-z0-9]{6,}",
+        "data-svelte(-h)?",
+        "__svelte",
+        "svelte/internal",
+        "svelte-announcer"
+      ],
+      "dom": {
+        "[class*='svelte-']": {
+          "attributes": {
+            "class": "(^|\\s)svelte-[a-z0-9]{4,}"
+          }
+        },
+        "[data-svelte-h]": {
+          "exists": ""
+        },
+        "style[id^='svelte-']": {
+          "exists": ""
+        }
+      }
     },
     {
       "name": "Next.js",
@@ -99,6 +265,54 @@
         "__NEXT_DATA__": "",
         "next": ""
       },
+      "body": [
+        "__NEXT_DATA__",
+        "id=\"__next\"",
+        "/_next/static/",
+        "/_next/image\\?url=",
+        "/_next/data/",
+        "self\\.__next_f\\.push",
+        "next-route-announcer",
+        "\"buildId\":\\s*\"[^\"]+\"",
+        "data-nscript",
+        "Application error: a (client|server)-side exception has occurred",
+        "next/dist/"
+      ],
+      "dom": {
+        "script#__NEXT_DATA__": {
+          "exists": ""
+        },
+        "div#__next": {
+          "exists": ""
+        },
+        "next-route-announcer": {
+          "exists": ""
+        },
+        "script[src*='/_next/static/']": {
+          "attributes": {
+            "src": "/_next/static/"
+          }
+        },
+        "link[href*='/_next/static/']": {
+          "attributes": {
+            "href": "/_next/static/"
+          }
+        },
+        "img[src*='/_next/image']": {
+          "attributes": {
+            "src": "/_next/image\\?"
+          }
+        },
+        "[data-nscript]": {
+          "exists": ""
+        },
+        "meta[name='next-head-count']": {
+          "exists": ""
+        },
+        "h1.next-error-h1": {
+          "exists": ""
+        }
+      },
       "implies": [
         "React"
       ]
@@ -118,6 +332,50 @@
       ],
       "scriptjs": {
         "__NUXT__": ""
+      },
+      "body": [
+        "window\\.__NUXT__",
+        "id=\"__nuxt\"",
+        "id=\"__layout\"",
+        "/_nuxt/",
+        "data-n-head(-ssr)?",
+        "__NUXT_DATA__",
+        "nuxt-loading-indicator",
+        "nuxt-link(-active|-exact-active)?",
+        "class=\"nuxt-progress\""
+      ],
+      "dom": {
+        "div#__nuxt": {
+          "exists": ""
+        },
+        "div#__layout": {
+          "exists": ""
+        },
+        "[data-n-head]": {
+          "exists": ""
+        },
+        "[data-n-head-ssr]": {
+          "exists": ""
+        },
+        "script#__NUXT_DATA__": {
+          "exists": ""
+        },
+        "script[src*='/_nuxt/']": {
+          "attributes": {
+            "src": "/_nuxt/"
+          }
+        },
+        "link[href*='/_nuxt/']": {
+          "attributes": {
+            "href": "/_nuxt/"
+          }
+        },
+        "a.nuxt-link-exact-active": {
+          "exists": ""
+        },
+        "div.nuxt-progress": {
+          "exists": ""
+        }
       },
       "implies": [
         "Vue.js"
@@ -144,6 +402,54 @@
         "___gatsby": "",
         "__GATSBY_DATA__": ""
       },
+      "body": [
+        "id=\"___gatsby\"",
+        "id=\"gatsby-focus-wrapper\"",
+        "id=\"gatsby-announcer\"",
+        "gatsby-(image-wrapper|resp-image-wrapper|highlight|plugin)",
+        "/page-data/.+/page-data\\.json",
+        "window\\.___(chunkMapping|webpackCompilationHash|gatsby)",
+        "webpack-runtime-[0-9a-f]+\\.js",
+        "/static/d/\\d+\\.json",
+        "<meta name=\"generator\" content=\"Gatsby [\\d.]+\">"
+      ],
+      "dom": {
+        "div#___gatsby": {
+          "exists": ""
+        },
+        "div#gatsby-focus-wrapper": {
+          "exists": ""
+        },
+        "div#gatsby-announcer": {
+          "exists": ""
+        },
+        "div.gatsby-image-wrapper": {
+          "exists": ""
+        },
+        "meta[name='generator']": {
+          "attributes": {
+            "content": "^Gatsby"
+          }
+        },
+        "link[href*='/page-data/']": {
+          "attributes": {
+            "href": "/page-data/"
+          }
+        },
+        "script[src*='webpack-runtime-']": {
+          "attributes": {
+            "src": "webpack-runtime-[0-9a-f]+\\.js"
+          }
+        },
+        "script[src*='/app-']": {
+          "attributes": {
+            "src": "/app-[0-9a-f]{8,}\\.js"
+          }
+        },
+        "[data-gatsby-head]": {
+          "exists": ""
+        }
+      },
       "implies": [
         "React"
       ]
@@ -165,7 +471,44 @@
       },
       "html": [
         "id=\"ember"
-      ]
+      ],
+      "body": [
+        "id=\"ember\\d+\"",
+        "class=\"[^\"]*\\bember-view\\b",
+        "ember-(application|view|testing|cli|data)",
+        "<meta name=\"[\\w\\-]+/config/environment\" content=",
+        "ember(\\.debug|\\.prod|\\.min)?\\.js",
+        "ember-cli-live-reload",
+        "data-ember-action",
+        "EmberENV"
+      ],
+      "dom": {
+        "div.ember-view": {
+          "exists": ""
+        },
+        "[id^='ember']": {
+          "attributes": {
+            "id": "^ember\\d+$"
+          }
+        },
+        "[data-ember-action]": {
+          "exists": ""
+        },
+        "meta[name$='/config/environment']": {
+          "exists": ""
+        },
+        "script[src*='ember']": {
+          "attributes": {
+            "src": "ember(\\.debug|\\.prod|\\.min)?\\.js"
+          }
+        },
+        "div#ember-basic-dropdown-wormhole": {
+          "exists": ""
+        },
+        "body.ember-application": {
+          "exists": ""
+        }
+      }
     },
     {
       "name": "jQuery",
@@ -182,6 +525,51 @@
       "scriptjs": {
         "jQuery": "",
         "$": ""
+      },
+      "body": [
+        "jquery([-.]\\d+(\\.\\d+)*)?(\\.min|\\.slim)?\\.js",
+        "jQuery(\\.|\\()",
+        "\\$\\(document\\)\\.ready",
+        "\\$\\(function\\s*\\(\\)",
+        "\\$\\.(ajax|get|post|getJSON)\\(",
+        "jquery[-.]ui",
+        "jquery[-.](migrate|validate|cookie|fancybox)",
+        "code\\.jquery\\.com",
+        "ajax\\.googleapis\\.com/ajax/libs/jquery/",
+        "cdnjs\\.cloudflare\\.com/ajax/libs/jquery/",
+        "jQuery v?[\\d.]+"
+      ],
+      "dom": {
+        "script[src*='jquery']": {
+          "attributes": {
+            "src": "jquery([-.]\\d+(\\.\\d+)*)?(\\.min|\\.slim)?\\.js"
+          }
+        },
+        "script[src*='code.jquery.com']": {
+          "attributes": {
+            "src": "code\\.jquery\\.com/jquery"
+          }
+        },
+        "script[src*='ajax/libs/jquery/']": {
+          "attributes": {
+            "src": "/ajax/libs/jquery/"
+          }
+        },
+        "script[src*='jquery-ui']": {
+          "attributes": {
+            "src": "jquery-ui"
+          }
+        },
+        "link[href*='jquery-ui']": {
+          "attributes": {
+            "href": "jquery-ui"
+          }
+        },
+        "script[src*='jquery-migrate']": {
+          "attributes": {
+            "src": "jquery-migrate"
+          }
+        }
       }
     },
     {
@@ -198,6 +586,38 @@
       ],
       "scriptjs": {
         "Backbone": ""
+      },
+      "body": [
+        "backbone(-min)?\\.js",
+        "Backbone\\.(View|Model|Collection|Router|history|\\$)",
+        "Backbone\\.js",
+        "underscore(-min)?\\.js",
+        "backbone\\.(marionette|stickit|localStorage)",
+        "ajax/libs/backbone\\.js/",
+        "<script type=\"text/template\""
+      ],
+      "dom": {
+        "script[src*='backbone']": {
+          "attributes": {
+            "src": "backbone(-min)?\\.js|backbone[.\\-][\\w.\\-]+\\.js"
+          }
+        },
+        "script[src*='underscore']": {
+          "attributes": {
+            "src": "underscore(-min)?\\.js"
+          }
+        },
+        "script[type='text/template']": {
+          "exists": ""
+        },
+        "script[type='text/x-underscore-template']": {
+          "exists": ""
+        },
+        "script[src*='marionette']": {
+          "attributes": {
+            "src": "backbone\\.marionette"
+          }
+        }
       }
     },
     {
@@ -217,7 +637,48 @@
       },
       "html": [
         "x-data="
-      ]
+      ],
+      "body": [
+        "x-data=",
+        "\\bx-(init|show|bind|on|model|text|html|for|if|ref|cloak|transition|effect|teleport|id)\\b",
+        "@(click|submit|keydown|input|change)(\\.\\w+)*=",
+        "alpinejs@[\\d.]+",
+        "cdn\\.jsdelivr\\.net/npm/alpinejs",
+        "alpine(\\.min)?\\.js",
+        "\\[x-cloak\\]\\s*\\{",
+        "Alpine\\.(data|store|start|plugin)"
+      ],
+      "dom": {
+        "[x-data]": {
+          "exists": ""
+        },
+        "[x-init]": {
+          "exists": ""
+        },
+        "[x-show]": {
+          "exists": ""
+        },
+        "[x-cloak]": {
+          "exists": ""
+        },
+        "[x-model]": {
+          "exists": ""
+        },
+        "[x-text]": {
+          "exists": ""
+        },
+        "[x-for]": {
+          "exists": ""
+        },
+        "[x-if]": {
+          "exists": ""
+        },
+        "script[src*='alpine']": {
+          "attributes": {
+            "src": "alpinejs|alpine(\\.min)?\\.js"
+          }
+        }
+      }
     },
     {
       "name": "Solid.js",
@@ -232,6 +693,25 @@
       ],
       "scriptjs": {
         "Solid": ""
+      },
+      "body": [
+        "data-hk=\"?[\\d\\-]+\"?",
+        "_\\$HY",
+        "window\\._\\$HY",
+        "<!--#-->|<!--/-->",
+        "solid-js(/web)?",
+        "solid(\\.min)?\\.js",
+        "solid-start|@solidjs/"
+      ],
+      "dom": {
+        "[data-hk]": {
+          "exists": ""
+        },
+        "script[src*='solid']": {
+          "attributes": {
+            "src": "solid(-js)?(\\.min)?\\.js|@solidjs/"
+          }
+        }
       }
     },
     {
@@ -250,7 +730,41 @@
       "scriptjs": {},
       "html": [
         "q:container"
-      ]
+      ],
+      "body": [
+        "q:container",
+        "q:(version|render|base|manifest-hash|key|id|slot|sref|instance)",
+        "type=\"qwik/json\"",
+        "on:(click|input|qvisible)=",
+        "/build/q-[\\w\\-]+\\.js",
+        "qwikloader",
+        "<!--qv",
+        "qwik-city|@builder\\.io/qwik"
+      ],
+      "dom": {
+        "[q\\:container]": {
+          "exists": ""
+        },
+        "[q\\:version]": {
+          "exists": ""
+        },
+        "script[type='qwik/json']": {
+          "exists": ""
+        },
+        "script#qwikloader": {
+          "exists": ""
+        },
+        "script[src*='/build/q-']": {
+          "attributes": {
+            "src": "/build/q-[\\w\\-]+\\.js"
+          }
+        },
+        "link[href*='/build/q-']": {
+          "attributes": {
+            "href": "/build/q-[\\w\\-]+\\.js"
+          }
+        }
+      }
     },
     {
       "name": "SvelteKit",
@@ -266,6 +780,37 @@
         "/_app/immutable/"
       ],
       "scriptjs": {},
+      "body": [
+        "data-sveltekit-(preload-data|preload-code|reload|noscroll|keepfocus|hydrate)",
+        "/_app/immutable/",
+        "__sveltekit_[a-z0-9]+",
+        "id=\"svelte-announcer\"",
+        "/_app/version\\.json"
+      ],
+      "dom": {
+        "[data-sveltekit-preload-data]": {
+          "exists": ""
+        },
+        "[data-sveltekit-reload]": {
+          "exists": ""
+        },
+        "[data-sveltekit-hydrate]": {
+          "exists": ""
+        },
+        "div#svelte-announcer": {
+          "exists": ""
+        },
+        "script[src*='/_app/immutable/']": {
+          "attributes": {
+            "src": "/_app/immutable/"
+          }
+        },
+        "link[href*='/_app/immutable/']": {
+          "attributes": {
+            "href": "/_app/immutable/"
+          }
+        }
+      },
       "implies": [
         "Svelte"
       ]
@@ -287,6 +832,38 @@
       ],
       "scriptjs": {
         "__remixContext": ""
+      },
+      "body": [
+        "window\\.__remixContext",
+        "__remixManifest",
+        "__remixRouteModules",
+        "/build/_assets/",
+        "/build/entry\\.client-[\\w\\-]+\\.js",
+        "/build/root-[\\w\\-]+\\.js",
+        "/assets/(entry\\.client|root)-[\\w\\-]+\\.js",
+        "@remix-run/"
+      ],
+      "dom": {
+        "link[href*='/build/_assets/']": {
+          "attributes": {
+            "href": "/build/_assets/"
+          }
+        },
+        "script[src*='/build/entry.client-']": {
+          "attributes": {
+            "src": "/build/entry\\.client-[\\w\\-]+\\.js"
+          }
+        },
+        "script[src*='/assets/entry.client-']": {
+          "attributes": {
+            "src": "/assets/entry\\.client-[\\w\\-]+\\.js"
+          }
+        },
+        "link[rel='modulepreload'][href*='/build/']": {
+          "attributes": {
+            "href": "/build/(root|entry\\.client|routes/)"
+          }
+        }
       },
       "implies": [
         "React"
@@ -312,7 +889,61 @@
       "scriptjs": {},
       "html": [
         "astro-island"
-      ]
+      ],
+      "body": [
+        "<astro-island",
+        "astro-(island|slot|static-slot)",
+        "data-astro-(cid|source-file|source-loc|reload|transition-(scope|persist)|prefetch|rerun)",
+        "/_astro/[\\w\\-.]+\\.(js|css)",
+        "astro:(page-load|before-swap|after-swap)",
+        "class=\"[^\"]*astro-[A-Z0-9]{8}",
+        "<meta name=\"generator\" content=\"Astro v?[\\d.]+\">",
+        "client:(load|idle|visible|media|only)",
+        "component-url="
+      ],
+      "dom": {
+        "astro-island": {
+          "exists": ""
+        },
+        "astro-slot": {
+          "exists": ""
+        },
+        "astro-static-slot": {
+          "exists": ""
+        },
+        "astro-island[component-url]": {
+          "attributes": {
+            "component-url": "/_astro/"
+          }
+        },
+        "[data-astro-reload]": {
+          "exists": ""
+        },
+        "[data-astro-transition-scope]": {
+          "exists": ""
+        },
+        "[data-astro-prefetch]": {
+          "exists": ""
+        },
+        "[data-astro-source-file]": {
+          "exists": ""
+        },
+        "meta[name='generator']": {
+          "attributes": {
+            "content": "^Astro v?[\\d.]+"
+          }
+        },
+        "script[src*='/_astro/']": {
+          "attributes": {
+            "src": "/_astro/"
+          }
+        },
+        "link[href*='/_astro/']": {
+          "attributes": {
+            "href": "/_astro/"
+          }
+        }
+      }
     },
     {
       "name": "Preact",
@@ -327,6 +958,30 @@
       ],
       "scriptjs": {
         "preact": ""
+      },
+      "body": [
+        "preact(\\.min|\\.module|\\.mjs)?\\.js",
+        "__PREACT_DEVTOOLS__",
+        "__PREACT_CLI_DATA__",
+        "preact/(compat|hooks|debug|devtools)",
+        "preact-(render-to-string|router|iso)",
+        "preact@[\\d.]+",
+        "(unpkg\\.com|esm\\.sh|cdn\\.skypack\\.dev)/preact",
+        "htm(/|\\+)preact",
+        "id=\"preact_root\""
+      ],
+      "dom": {
+        "script[type='__PREACT_CLI_DATA__']": {
+          "exists": ""
+        },
+        "div#preact_root": {
+          "exists": ""
+        },
+        "script[src*='preact']": {
+          "attributes": {
+            "src": "preact"
+          }
+        }
       }
     }
   ]
