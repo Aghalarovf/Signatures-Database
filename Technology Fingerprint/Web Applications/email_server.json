@@ -1,0 +1,337 @@
+{
+  "technologies": [
+    {
+      "name": "Roundcube Webmail",
+      "category": "Email Server",
+      "cookies": {
+        "^roundcube_sessid$": "",
+        "^roundcube_sessauth$": ""
+      },
+      "headers": {
+        "^X-Powered-By$": "Roundcube"
+      },
+      "url": [
+        "/roundcube/",
+        "/?_task=mail"
+      ],
+      "meta": {
+        "generator": "^Roundcube ?([\\d.]+)?"
+      },
+      "robots": [
+        "/roundcube/",
+        "Disallow: /roundcube/"
+      ],
+      "scriptSrc": [
+        "/program/js/",
+        "/skins/elastic/"
+      ],
+      "scriptjs": {
+        "rcmail": ""
+      },
+      "implies": [
+        "PHP"
+      ]
+    },
+    {
+      "name": "Horde Webmail",
+      "category": "Email Server",
+      "cookies": {
+        "^Horde$": "",
+        "^horde_imp$": ""
+      },
+      "headers": {
+        "^X-Powered-By$": "Horde"
+      },
+      "url": [
+        "/horde/",
+        "/imp/"
+      ],
+      "meta": {
+        "generator": "^Horde ?([\\d.]+)?"
+      },
+      "robots": [
+        "/horde/",
+        "Disallow: /horde/"
+      ],
+      "scriptSrc": [
+        "/horde/js/"
+      ],
+      "scriptjs": {
+        "Horde": ""
+      },
+      "implies": [
+        "PHP"
+      ]
+    },
+    {
+      "name": "Zimbra Collaboration Suite",
+      "category": "Email Server",
+      "cookies": {
+        "^ZM_AUTH_TOKEN$": "",
+        "^JSESSIONID$": ""
+      },
+      "headers": {
+        "^X-Zimbra-": ""
+      },
+      "url": [
+        "/zimbra/",
+        "/zimbraAdmin/"
+      ],
+      "meta": {
+        "generator": "^Zimbra ?([\\d.]+)?"
+      },
+      "robots": [
+        "/zimbra/",
+        "Disallow: /zimbra/"
+      ],
+      "scriptSrc": [
+        "/zimbra/js/"
+      ],
+      "scriptjs": {
+        "ZmZimbraMail": ""
+      },
+      "implies": [
+        "Java"
+      ]
+    },
+    {
+      "name": "SquirrelMail",
+      "category": "Email Server",
+      "cookies": {
+        "^SQMSESSID$": ""
+      },
+      "headers": {},
+      "url": [
+        "/squirrelmail/",
+        "/src/webmail.php"
+      ],
+      "meta": {
+        "generator": "^SquirrelMail"
+      },
+      "robots": [
+        "/squirrelmail/",
+        "Disallow: /squirrelmail/"
+      ],
+      "scriptSrc": [
+        "/functions/"
+      ],
+      "scriptjs": {},
+      "implies": [
+        "PHP"
+      ]
+    },
+    {
+      "name": "RainLoop Webmail",
+      "category": "Email Server",
+      "cookies": {
+        "^rainloop$": ""
+      },
+      "headers": {
+        "^X-Powered-By$": "RainLoop"
+      },
+      "url": [
+        "/?/AppData/",
+        "/rainloop/"
+      ],
+      "meta": {},
+      "robots": [
+        "/rainloop/",
+        "Disallow: /rainloop/"
+      ],
+      "scriptSrc": [
+        "/rainloop/v/"
+      ],
+      "scriptjs": {
+        "rl": ""
+      },
+      "implies": [
+        "PHP"
+      ]
+    },
+    {
+      "name": "Microsoft Exchange / Outlook Web Access (OWA)",
+      "category": "Email Server",
+      "cookies": {
+        "^OutlookSession$": "",
+        "^exchangecookie$": "",
+        "^X-OWA-CANARY$": ""
+      },
+      "headers": {
+        "^X-OWA-Version$": "",
+        "^X-FEServer$": ""
+      },
+      "url": [
+        "/owa/",
+        "/ecp/",
+        "/autodiscover/"
+      ],
+      "meta": {},
+      "robots": [
+        "/owa/",
+        "Disallow: /owa/"
+      ],
+      "scriptSrc": [
+        "/owa/auth/"
+      ],
+      "scriptjs": {},
+      "implies": [
+        ".NET"
+      ]
+    },
+    {
+      "name": "Microsoft 365 / Exchange Online",
+      "category": "Email Server",
+      "cookies": {
+        "^OIDC$": "",
+        "^MSFPC$": ""
+      },
+      "headers": {
+        "^X-MSEdge-Ref$": ""
+      },
+      "url": [
+        "outlook.office.com",
+        "outlook.office365.com"
+      ],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [],
+      "scriptjs": {}
+    },
+    {
+      "name": "Postfix (SMTP banner)",
+      "category": "Email Server",
+      "cookies": {},
+      "headers": {
+        "^Server$": "Postfix"
+      },
+      "url": [],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [],
+      "scriptjs": {},
+      "smtp": [
+        "ESMTP Postfix"
+      ]
+    },
+    {
+      "name": "Exim (SMTP banner)",
+      "category": "Email Server",
+      "cookies": {},
+      "headers": {
+        "^Server$": "Exim"
+      },
+      "url": [],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [],
+      "scriptjs": {},
+      "smtp": [
+        "ESMTP Exim"
+      ]
+    },
+    {
+      "name": "Dovecot (IMAP/POP3 banner)",
+      "category": "Email Server",
+      "cookies": {},
+      "headers": {},
+      "url": [],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [],
+      "scriptjs": {},
+      "imap": [
+        "Dovecot ready"
+      ]
+    },
+    {
+      "name": "MDaemon",
+      "category": "Email Server",
+      "cookies": {
+        "^WorldClient$": ""
+      },
+      "headers": {
+        "^Server$": "MDaemon"
+      },
+      "url": [
+        "/WorldClient.dll"
+      ],
+      "meta": {
+        "generator": "^MDaemon ?([\\d.]+)?"
+      },
+      "robots": [],
+      "scriptSrc": [],
+      "scriptjs": {},
+      "implies": [
+        ".NET"
+      ]
+    },
+    {
+      "name": "Atmail",
+      "category": "Email Server",
+      "cookies": {
+        "^atmail_session$": ""
+      },
+      "headers": {
+        "^X-Powered-By$": "Atmail"
+      },
+      "url": [
+        "/atmail/"
+      ],
+      "meta": {
+        "generator": "^Atmail ?([\\d.]+)?"
+      },
+      "robots": [
+        "/atmail/",
+        "Disallow: /atmail/"
+      ],
+      "scriptSrc": [],
+      "scriptjs": {},
+      "implies": [
+        "PHP"
+      ]
+    },
+    {
+      "name": "Mailcow",
+      "category": "Email Server",
+      "cookies": {
+        "^MCSID$": ""
+      },
+      "headers": {
+        "^X-Powered-By$": "mailcow"
+      },
+      "url": [
+        "/SOGo/",
+        "/mailcow/"
+      ],
+      "meta": {},
+      "robots": [
+        "/SOGo/",
+        "Disallow: /SOGo/"
+      ],
+      "scriptSrc": [],
+      "scriptjs": {}
+    },
+    {
+      "name": "SOGo Groupware",
+      "category": "Email Server",
+      "cookies": {
+        "^SOGoSudoUserPerm$": ""
+      },
+      "headers": {
+        "^X-SOGo-": ""
+      },
+      "url": [
+        "/SOGo/"
+      ],
+      "meta": {},
+      "robots": [
+        "/SOGo/",
+        "Disallow: /SOGo/"
+      ],
+      "scriptSrc": [
+        "/SOGo.woa/"
+      ],
+      "scriptjs": {}
+    }
+  ]
+}
