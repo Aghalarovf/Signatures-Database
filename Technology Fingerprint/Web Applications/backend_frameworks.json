@@ -20,6 +20,38 @@
       "scriptjs": {
         "Laravel": ""
       },
+      "body": [
+        "name=\"_token\"",
+        "name=\"csrf-token\"",
+        "Whoops, looks like something went wrong",
+        "Illuminate\\\\(Database|Http|Support|Foundation|Routing)\\\\",
+        "window\\.Laravel",
+        "Laravel v?[\\d.]+ \\(PHP v?[\\d.]+\\)",
+        "facade/ignition|spatie/laravel-ignition",
+        "livewire|wire:(id|model|click|submit)",
+        "/vendor/livewire/"
+      ],
+      "dom": {
+        "input[name='_token']": {
+          "exists": ""
+        },
+        "meta[name='csrf-token']": {
+          "exists": ""
+        },
+        "script[src*='/vendor/livewire/']": {
+          "attributes": {
+            "src": "/vendor/livewire/"
+          }
+        },
+        "[wire\\:id]": {
+          "exists": ""
+        },
+        "script[src*='/vendor/telescope/']": {
+          "attributes": {
+            "src": "/vendor/telescope/"
+          }
+        }
+      },
       "implies": [
         "PHP"
       ]
@@ -44,6 +76,41 @@
         "/bundles/"
       ],
       "scriptjs": {},
+      "body": [
+        "sf-toolbar|sf-minitoolbar",
+        "/_wdt/[\\w\\-]+",
+        "/_profiler/[\\w\\-]+",
+        "Symfony Profiler",
+        "Symfony\\\\(Component|Bundle)\\\\",
+        "Symfony Exception",
+        "name=\"[A-Za-z_]+\\[_token\\]\"",
+        "name=\"_csrf_token\"",
+        "/bundles/[a-z0-9_\\-]+/"
+      ],
+      "dom": {
+        "div.sf-toolbar": {
+          "exists": ""
+        },
+        "input[name='_csrf_token']": {
+          "exists": ""
+        },
+        "input[name$='[_token]']": {
+          "exists": ""
+        },
+        "script[src*='/bundles/']": {
+          "attributes": {
+            "src": "/bundles/[a-z0-9_\\-]+/"
+          }
+        },
+        "link[href*='/bundles/']": {
+          "attributes": {
+            "href": "/bundles/[a-z0-9_\\-]+/"
+          }
+        },
+        "div.exception-message-wrapper": {
+          "exists": ""
+        }
+      },
       "implies": [
         "PHP"
       ]
@@ -71,6 +138,37 @@
         "/static/admin/js/"
       ],
       "scriptjs": {},
+      "body": [
+        "csrfmiddlewaretoken",
+        "/static/admin/",
+        "Django (administration|site admin)",
+        "__debug__",
+        "djdt|django-debug-toolbar",
+        "Using the URLconf defined in",
+        "You're seeing this error because you have <code>DEBUG = True",
+        "Django Version"
+      ],
+      "dom": {
+        "input[name='csrfmiddlewaretoken']": {
+          "exists": ""
+        },
+        "link[href*='/static/admin/']": {
+          "attributes": {
+            "href": "/static/admin/"
+          }
+        },
+        "script[src*='/static/admin/js/']": {
+          "attributes": {
+            "src": "/static/admin/js/"
+          }
+        },
+        "div#djDebug": {
+          "exists": ""
+        },
+        "#site-name": {
+          "text": "Django administration"
+        }
+      },
       "implies": [
         "Python"
       ]
@@ -89,6 +187,34 @@
       "robots": [],
       "scriptSrc": [],
       "scriptjs": {},
+      "body": [
+        "Werkzeug Debugger",
+        "The debugger caught an exception in your WSGI application",
+        "The requested URL was not found on the server\\. If you entered the URL manually",
+        "The method is not allowed for the requested URL",
+        "__debugger__=yes",
+        "Powered by Flask",
+        "name=\"csrf_token\"",
+        "Flask-(WTF|Login|Admin|Bootstrap|Babel)"
+      ],
+      "dom": {
+        "input[name='csrf_token']": {
+          "exists": ""
+        },
+        "div.debugger": {
+          "exists": ""
+        },
+        "script[src*='__debugger__=yes']": {
+          "attributes": {
+            "src": "__debugger__=yes"
+          }
+        },
+        "link[href*='__debugger__=yes']": {
+          "attributes": {
+            "href": "__debugger__=yes"
+          }
+        }
+      },
       "implies": [
         "Python"
       ]
@@ -118,6 +244,53 @@
       "scriptjs": {
         "Rails": ""
       },
+      "body": [
+        "name=\"csrf-param\"",
+        "name=\"csrf-token\"",
+        "authenticity_token",
+        "/assets/application-[0-9a-f]{8,}\\.(js|css)",
+        "ActionController::[A-Za-z]+",
+        "ActionView::Template::Error",
+        "No route matches \\[(GET|POST|PUT|PATCH|DELETE)\\]",
+        "data-turbolinks|data-turbo(-track|-frame)?",
+        "/rails/active_storage/",
+        "Rails\\.(env|root|logger)"
+      ],
+      "dom": {
+        "meta[name='csrf-param']": {
+          "exists": ""
+        },
+        "meta[name='csrf-token']": {
+          "exists": ""
+        },
+        "input[name='authenticity_token']": {
+          "exists": ""
+        },
+        "script[src*='/assets/application-']": {
+          "attributes": {
+            "src": "/assets/application-[0-9a-f]+\\.js"
+          }
+        },
+        "link[href*='/assets/application-']": {
+          "attributes": {
+            "href": "/assets/application-[0-9a-f]+\\.css"
+          }
+        },
+        "turbo-frame": {
+          "exists": ""
+        },
+        "[data-turbo-track]": {
+          "exists": ""
+        },
+        "form[data-remote='true']": {
+          "exists": ""
+        },
+        "a[href*='/rails/active_storage/']": {
+          "attributes": {
+            "href": "/rails/active_storage/"
+          }
+        }
+      },
       "implies": [
         "Ruby"
       ]
@@ -136,6 +309,22 @@
       "robots": [],
       "scriptSrc": [],
       "scriptjs": {},
+      "body": [
+        "Cannot (GET|POST|PUT|PATCH|DELETE) /",
+        "Powered by Express",
+        "node_modules/express/lib/",
+        "at (Function|Layer)\\.(handle|process_params)",
+        "<pre>(Type|Reference|Syntax|Range)?Error: .+\\n\\s+(&nbsp;)*\\s*at ",
+        "<title>Error</title>"
+      ],
+      "dom": {
+        "body > pre": {
+          "text": "(Cannot (GET|POST|PUT|PATCH|DELETE) /|Error: .+\\n\\s+at .*(express|node_modules))"
+        },
+        "title": {
+          "text": "^Error$"
+        }
+      },
       "implies": [
         "Node.js"
       ]
@@ -155,6 +344,35 @@
       "robots": [],
       "scriptSrc": [],
       "scriptjs": {},
+      "body": [
+        "\"statusCode\":\\s*(400|401|403|404|500)",
+        "\"message\":\\s*\"Cannot (GET|POST|PUT|PATCH|DELETE) /[^\"]*\"",
+        "\"error\":\\s*\"(Not Found|Bad Request|Unauthorized|Forbidden|Internal Server Error)\"",
+        "@nestjs/",
+        "swagger-ui",
+        "/api-json"
+      ],
+      "dom": {
+        "div#swagger-ui": {
+          "exists": ""
+        },
+        "script[src*='swagger-ui']": {
+          "attributes": {
+            "src": "swagger-ui"
+          }
+        },
+        "link[href*='swagger-ui']": {
+          "attributes": {
+            "href": "swagger-ui"
+          }
+        },
+        "title": {
+          "text": "Swagger UI"
+        },
+        "body > pre": {
+          "text": "\"statusCode\":\\s*\\d{3}"
+        }
+      },
       "implies": [
         "Node.js"
       ]
@@ -176,6 +394,33 @@
       "robots": [],
       "scriptSrc": [],
       "scriptjs": {},
+      "body": [
+        "Whitelabel Error Page",
+        "This application has no explicit mapping for /error",
+        "\"timestamp\":\\s*\"[^\"]+\",\\s*\"status\":\\s*\\d{3},\\s*\"error\"",
+        "org\\.springframework\\.",
+        "name=\"_csrf\"",
+        "<title>Please sign in</title>",
+        "/actuator(/|\\\")",
+        "Spring (Boot|Security|MVC)"
+      ],
+      "dom": {
+        "input[name='_csrf']": {
+          "exists": ""
+        },
+        "meta[name='_csrf']": {
+          "exists": ""
+        },
+        "meta[name='_csrf_header']": {
+          "exists": ""
+        },
+        "h1": {
+          "text": "^Whitelabel Error Page$"
+        },
+        "title": {
+          "text": "^Please sign in$"
+        }
+      },
       "implies": [
         "Java"
       ]
@@ -200,6 +445,58 @@
         "/lib/bootstrap/"
       ],
       "scriptjs": {},
+      "body": [
+        "__RequestVerificationToken",
+        "data-val-(required|length|regex|range|email)=",
+        "jquery\\.validate\\.unobtrusive",
+        "/_framework/blazor\\.(server|webassembly)\\.js",
+        "/_framework/aspnetcore-browser-refresh\\.js",
+        "/_vs/browserLink",
+        "/lib/(bootstrap|jquery|jquery-validation)(-[\\w\\-]+)?/dist/",
+        "An unhandled exception occurred while processing the request",
+        "Microsoft\\.AspNetCore\\."
+      ],
+      "dom": {
+        "input[name='__RequestVerificationToken']": {
+          "exists": ""
+        },
+        "input[data-val='true']": {
+          "exists": ""
+        },
+        "[data-valmsg-for]": {
+          "exists": ""
+        },
+        "script[src*='/_framework/blazor']": {
+          "attributes": {
+            "src": "/_framework/blazor\\.(server|webassembly)\\.js"
+          }
+        },
+        "script[src*='jquery.validate.unobtrusive']": {
+          "attributes": {
+            "src": "jquery\\.validate\\.unobtrusive"
+          }
+        },
+        "script[src*='/lib/jquery/']": {
+          "attributes": {
+            "src": "/lib/jquery/"
+          }
+        },
+        "link[href*='/lib/bootstrap/']": {
+          "attributes": {
+            "href": "/lib/bootstrap/"
+          }
+        },
+        "script[src*='/_vs/browserLink']": {
+          "attributes": {
+            "src": "/_vs/browserLink"
+          }
+        },
+        "script[src*='/_framework/aspnetcore-browser-refresh.js']": {
+          "attributes": {
+            "src": "aspnetcore-browser-refresh\\.js"
+          }
+        }
+      },
       "implies": [
         ".NET"
       ]
@@ -218,6 +515,39 @@
       "robots": [],
       "scriptSrc": [],
       "scriptjs": {},
+      "body": [
+        "A PHP Error was encountered",
+        "A Database Error Occurred",
+        "Message:\\s+.+\\s+Filename:\\s+.+\\.php\\s+Line Number:\\s+\\d+",
+        "name=\"csrf_test_name\"",
+        "name=\"ci_csrf_token\"",
+        "Powered by CodeIgniter|CodeIgniter",
+        "<title>404 Page Not Found</title>",
+        "/index\\.php/[\\w/\\-]+",
+        "debugbar_loader|ci-debug-toolbar"
+      ],
+      "dom": {
+        "input[name='csrf_test_name']": {
+          "exists": ""
+        },
+        "input[name='ci_csrf_token']": {
+          "exists": ""
+        },
+        "script#debugbar_loader": {
+          "exists": ""
+        },
+        "div#debug-bar": {
+          "exists": ""
+        },
+        "a[href*='/index.php/']": {
+          "attributes": {
+            "href": "/index\\.php/"
+          }
+        },
+        "div#container h1": {
+          "text": "(A PHP Error was encountered|A Database Error Occurred|404 Page Not Found)"
+        }
+      },
       "implies": [
         "PHP"
       ]
@@ -236,6 +566,40 @@
       "robots": [],
       "scriptSrc": [],
       "scriptjs": {},
+      "body": [
+        "Powered by CakePHP|CakePHP",
+        "name=\"_csrfToken\"",
+        "name=\"_Token\\[(fields|unlocked)\\]\"",
+        "DebugKit|debug_kit|debug-kit",
+        "Cake\\\\(Core|Http|Controller|Database|View)\\\\",
+        "Missing (Controller|Action|Template|View|Table|Route)",
+        "/css/(cake|home)\\.css",
+        "/img/cake\\.(icon|power)\\.(png|gif)"
+      ],
+      "dom": {
+        "input[name='_csrfToken']": {
+          "exists": ""
+        },
+        "input[name='_Token[fields]']": {
+          "exists": ""
+        },
+        "meta[name='csrfToken']": {
+          "exists": ""
+        },
+        "div#debug-kit-toolbar": {
+          "exists": ""
+        },
+        "link[href*='/css/cake.']": {
+          "attributes": {
+            "href": "/css/cake\\."
+          }
+        },
+        "img[src*='cake.power']": {
+          "attributes": {
+            "src": "cake\\.power\\.gif|cake\\.icon\\.png"
+          }
+        }
+      },
       "implies": [
         "PHP"
       ]
@@ -259,6 +623,60 @@
       "scriptjs": {
         "yii": ""
       },
+      "body": [
+        "YII_CSRF_TOKEN",
+        "name=\"_csrf(-\\w+)?\"",
+        "<meta name=\"csrf-param\" content=\"_csrf(-\\w+)?\">",
+        "yii\\.(js|activeForm|validation|captcha|gridView)",
+        "/assets/[0-9a-f]{8}/",
+        "yiiframework\\.com",
+        "yii\\\\(base|web|db|helpers)\\\\",
+        "Unable to resolve the request",
+        "yii2?-debug",
+        "[?&]r=[\\w/\\-]+"
+      ],
+      "dom": {
+        "meta[name='csrf-param']": {
+          "attributes": {
+            "content": "^_csrf"
+          }
+        },
+        "input[name='_csrf']": {
+          "exists": ""
+        },
+        "input[name='_csrf-frontend']": {
+          "exists": ""
+        },
+        "input[name='_csrf-backend']": {
+          "exists": ""
+        },
+        "input[name='YII_CSRF_TOKEN']": {
+          "exists": ""
+        },
+        "script[src*='yii.js']": {
+          "attributes": {
+            "src": "/yii(\\.\\w+)?\\.js"
+          }
+        },
+        "script[src*='/assets/']": {
+          "attributes": {
+            "src": "/assets/[0-9a-f]{8}/"
+          }
+        },
+        "link[href*='/assets/']": {
+          "attributes": {
+            "href": "/assets/[0-9a-f]{8}/"
+          }
+        },
+        "div#yii-debug-toolbar": {
+          "exists": ""
+        },
+        "a[href*='?r=']": {
+          "attributes": {
+            "href": "[?&]r=[\\w/\\-]+"
+          }
+        }
+      },
       "implies": [
         "PHP"
       ]
@@ -278,6 +696,45 @@
       "robots": [],
       "scriptSrc": [],
       "scriptjs": {},
+      "body": [
+        "Swagger UI",
+        "swagger-ui-(dist|bundle)",
+        "ReDoc|redoc",
+        "/openapi\\.json",
+        "\"detail\":\\s*\"Not Found\"",
+        "\"detail\":\\s*\\[\\s*\\{\\s*\"loc\"",
+        "\"msg\":\\s*\"Field required\"",
+        "\"type\":\\s*\"(missing|value_error|string_type|int_parsing)\"",
+        "\"openapi\":\\s*\"3\\.\\d+\\.\\d+\""
+      ],
+      "dom": {
+        "div#swagger-ui": {
+          "exists": ""
+        },
+        "script[src*='swagger-ui-bundle.js']": {
+          "attributes": {
+            "src": "swagger-ui-bundle\\.js"
+          }
+        },
+        "link[href*='swagger-ui.css']": {
+          "attributes": {
+            "href": "swagger-ui\\.css"
+          }
+        },
+        "link[rel='shortcut icon']": {
+          "attributes": {
+            "href": "fastapi\\.tiangolo\\.com/img/favicon\\.png"
+          }
+        },
+        "redoc[spec-url]": {
+          "attributes": {
+            "spec-url": "openapi\\.json"
+          }
+        },
+        "title": {
+          "text": " - (Swagger UI|ReDoc)$"
+        }
+      },
       "implies": [
         "Python"
       ]
@@ -302,6 +759,50 @@
       "scriptjs": {
         "Phoenix": ""
       },
+      "body": [
+        "data-phx-(main|session|static|view|component|link|id)",
+        "phx-(click|submit|change|hook|update|target|socket)",
+        "name=\"_csrf_token\"",
+        "phoenix(\\.min)?\\.js|phoenix_html|phoenix_live_view",
+        "Phoenix\\.(LiveView|Router|Endpoint|Controller)",
+        "Phoenix\\.Router\\.NoRouteError",
+        "/(live|socket)/websocket",
+        "<title data-suffix"
+      ],
+      "dom": {
+        "[data-phx-main]": {
+          "exists": ""
+        },
+        "[data-phx-session]": {
+          "exists": ""
+        },
+        "[data-phx-static]": {
+          "exists": ""
+        },
+        "[phx-click]": {
+          "exists": ""
+        },
+        "[phx-submit]": {
+          "exists": ""
+        },
+        "input[name='_csrf_token']": {
+          "exists": ""
+        },
+        "meta[name='csrf-token']": {
+          "exists": ""
+        },
+        "a[data-csrf][data-method]": {
+          "exists": ""
+        },
+        "title[data-suffix]": {
+          "exists": ""
+        },
+        "script[src*='phoenix']": {
+          "attributes": {
+            "src": "phoenix(\\.min)?\\.js|phoenix_html|phoenix_live_view"
+          }
+        }
+      },
       "implies": [
         "Elixir"
       ]
@@ -318,6 +819,38 @@
       "robots": [],
       "scriptSrc": [],
       "scriptjs": {},
+      "body": [
+        "(^|>)\\s*404 page not found\\s*(<|$)",
+        "\\[GIN(-debug)?\\]",
+        "github\\.com/gin-gonic/gin(@v[\\d.]+)?/",
+        "gin-gonic",
+        "gin-contrib/",
+        "Powered by Gin",
+        "/swagger/index\\.html",
+        "\"message\":\\s*\"(page not found|Not Found)\"",
+        "goroutine \\d+ \\[running\\]:[\\s\\S]*gin"
+      ],
+      "dom": {
+        "body": {
+          "text": "^\\s*404 page not found\\s*$"
+        },
+        "pre": {
+          "text": "gin-gonic/gin"
+        },
+        "div#swagger-ui": {
+          "exists": ""
+        },
+        "link[href*='/swagger/']": {
+          "attributes": {
+            "href": "/swagger/"
+          }
+        },
+        "script[src*='/swagger/']": {
+          "attributes": {
+            "src": "/swagger/"
+          }
+        }
+      },
       "implies": [
         "Go"
       ]
@@ -336,6 +869,40 @@
       "robots": [],
       "scriptSrc": [],
       "scriptjs": {},
+      "body": [
+        "play\\.(api|core)\\.",
+        "Action Not Found",
+        "For request '(GET|POST|PUT|PATCH|DELETE) [^']*'",
+        "Execution exception",
+        "This page is generated by Play|Welcome to Play",
+        "/assets/(javascripts|stylesheets|images)/",
+        "name=\"csrfToken\"",
+        "csrfToken=[0-9a-f\\-]{20,}",
+        "/@documentation"
+      ],
+      "dom": {
+        "input[name='csrfToken']": {
+          "exists": ""
+        },
+        "a[href*='csrfToken=']": {
+          "attributes": {
+            "href": "csrfToken="
+          }
+        },
+        "link[href*='/assets/stylesheets/']": {
+          "attributes": {
+            "href": "/assets/stylesheets/"
+          }
+        },
+        "script[src*='/assets/javascripts/']": {
+          "attributes": {
+            "src": "/assets/javascripts/"
+          }
+        },
+        "h1": {
+          "text": "^(Action Not Found|Execution exception)"
+        }
+      },
       "implies": [
         "Java"
       ]
@@ -359,6 +926,47 @@
       "scriptjs": {
         "Meteor": "",
         "__meteor_runtime_config__": ""
+      },
+      "body": [
+        "__meteor_runtime_config__\\s*=\\s*JSON\\.parse\\(decodeURIComponent\\(",
+        "__meteor_runtime_config__",
+        "meteor_runtime_config\\.js",
+        "meteor_(js|css)_resource=true",
+        "/packages/[\\w\\-]+\\.js",
+        "Meteor\\.(startup|isClient|isServer|call|methods|subscribe)",
+        "/sockjs/info",
+        "/__cordova/",
+        "Tracker\\.autorun"
+      ],
+      "dom": {
+        "script[src*='meteor_runtime_config.js']": {
+          "attributes": {
+            "src": "meteor_runtime_config\\.js"
+          }
+        },
+        "script[src*='meteor_js_resource=true']": {
+          "attributes": {
+            "src": "meteor_js_resource=true"
+          }
+        },
+        "link[href*='meteor_css_resource=true']": {
+          "attributes": {
+            "href": "meteor_css_resource=true"
+          }
+        },
+        "script[src*='/packages/']": {
+          "attributes": {
+            "src": "/packages/[\\w\\-]+\\.js"
+          }
+        },
+        "script[src*='/app/app.js']": {
+          "attributes": {
+            "src": "/app/app\\.js"
+          }
+        },
+        "div#login-buttons": {
+          "exists": ""
+        }
       },
       "implies": [
         "Node.js"
