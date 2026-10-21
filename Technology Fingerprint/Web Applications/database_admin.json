@@ -1,0 +1,14 @@
+{
+  "technologies": [
+    {
+      "name": "phpMyAdmin",
+      "category": "Database Admin",
+      "cookies": {
+        "^phpMyAdmin$": ""
+      },
+      "implies": [
+        "PHP"
+      ]
+    }
+  ]
+}
