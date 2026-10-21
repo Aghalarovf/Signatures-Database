@@ -1,0 +1,116 @@
+{
+  "technologies": [
+    {
+      "name": "Atlassian (Jira/Confluence)",
+      "category": "DevOps",
+      "cookies": {
+        "^atlassian\\.xsrf\\.token$": "",
+        "^studio\\.crowd\\.tokenkey$": ""
+      },
+      "implies": [
+        "Java"
+      ]
+    },
+    {
+      "name": "Jenkins",
+      "category": "CI/CD",
+      "cookies": {
+        "^JSESSIONID\\.": ""
+      },
+      "implies": [
+        "Java"
+      ]
+    },
+    {
+      "name": "GitLab",
+      "category": "DevOps",
+      "cookies": {
+        "^_gitlab_session$": "",
+        "^remember_user_token$": ""
+      },
+      "implies": [
+        "Ruby on Rails"
+      ]
+    },
+    {
+      "name": "Kubernetes Dashboard",
+      "category": "DevOps",
+      "cookies": {
+        "^jweToken$": "",
+        "^kubernetes-dashboard": ""
+      }
+    },
+    {
+      "name": "Portainer",
+      "category": "DevOps",
+      "cookies": {
+        "^portainer\\.": "",
+        "^portainer_": ""
+      }
+    },
+    {
+      "name": "SonarQube",
+      "category": "DevOps",
+      "cookies": {
+        "^JWT-SESSION$": "",
+        "^SONAR_": ""
+      },
+      "implies": [
+        "Java"
+      ]
+    },
+    {
+      "name": "Nexus Repository",
+      "category": "DevOps",
+      "cookies": {
+        "^NXSESSIONID$": "",
+        "^NX-ANTI-CSRF-TOKEN$": ""
+      },
+      "implies": [
+        "Java"
+      ]
+    },
+    {
+      "name": "JFrog Artifactory",
+      "category": "DevOps",
+      "cookies": {
+        "^ARTIFACTORYSESSIONID$": "",
+        "^ARTIFACTORY_": ""
+      },
+      "implies": [
+        "Java"
+      ]
+    },
+    {
+      "name": "TeamCity",
+      "category": "CI/CD",
+      "cookies": {
+        "^TCSESSIONID$": "",
+        "^TeamCityMeta": ""
+      },
+      "implies": [
+        "Java"
+      ]
+    },
+    {
+      "name": "Gitea / Gogs",
+      "category": "DevOps",
+      "cookies": {
+        "^i_like_gitea$": "",
+        "^i_like_gogs$": "",
+        "^gitea_awesome$": ""
+      }
+    },
+    {
+      "name": "GitHub",
+      "category": "DevOps",
+      "cookies": {
+        "^_gh_sess$": "",
+        "^user_session$": "",
+        "^__Host-user_session_same_site$": "",
+        "^dotcom_user$": "",
+        "^_octo$": ""
+      }
+    }
+  ]
+}
