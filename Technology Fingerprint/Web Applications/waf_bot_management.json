@@ -7,6 +7,23 @@
         "^ak_bmsc$": "",
         "^bm_sz$": "",
         "^_abck$": ""
+      },
+      "headers": {
+        "^X-Akamai-Transformed$": "",
+        "^Server$": "AkamaiGHost"
+      },
+      "url": [
+        "/akam/",
+        "/_sec/cp_challenge/"
+      ],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [
+        "/akam/",
+        "/ak-sec/"
+      ],
+      "scriptjs": {
+        "bmak": ""
       }
     },
     {
@@ -16,14 +33,37 @@
         "^incap_ses_": "",
         "^visid_incap_": "",
         "^nlbi_": ""
-      }
+      },
+      "headers": {
+        "^X-Iinfo$": "",
+        "^X-CDN$": "Incapsula"
+      },
+      "url": [
+        "/_Incapsula_Resource"
+      ],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [
+        "/_Incapsula_Resource"
+      ],
+      "scriptjs": {}
     },
     {
       "name": "Sucuri",
       "category": "WAF",
       "cookies": {
         "^sucuri_cloudproxy_uuid_": ""
-      }
+      },
+      "headers": {
+        "^X-Sucuri-ID$": "",
+        "^X-Sucuri-Cache$": "",
+        "^Server$": "Sucuri/Cloudproxy"
+      },
+      "url": [],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [],
+      "scriptjs": {}
     },
     {
       "name": "Distil Networks",
@@ -31,7 +71,18 @@
       "cookies": {
         "^D_SID$": "",
         "^D_UID$": ""
-      }
+      },
+      "headers": {
+        "^X-Distil-CS$": ""
+      },
+      "url": [],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [
+        "distil_r_captcha.js",
+        "distilCaptcha"
+      ],
+      "scriptjs": {}
     },
     {
       "name": "PerimeterX",
@@ -40,6 +91,22 @@
         "^_px$": "",
         "^_pxvid$": "",
         "^_pxhd$": ""
+      },
+      "headers": {
+        "^X-PX-": ""
+      },
+      "url": [
+        "/captcha/captcha.js"
+      ],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [
+        "client.perimeterx.net",
+        "/px-captcha"
+      ],
+      "scriptjs": {
+        "_pxAppId": "",
+        "PX": ""
       }
     },
     {
@@ -47,6 +114,21 @@
       "category": "Bot Management",
       "cookies": {
         "^datadome$": ""
+      },
+      "headers": {
+        "^X-DataDome$": ""
+      },
+      "url": [
+        "/captcha/"
+      ],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [
+        "ct.captcha-delivery.com",
+        "js.datadome.co"
+      ],
+      "scriptjs": {
+        "DD_OPTIONS": ""
       }
     },
     {
@@ -63,14 +145,30 @@
         "^F5_ST$": "",
         "^F5_HT_shrinked$": "",
         "^F5_fullWT$": ""
-      }
+      },
+      "headers": {
+        "^Server$": "BigIP|BIG-IP"
+      },
+      "url": [],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [],
+      "scriptjs": {}
     },
     {
       "name": "F5 Shape Security",
       "category": "Bot Management",
       "cookies": {
         "^_imp_apg_r_$": ""
-      }
+      },
+      "headers": {
+        "^X-Shape-": ""
+      },
+      "url": [],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [],
+      "scriptjs": {}
     },
     {
       "name": "Barracuda WAF",
@@ -79,7 +177,15 @@
         "^barra_counter_session$": "",
         "^BNI__BARRACUDA_LB_COOKIE$": "",
         "^BNI_persistence$": ""
-      }
+      },
+      "headers": {
+        "^Server$": "Barracuda"
+      },
+      "url": [],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [],
+      "scriptjs": {}
     },
     {
       "name": "Fortinet FortiWeb",
@@ -87,14 +193,30 @@
       "cookies": {
         "^cookiesession1$": "",
         "^FORTIWAFSID$": ""
-      }
+      },
+      "headers": {
+        "^Server$": "FortiWeb"
+      },
+      "url": [],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [],
+      "scriptjs": {}
     },
     {
       "name": "Radware AppWall",
       "category": "WAF",
       "cookies": {
         "^rdwr_": ""
-      }
+      },
+      "headers": {
+        "^X-SL-CompState$": ""
+      },
+      "url": [],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [],
+      "scriptjs": {}
     },
     {
       "name": "Radware Bot Manager (ShieldSquare)",
@@ -105,7 +227,16 @@
         "^__uzmc$": "",
         "^__uzmd$": "",
         "^__uzme$": ""
-      }
+      },
+      "headers": {},
+      "url": [],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [
+        "shieldsquare",
+        "ssactivate.js"
+      ],
+      "scriptjs": {}
     },
     {
       "name": "Akamai Bot Manager Premier",
@@ -114,7 +245,20 @@
         "^bm_sv$": "",
         "^bm_mi$": "",
         "^bm_lso$": ""
-      }
+      },
+      "headers": {
+        "^Server$": "AkamaiGHost"
+      },
+      "url": [],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [],
+      "scriptjs": {
+        "bmak": ""
+      },
+      "implies": [
+        "Akamai Bot Manager"
+      ]
     },
     {
       "name": "Reblaze",
@@ -122,7 +266,15 @@
       "cookies": {
         "^rbzid$": "",
         "^rbzsessionid$": ""
-      }
+      },
+      "headers": {
+        "^Server$": "Reblaze"
+      },
+      "url": [],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [],
+      "scriptjs": {}
     },
     {
       "name": "Cloudflare Challenge",
@@ -131,7 +283,20 @@
         "^cf_chl_": "",
         "^__cf_chl_": "",
         "^cf_chl_rc_": ""
-      }
+      },
+      "headers": {
+        "^Server$": "cloudflare",
+        "^CF-RAY$": ""
+      },
+      "url": [
+        "/cdn-cgi/challenge-platform/"
+      ],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [
+        "/cdn-cgi/challenge-platform/"
+      ],
+      "scriptjs": {}
     },
     {
       "name": "Imperva (extended)",
@@ -143,7 +308,18 @@
         "^___utmva$": "",
         "^reese84$": "",
         "^incap_sh_": ""
-      }
+      },
+      "headers": {
+        "^X-Iinfo$": ""
+      },
+      "url": [],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [],
+      "scriptjs": {},
+      "implies": [
+        "Imperva"
+      ]
     },
     {
       "name": "Kasada",
@@ -152,7 +328,18 @@
         "^x-kpsdk-": "",
         "^KP_UIDz$": "",
         "^KP_UIDz-ssn$": ""
-      }
+      },
+      "headers": {
+        "^x-kpsdk-ct$": ""
+      },
+      "url": [],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [
+        "/ips.js",
+        "kasada"
+      ],
+      "scriptjs": {}
     },
     {
       "name": "Netacea",
@@ -160,7 +347,15 @@
       "cookies": {
         "^_mitata$": "",
         "^_mitataexp$": ""
-      }
+      },
+      "headers": {},
+      "url": [],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [
+        "netacea"
+      ],
+      "scriptjs": {}
     },
     {
       "name": "Alibaba Cloud WAF",
@@ -170,7 +365,15 @@
         "^acw_sc__v2$": "",
         "^acw_sc__v3$": "",
         "^aliyungf_tc$": ""
-      }
+      },
+      "headers": {
+        "^Server$": "Tengine"
+      },
+      "url": [],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [],
+      "scriptjs": {}
     },
     {
       "name": "Huawei Cloud WAF",
@@ -178,14 +381,30 @@
       "cookies": {
         "^HWWAFSESID$": "",
         "^HWWAFSESTIME$": ""
-      }
+      },
+      "headers": {
+        "^Server$": "Huawei"
+      },
+      "url": [],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [],
+      "scriptjs": {}
     },
     {
       "name": "Safedog",
       "category": "WAF",
       "cookies": {
         "^safedog-flow-item": ""
-      }
+      },
+      "headers": {
+        "^Server$": "Safedog"
+      },
+      "url": [],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [],
+      "scriptjs": {}
     },
     {
       "name": "Yunsuo",
@@ -194,21 +413,45 @@
         "^yunsuo_session_verify$": "",
         "^security_session_verify$": "",
         "^security_session_mid_verify$": ""
-      }
+      },
+      "headers": {},
+      "url": [],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [],
+      "scriptjs": {}
     },
     {
       "name": "360 Web Application Firewall",
       "category": "WAF",
       "cookies": {
         "^__jsluid_[hs]$": ""
-      }
+      },
+      "headers": {
+        "^Server$": "360wzb"
+      },
+      "url": [],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [],
+      "scriptjs": {}
     },
     {
       "name": "Knownsec Jiasule",
       "category": "WAF",
       "cookies": {
         "^__jsl_clearance": ""
-      }
+      },
+      "headers": {
+        "^Server$": "jiasule-waf"
+      },
+      "url": [],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [
+        "static.jiasule.com"
+      ],
+      "scriptjs": {}
     }
   ]
 }
