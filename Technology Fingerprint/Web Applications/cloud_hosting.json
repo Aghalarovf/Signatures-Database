@@ -1,0 +1,290 @@
+{
+  "technologies": [
+    {
+      "name": "Amazon Web Services (AWS)",
+      "category": "Cloud Hosting",
+      "cookies": {
+        "^AWSALB$": "",
+        "^AWSALBCORS$": "",
+        "^AWSALBTG$": ""
+      },
+      "headers": {
+        "^X-Amz-Cf-Id$": "",
+        "^X-Amz-Request-Id$": "",
+        "^Server$": "AmazonS3|awselb"
+      },
+      "url": [
+        ".amazonaws.com",
+        ".s3.amazonaws.com",
+        ".elb.amazonaws.com"
+      ],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [],
+      "scriptjs": {}
+    },
+    {
+      "name": "Amazon CloudFront",
+      "category": "Cloud Hosting",
+      "cookies": {},
+      "headers": {
+        "^X-Amz-Cf-Pop$": "",
+        "^X-Amz-Cf-Id$": "",
+        "^Via$": "CloudFront"
+      },
+      "url": [
+        ".cloudfront.net"
+      ],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [],
+      "scriptjs": {},
+      "implies": [
+        "Amazon Web Services (AWS)"
+      ]
+    },
+    {
+      "name": "Microsoft Azure",
+      "category": "Cloud Hosting",
+      "cookies": {
+        "^ARRAffinity$": "",
+        "^ARRAffinitySameSite$": ""
+      },
+      "headers": {
+        "^X-Azure-Ref$": "",
+        "^X-Ms-Routing-Name$": "",
+        "^Server$": "Microsoft-Azure"
+      },
+      "url": [
+        ".azurewebsites.net",
+        ".blob.core.windows.net",
+        ".cloudapp.azure.com"
+      ],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [],
+      "scriptjs": {}
+    },
+    {
+      "name": "Google Cloud Platform (GCP)",
+      "category": "Cloud Hosting",
+      "cookies": {},
+      "headers": {
+        "^X-Goog-": "",
+        "^Server$": "Google Frontend|gws|GSE"
+      },
+      "url": [
+        ".appspot.com",
+        ".run.app",
+        "storage.googleapis.com"
+      ],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [],
+      "scriptjs": {}
+    },
+    {
+      "name": "DigitalOcean",
+      "category": "Cloud Hosting",
+      "cookies": {},
+      "headers": {
+        "^X-DO-App-Origin$": ""
+      },
+      "url": [
+        ".digitaloceanspaces.com",
+        ".ondigitalocean.app"
+      ],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [],
+      "scriptjs": {}
+    },
+    {
+      "name": "Vercel",
+      "category": "Cloud Hosting",
+      "cookies": {
+        "^_vercel_jwt$": ""
+      },
+      "headers": {
+        "^X-Vercel-Id$": "",
+        "^X-Vercel-Cache$": "",
+        "^Server$": "Vercel"
+      },
+      "url": [
+        ".vercel.app"
+      ],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [
+        "/_next/static/"
+      ],
+      "scriptjs": {
+        "__NEXT_DATA__": ""
+      }
+    },
+    {
+      "name": "Netlify",
+      "category": "Cloud Hosting",
+      "cookies": {
+        "^nf_jwt$": ""
+      },
+      "headers": {
+        "^X-Nf-Request-Id$": "",
+        "^Server$": "Netlify"
+      },
+      "url": [
+        ".netlify.app"
+      ],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [],
+      "scriptjs": {}
+    },
+    {
+      "name": "Heroku",
+      "category": "Cloud Hosting",
+      "cookies": {},
+      "headers": {
+        "^Via$": "vegur",
+        "^X-Heroku-": ""
+      },
+      "url": [
+        ".herokuapp.com"
+      ],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [],
+      "scriptjs": {}
+    },
+    {
+      "name": "Cloudflare Pages / Workers",
+      "category": "Cloud Hosting",
+      "cookies": {
+        "^__cflb$": ""
+      },
+      "headers": {
+        "^CF-RAY$": "",
+        "^Server$": "cloudflare"
+      },
+      "url": [
+        ".pages.dev",
+        ".workers.dev"
+      ],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [],
+      "scriptjs": {}
+    },
+    {
+      "name": "Alibaba Cloud",
+      "category": "Cloud Hosting",
+      "cookies": {},
+      "headers": {
+        "^Server$": "Tengine",
+        "^X-Oss-Request-Id$": ""
+      },
+      "url": [
+        ".aliyuncs.com",
+        ".oss-cn-"
+      ],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [],
+      "scriptjs": {}
+    },
+    {
+      "name": "Linode / Akamai Connected Cloud",
+      "category": "Cloud Hosting",
+      "cookies": {},
+      "headers": {},
+      "url": [
+        ".linodeobjects.com",
+        ".linode.com"
+      ],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [],
+      "scriptjs": {}
+    },
+    {
+      "name": "OVHcloud",
+      "category": "Cloud Hosting",
+      "cookies": {},
+      "headers": {
+        "^X-OVH-": ""
+      },
+      "url": [
+        ".ovh.net",
+        ".ovhcloud.com"
+      ],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [],
+      "scriptjs": {}
+    },
+    {
+      "name": "Render",
+      "category": "Cloud Hosting",
+      "cookies": {},
+      "headers": {
+        "^X-Render-Origin-Server$": ""
+      },
+      "url": [
+        ".onrender.com"
+      ],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [],
+      "scriptjs": {}
+    },
+    {
+      "name": "Fly.io",
+      "category": "Cloud Hosting",
+      "cookies": {
+        "^_fly_instance$": ""
+      },
+      "headers": {
+        "^Fly-Request-Id$": "",
+        "^Server$": "Fly/"
+      },
+      "url": [
+        ".fly.dev"
+      ],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [],
+      "scriptjs": {}
+    },
+    {
+      "name": "Tencent Cloud",
+      "category": "Cloud Hosting",
+      "cookies": {},
+      "headers": {
+        "^X-Daa-Tunnel$": "",
+        "^Server$": "Tencent"
+      },
+      "url": [
+        ".myqcloud.com",
+        ".tencentcos.cn"
+      ],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [],
+      "scriptjs": {}
+    },
+    {
+      "name": "Hetzner Cloud",
+      "category": "Cloud Hosting",
+      "cookies": {},
+      "headers": {},
+      "url": [
+        ".your-objectstorage.com",
+        "hetzner.cloud"
+      ],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [],
+      "scriptjs": {}
+    }
+  ]
+}
