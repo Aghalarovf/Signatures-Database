@@ -28,6 +28,60 @@
       "scriptjs": {
         "rcmail": ""
       },
+      "body": [
+        "Roundcube Webmail",
+        "rcmail(\\.|\\b)",
+        "rcmail\\.(env|init|command|gettext|set_env)",
+        "rcube_webmail",
+        "id=\"rcmloginuser\"",
+        "id=\"rcmloginpwd\"",
+        "id=\"rcmloginsubmit\"",
+        "name=\"_task\" value=\"login\"",
+        "name=\"_action\" value=\"login\"",
+        "<input type=\"hidden\" name=\"_token\"",
+        "/program/js/(app|common|jquery)(\\.min)?\\.js",
+        "/skins/(elastic|larry|classic)/",
+        "_task=(mail|login|addressbook|settings)"
+      ],
+      "dom": {
+        "input#rcmloginuser": {
+          "exists": ""
+        },
+        "input#rcmloginpwd": {
+          "exists": ""
+        },
+        "#rcmloginsubmit": {
+          "exists": ""
+        },
+        "input[name='_task'][value='login']": {
+          "attributes": {
+            "value": "^login$"
+          }
+        },
+        "form#login-form": {
+          "attributes": {
+            "action": "_task=login"
+          }
+        },
+        "script[src*='/program/js/']": {
+          "attributes": {
+            "src": "/program/js/(app|common|jquery)(\\.min)?\\.js"
+          }
+        },
+        "link[href*='/skins/']": {
+          "attributes": {
+            "href": "/skins/(elastic|larry|classic)/"
+          }
+        },
+        "title": {
+          "text": "Roundcube Webmail"
+        },
+        "body[class*='task-']": {
+          "attributes": {
+            "class": "\\btask-(login|mail|addressbook|settings)\\b"
+          }
+        }
+      },
       "implies": [
         "PHP"
       ]
@@ -58,6 +112,57 @@
       ],
       "scriptjs": {
         "Horde": ""
+      },
+      "body": [
+        "Horde (Groupware|Webmail|Application Framework)",
+        "Horde_(Core|Registry|Auth|Mime|Imap)",
+        "HordeCore|hordecore(\\.min)?\\.js",
+        "name=\"horde_user\"",
+        "name=\"horde_pass\"",
+        "id=\"horde_user\"",
+        "id=\"horde_pass\"",
+        "/horde/(js|themes|login\\.php)",
+        "/imp/(dynamic|basic|minimal)",
+        "horde[_\\-](imp|ingo|turba|kronolith|nag|mnemo|gollem)"
+      ],
+      "dom": {
+        "input#horde_user": {
+          "exists": ""
+        },
+        "input#horde_pass": {
+          "exists": ""
+        },
+        "input[name='horde_user']": {
+          "exists": ""
+        },
+        "form[action*='login.php']": {
+          "attributes": {
+            "action": "login\\.php"
+          }
+        },
+        "script[src*='/horde/js/']": {
+          "attributes": {
+            "src": "/horde/js/"
+          }
+        },
+        "script[src*='hordecore.js']": {
+          "attributes": {
+            "src": "hordecore(\\.min)?\\.js"
+          }
+        },
+        "link[href*='/horde/themes/']": {
+          "attributes": {
+            "href": "/horde/themes/"
+          }
+        },
+        "a[href*='/imp/']": {
+          "attributes": {
+            "href": "/imp/(dynamic|basic|minimal)"
+          }
+        },
+        "title": {
+          "text": "Horde|IMP"
+        }
       },
       "implies": [
         "PHP"
@@ -90,6 +195,54 @@
       "scriptjs": {
         "ZmZimbraMail": ""
       },
+      "body": [
+        "ZmZimbraMail",
+        "Zimbra Web Client",
+        "Zimbra Collaboration( Suite)?",
+        "Synacor|Zimbra,? Inc",
+        "name=\"loginOp\"",
+        "name=\"login_csrf\"",
+        "zLoginField|zLoginButton|ZLoginFormPanel",
+        "/zimbra/(js|img|h|m|public)/",
+        "/js/(ajax|zimbraMail|zimbraAdmin)/",
+        "zimbraAdmin|ZimbraAdmin",
+        "client=(preferred|advanced|standard|mobile)"
+      ],
+      "dom": {
+        "input[name='loginOp']": {
+          "exists": ""
+        },
+        "input[name='login_csrf']": {
+          "exists": ""
+        },
+        "input.zLoginField": {
+          "exists": ""
+        },
+        ".ZLoginFormPanel": {
+          "exists": ""
+        },
+        "div.LoginScreen": {
+          "exists": ""
+        },
+        "form[name='loginForm']": {
+          "attributes": {
+            "action": "client=(preferred|advanced|standard|mobile)"
+          }
+        },
+        "script[src*='/zimbra/js/']": {
+          "attributes": {
+            "src": "/zimbra/js/"
+          }
+        },
+        "script[src*='/js/zimbraMail/']": {
+          "attributes": {
+            "src": "/js/(zimbraMail|ajax)/"
+          }
+        },
+        "title": {
+          "text": "Zimbra"
+        }
+      },
       "implies": [
         "Java"
       ]
@@ -116,6 +269,60 @@
         "/functions/"
       ],
       "scriptjs": {},
+      "body": [
+        "SquirrelMail( version)? ?[\\d.]*",
+        "name=\"login_username\"",
+        "name=\"secretkey\"",
+        "name=\"js_autodetect_results\"",
+        "name=\"just_logged_in\"",
+        "src/(login|redirect|webmail|right_main|left_main)\\.php",
+        "squirrelmail\\.org",
+        "SquirrelMail Project Team",
+        "/squirrelmail/(src|plugins|functions|themes)/",
+        "sqspell"
+      ],
+      "dom": {
+        "input[name='login_username']": {
+          "exists": ""
+        },
+        "input[name='secretkey']": {
+          "exists": ""
+        },
+        "input[name='js_autodetect_results']": {
+          "exists": ""
+        },
+        "input[name='just_logged_in']": {
+          "exists": ""
+        },
+        "form[action='redirect.php']": {
+          "attributes": {
+            "action": "redirect\\.php"
+          }
+        },
+        "a[href*='squirrelmail.org']": {
+          "attributes": {
+            "href": "squirrelmail\\.org"
+          }
+        },
+        "frame[src*='right_main.php']": {
+          "attributes": {
+            "src": "right_main\\.php"
+          }
+        },
+        "frame[src*='left_main.php']": {
+          "attributes": {
+            "src": "left_main\\.php"
+          }
+        },
+        "img[src*='sm_logo']": {
+          "attributes": {
+            "src": "sm_logo\\.(png|jpg|gif)"
+          }
+        },
+        "title": {
+          "text": "SquirrelMail"
+        }
+      },
       "implies": [
         "PHP"
       ]
@@ -143,6 +350,48 @@
       ],
       "scriptjs": {
         "rl": ""
+      },
+      "body": [
+        "RainLoop( Webmail)?",
+        "rainloop/v/[\\d.]+/",
+        "rainloopAppData|rainloopTEMPLATES|window\\.rainloop",
+        "id=\"rl-(app|loading|content|loading-error|check)\"",
+        "/\\?/(AppData|Css|Template|Lang|Plugins)/",
+        "rainloop-community"
+      ],
+      "dom": {
+        "#rl-app": {
+          "exists": ""
+        },
+        "#rl-loading": {
+          "exists": ""
+        },
+        "#rl-content": {
+          "exists": ""
+        },
+        "script[src*='/rainloop/v/']": {
+          "attributes": {
+            "src": "/rainloop/v/[\\d.]+/"
+          }
+        },
+        "link[href*='/rainloop/v/']": {
+          "attributes": {
+            "href": "/rainloop/v/[\\d.]+/"
+          }
+        },
+        "script[src*='?/AppData/']": {
+          "attributes": {
+            "src": "\\?/AppData/"
+          }
+        },
+        "link[href*='?/Css/']": {
+          "attributes": {
+            "href": "\\?/Css/"
+          }
+        },
+        "title": {
+          "text": "RainLoop"
+        }
       },
       "implies": [
         "PHP"
@@ -174,6 +423,58 @@
         "/owa/auth/"
       ],
       "scriptjs": {},
+      "body": [
+        "Outlook Web (App|Access)|Outlook on the web",
+        "Microsoft Exchange",
+        "/owa/auth/(logon\\.aspx|[\\d.]+/)",
+        "/owa/(prem|scripts)/[\\d.]+",
+        "/owa/\\d+\\.\\d+\\.\\d+\\.\\d+/",
+        "action=\"auth\\.owa\"",
+        "name=\"destination\"",
+        "name=\"forcedownlevel\"",
+        "name=\"isUtf8\"",
+        "id=\"lgnDiv\"",
+        "OwaStrings|g_isNewOwa|owaconfig",
+        "/ecp/",
+        "/aspnet_client/system_web/"
+      ],
+      "dom": {
+        "form[action='auth.owa']": {
+          "attributes": {
+            "action": "auth\\.owa"
+          }
+        },
+        "input[name='destination']": {
+          "exists": ""
+        },
+        "input[name='forcedownlevel']": {
+          "exists": ""
+        },
+        "input[name='isUtf8']": {
+          "exists": ""
+        },
+        "#lgnDiv": {
+          "exists": ""
+        },
+        "link[href*='/owa/auth/']": {
+          "attributes": {
+            "href": "/owa/auth/[\\d.]+/"
+          }
+        },
+        "script[src*='/owa/auth/']": {
+          "attributes": {
+            "src": "/owa/auth/"
+          }
+        },
+        "img[src*='/owa/auth/']": {
+          "attributes": {
+            "src": "/owa/auth/"
+          }
+        },
+        "title": {
+          "text": "Outlook( Web (App|Access))?|Outlook on the web"
+        }
+      },
       "implies": [
         ".NET"
       ]
@@ -195,7 +496,53 @@
       "meta": {},
       "robots": [],
       "scriptSrc": [],
-      "scriptjs": {}
+      "scriptjs": {},
+      "body": [
+        "outlook\\.office(365)?\\.com",
+        "login\\.microsoftonline\\.com",
+        "login\\.live\\.com",
+        "Sign in to your account",
+        "Outlook on the web",
+        "urn:federation:MicrosoftOnline",
+        "autodiscover-s\\.outlook\\.com",
+        "microsoftonline-p\\.com",
+        "aadcdn\\.(msauth|msftauth)\\.net",
+        "\\$Config\\s*=\\s*\\{",
+        "Microsoft 365|Office 365"
+      ],
+      "dom": {
+        "a[href*='outlook.office']": {
+          "attributes": {
+            "href": "outlook\\.office(365)?\\.com"
+          }
+        },
+        "link[href*='outlook.office']": {
+          "attributes": {
+            "href": "outlook\\.office(365)?\\.com"
+          }
+        },
+        "iframe[src*='outlook.office']": {
+          "attributes": {
+            "src": "outlook\\.office(365)?\\.com"
+          }
+        },
+        "form[action*='login.microsoftonline.com']": {
+          "attributes": {
+            "action": "login\\.microsoftonline\\.com"
+          }
+        },
+        "script[src*='aadcdn']": {
+          "attributes": {
+            "src": "aadcdn\\.(msauth|msftauth)\\.net"
+          }
+        },
+        "#lightboxTemplateContainer": {
+          "exists": ""
+        },
+        "title": {
+          "text": "Sign in to your account|Outlook"
+        }
+      }
     },
     {
       "name": "Postfix (SMTP banner)",
@@ -211,7 +558,29 @@
       "scriptjs": {},
       "smtp": [
         "ESMTP Postfix"
-      ]
+      ],
+      "body": [
+        "This is the mail system at host",
+        "Reporting-MTA: dns;",
+        "ESMTP Postfix",
+        "Postfix ?Admin|postfixadmin",
+        "MAILER-DAEMON",
+        "Undelivered Message",
+        "Diagnostic-Code: smtp;"
+      ],
+      "dom": {
+        "pre": {
+          "text": "(This is the mail system at host|ESMTP Postfix)"
+        },
+        "title": {
+          "text": "Postfix ?Admin"
+        },
+        "a[href*='postfixadmin']": {
+          "attributes": {
+            "href": "postfixadmin"
+          }
+        }
+      }
     },
     {
       "name": "Exim (SMTP banner)",
@@ -227,7 +596,28 @@
       "scriptjs": {},
       "smtp": [
         "ESMTP Exim"
-      ]
+      ],
+      "body": [
+        "Exim ?\\d+\\.\\d+",
+        "This message was created automatically by mail delivery software",
+        "A message that you sent could not be delivered to one or more of its recipients",
+        "X-Exim",
+        "ESMTP Exim",
+        "exim4?"
+      ],
+      "dom": {
+        "pre": {
+          "text": "(Exim ?\\d|This message was created automatically by mail delivery software|ESMTP Exim)"
+        },
+        "title": {
+          "text": "Exim"
+        },
+        "a[href*='eximstats']": {
+          "attributes": {
+            "href": "eximstats"
+          }
+        }
+      }
     },
     {
       "name": "Dovecot (IMAP/POP3 banner)",
@@ -241,7 +631,26 @@
       "scriptjs": {},
       "imap": [
         "Dovecot ready"
-      ]
+      ],
+      "body": [
+        "Dovecot ready",
+        "\\+OK Dovecot",
+        "\\* OK \\[CAPABILITY .*\\] Dovecot",
+        "Dovecot (Pigeonhole|Sieve)",
+        "doveadm|dovecot-lda|dovecot\\.conf",
+        "managesieve"
+      ],
+      "dom": {
+        "pre": {
+          "text": "(\\* OK|\\+OK).*Dovecot"
+        },
+        "body": {
+          "text": "Dovecot ready"
+        },
+        "title": {
+          "text": "Dovecot"
+        }
+      }
     },
     {
       "name": "MDaemon",
@@ -261,6 +670,36 @@
       "robots": [],
       "scriptSrc": [],
       "scriptjs": {},
+      "body": [
+        "WorldClient(\\.dll)?",
+        "MDaemon( Webmail| Remote Administration| Technologies)?",
+        "/WorldClient\\.dll\\?(View|Session)=",
+        "Alt-N",
+        "altn\\.com|mdaemon\\.com"
+      ],
+      "dom": {
+        "form[action*='WorldClient.dll']": {
+          "attributes": {
+            "action": "WorldClient\\.dll"
+          }
+        },
+        "a[href*='WorldClient.dll']": {
+          "attributes": {
+            "href": "WorldClient\\.dll\\?(View|Session)="
+          }
+        },
+        "script[src*='WorldClient.dll']": {
+          "attributes": {
+            "src": "WorldClient\\.dll"
+          }
+        },
+        "input[name='User']": {
+          "exists": ""
+        },
+        "title": {
+          "text": "MDaemon|WorldClient"
+        }
+      },
       "implies": [
         ".NET"
       ]
@@ -286,6 +725,50 @@
       ],
       "scriptSrc": [],
       "scriptjs": {},
+      "body": [
+        "Atmail( Webmail| Email| Suite| Cloud| Open)?",
+        "/atmail/",
+        "atmail\\.com",
+        "name=\"emailName\"",
+        "name=\"emailDomain\"",
+        "name=\"requestedServer\"",
+        "mail/auth/processlogin",
+        "/index\\.php/mail/"
+      ],
+      "dom": {
+        "input[name='emailName']": {
+          "exists": ""
+        },
+        "input[name='emailDomain']": {
+          "exists": ""
+        },
+        "input[name='requestedServer']": {
+          "exists": ""
+        },
+        "form[action*='processlogin']": {
+          "attributes": {
+            "action": "auth/processlogin"
+          }
+        },
+        "script[src*='atmail']": {
+          "attributes": {
+            "src": "atmail"
+          }
+        },
+        "link[href*='atmail']": {
+          "attributes": {
+            "href": "atmail"
+          }
+        },
+        "a[href*='atmail.com']": {
+          "attributes": {
+            "href": "atmail\\.com"
+          }
+        },
+        "title": {
+          "text": "Atmail"
+        }
+      },
       "implies": [
         "PHP"
       ]
@@ -309,7 +792,54 @@
         "Disallow: /SOGo/"
       ],
       "scriptSrc": [],
-      "scriptjs": {}
+      "scriptjs": {},
+      "body": [
+        "mailcow( UI| dockerized)?",
+        "mailcow-dockerized",
+        "name=\"login_user\"",
+        "name=\"pass_user\"",
+        "/js/build/[\\w\\-.]+\\.js",
+        "/css/build/[\\w\\-.]+\\.css",
+        "/SOGo/(so/)?",
+        "/rspamd/",
+        "github\\.com/mailcow"
+      ],
+      "dom": {
+        "input[name='login_user']": {
+          "exists": ""
+        },
+        "input[name='pass_user']": {
+          "exists": ""
+        },
+        "link[href*='/css/build/']": {
+          "attributes": {
+            "href": "/css/build/"
+          }
+        },
+        "script[src*='/js/build/']": {
+          "attributes": {
+            "src": "/js/build/"
+          }
+        },
+        "a[href*='/SOGo/']": {
+          "attributes": {
+            "href": "/SOGo/"
+          }
+        },
+        "a[href*='/rspamd/']": {
+          "attributes": {
+            "href": "/rspamd/"
+          }
+        },
+        "a[href*='github.com/mailcow']": {
+          "attributes": {
+            "href": "github\\.com/mailcow"
+          }
+        },
+        "title": {
+          "text": "mailcow"
+        }
+      }
     },
     {
       "name": "SOGo Groupware",
@@ -331,7 +861,51 @@
       "scriptSrc": [
         "/SOGo.woa/"
       ],
-      "scriptjs": {}
+      "scriptjs": {},
+      "body": [
+        "SOGo( Web ?Mail| Groupware)?",
+        "SOGo\\.woa",
+        "/SOGo/so/",
+        "/SOGo/connect",
+        "/SOGo\\.woa/WebServerResources/(js|css)/",
+        "ng-app=\"SOGo\\.",
+        "SOGoRootURL|SOGoSudo",
+        "name=\"userName\"",
+        "name=\"rememberLogin\""
+      ],
+      "dom": {
+        "form[action*='/SOGo/connect']": {
+          "attributes": {
+            "action": "/SOGo/connect"
+          }
+        },
+        "input[name='userName']": {
+          "exists": ""
+        },
+        "[ng-app^='SOGo']": {
+          "attributes": {
+            "ng-app": "^SOGo\\.(MainUI|MailerUI|ContactsUI|SchedulerUI|PreferencesUI)"
+          }
+        },
+        "script[src*='/SOGo.woa/WebServerResources/']": {
+          "attributes": {
+            "src": "/SOGo\\.woa/WebServerResources/"
+          }
+        },
+        "link[href*='/SOGo.woa/WebServerResources/']": {
+          "attributes": {
+            "href": "/SOGo\\.woa/WebServerResources/"
+          }
+        },
+        "link[rel='shortcut icon']": {
+          "attributes": {
+            "href": "SOGo"
+          }
+        },
+        "title": {
+          "text": "SOGo"
+        }
+      }
     }
   ]
 }
