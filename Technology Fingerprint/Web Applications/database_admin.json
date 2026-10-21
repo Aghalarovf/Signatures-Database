@@ -6,6 +6,294 @@
       "cookies": {
         "^phpMyAdmin$": ""
       },
+      "headers": {
+        "^X-Powered-By$": "phpMyAdmin"
+      },
+      "url": [
+        "/phpmyadmin/",
+        "/pma/",
+        "/db/"
+      ],
+      "meta": {
+        "generator": "^phpMyAdmin ?([\\d.]+)?"
+      },
+      "robots": [
+        "/phpmyadmin/",
+        "Disallow: /phpmyadmin/"
+      ],
+      "scriptSrc": [
+        "/js/vendor/",
+        "/themes/pmahomme/"
+      ],
+      "scriptjs": {
+        "PMA_": ""
+      },
+      "implies": [
+        "PHP"
+      ]
+    },
+    {
+      "name": "Adminer",
+      "category": "Database Admin",
+      "cookies": {
+        "^adminer_": "",
+        "^adminer_sid$": ""
+      },
+      "headers": {
+        "^X-Powered-By$": "PHP"
+      },
+      "url": [
+        "/adminer.php",
+        "/adminer/"
+      ],
+      "meta": {
+        "generator": "^Adminer ?([\\d.]+)?"
+      },
+      "robots": [
+        "/adminer.php",
+        "Disallow: /adminer.php"
+      ],
+      "scriptSrc": [
+        "adminer.css",
+        "adminer.js"
+      ],
+      "scriptjs": {},
+      "implies": [
+        "PHP"
+      ]
+    },
+    {
+      "name": "pgAdmin",
+      "category": "Database Admin",
+      "cookies": {
+        "^pga4_session$": ""
+      },
+      "headers": {
+        "^X-Powered-By$": "pgAdmin"
+      },
+      "url": [
+        "/pgadmin4/",
+        "/browser/"
+      ],
+      "meta": {
+        "generator": "^pgAdmin ?4? ?([\\d.]+)?"
+      },
+      "robots": [
+        "/pgadmin4/",
+        "Disallow: /pgadmin4/"
+      ],
+      "scriptSrc": [
+        "/pgadmin/static/"
+      ],
+      "scriptjs": {
+        "pgAdmin": ""
+      },
+      "implies": [
+        "Python"
+      ]
+    },
+    {
+      "name": "phpPgAdmin",
+      "category": "Database Admin",
+      "cookies": {
+        "^PHPPGADMIN_LANG$": ""
+      },
+      "headers": {
+        "^X-Powered-By$": "PHP"
+      },
+      "url": [
+        "/phppgadmin/",
+        "/phpPgAdmin/"
+      ],
+      "meta": {
+        "generator": "^phpPgAdmin ?([\\d.]+)?"
+      },
+      "robots": [
+        "/phppgadmin/",
+        "Disallow: /phppgadmin/"
+      ],
+      "scriptSrc": [
+        "/phppgadmin/themes/"
+      ],
+      "scriptjs": {},
+      "implies": [
+        "PHP"
+      ]
+    },
+    {
+      "name": "Mongo Express",
+      "category": "Database Admin",
+      "cookies": {
+        "^connect\\.sid$": ""
+      },
+      "headers": {
+        "^X-Powered-By$": "Express"
+      },
+      "url": [
+        "/mongo-express/",
+        "/db/"
+      ],
+      "meta": {
+        "generator": "^mongo-express ?([\\d.]+)?"
+      },
+      "robots": [],
+      "scriptSrc": [
+        "/mongo-express/"
+      ],
+      "scriptjs": {},
+      "implies": [
+        "Node.js"
+      ]
+    },
+    {
+      "name": "RockMongo",
+      "category": "Database Admin",
+      "cookies": {
+        "^ROCKMONGO_": ""
+      },
+      "headers": {
+        "^X-Powered-By$": "PHP"
+      },
+      "url": [
+        "/rockmongo/",
+        "/index.php?action=admin"
+      ],
+      "meta": {
+        "generator": "^RockMongo ?([\\d.]+)?"
+      },
+      "robots": [
+        "/rockmongo/",
+        "Disallow: /rockmongo/"
+      ],
+      "scriptSrc": [
+        "/rockmongo/style/"
+      ],
+      "scriptjs": {},
+      "implies": [
+        "PHP"
+      ]
+    },
+    {
+      "name": "Redis Commander",
+      "category": "Database Admin",
+      "cookies": {
+        "^connect\\.sid$": ""
+      },
+      "headers": {
+        "^X-Powered-By$": "Express"
+      },
+      "url": [
+        "/redis-commander/"
+      ],
+      "meta": {
+        "generator": "^Redis Commander ?([\\d.]+)?"
+      },
+      "robots": [],
+      "scriptSrc": [
+        "/redis-commander/"
+      ],
+      "scriptjs": {},
+      "implies": [
+        "Node.js"
+      ]
+    },
+    {
+      "name": "CloudBeaver",
+      "category": "Database Admin",
+      "cookies": {
+        "^cb-session-id$": ""
+      },
+      "headers": {
+        "^X-Powered-By$": "CloudBeaver"
+      },
+      "url": [
+        "/cloudbeaver/",
+        "/api/health/check"
+      ],
+      "meta": {
+        "generator": "^CloudBeaver ?([\\d.]+)?"
+      },
+      "robots": [],
+      "scriptSrc": [
+        "/cloudbeaver/"
+      ],
+      "scriptjs": {
+        "cloudbeaver": ""
+      },
+      "implies": [
+        "Java"
+      ]
+    },
+    {
+      "name": "Oracle SQL Developer Web",
+      "category": "Database Admin",
+      "cookies": {
+        "^ORA_SDW_SESSION$": ""
+      },
+      "headers": {
+        "^Server$": "Oracle Application Express"
+      },
+      "url": [
+        "/ords/sql-developer",
+        "/ords/_sdw/"
+      ],
+      "meta": {
+        "generator": "^SQL Developer Web ?([\\d.]+)?"
+      },
+      "robots": [
+        "/ords/sql-developer",
+        "Disallow: /ords/sql-developer"
+      ],
+      "scriptSrc": [
+        "/ords/sdw/"
+      ],
+      "scriptjs": {},
+      "implies": [
+        "Oracle APEX"
+      ]
+    },
+    {
+      "name": "Supabase Studio",
+      "category": "Database Admin",
+      "cookies": {
+        "^sb-access-token$": "",
+        "^sb-refresh-token$": ""
+      },
+      "headers": {
+        "^X-Powered-By$": "Next.js"
+      },
+      "url": [
+        "/project/default/",
+        "/studio/"
+      ],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [
+        "/_next/static/"
+      ],
+      "scriptjs": {
+        "__NEXT_DATA__": ""
+      },
+      "implies": [
+        "Next.js"
+      ]
+    },
+    {
+      "name": "Adminer.io-style Evo Adminer",
+      "category": "Database Admin",
+      "cookies": {
+        "^adminer_": ""
+      },
+      "headers": {},
+      "url": [
+        "/adminer-evo.php"
+      ],
+      "meta": {
+        "generator": "^Adminer ?Evo ?([\\d.]+)?"
+      },
+      "robots": [],
+      "scriptSrc": [],
+      "scriptjs": {},
       "implies": [
         "PHP"
       ]
