@@ -6,6 +6,24 @@
       "cookies": {
         "^auth0$": "",
         "^a0:session$": ""
+      },
+      "headers": {
+        "^X-Powered-By$": "Auth0"
+      },
+      "url": [
+        ".auth0.com",
+        "/authorize?client_id=",
+        "/.well-known/openid-configuration"
+      ],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [
+        "cdn.auth0.com",
+        "/auth0-"
+      ],
+      "scriptjs": {
+        "auth0": "",
+        "Auth0Lock": ""
       }
     },
     {
@@ -15,13 +33,54 @@
         "^KEYCLOAK_SESSION": "",
         "^KEYCLOAK_IDENTITY": "",
         "^AUTH_SESSION_ID": ""
-      }
+      },
+      "headers": {
+        "^X-Powered-By$": "Keycloak"
+      },
+      "url": [
+        "/auth/realms/",
+        "/realms/",
+        "/resources/"
+      ],
+      "meta": {},
+      "robots": [
+        "/auth/admin/",
+        "Disallow: /auth/admin/"
+      ],
+      "scriptSrc": [
+        "/resources/js/keycloak",
+        "/auth/js/keycloak"
+      ],
+      "scriptjs": {
+        "Keycloak": ""
+      },
+      "implies": [
+        "Java"
+      ]
     },
     {
       "name": "Okta",
       "category": "Identity Provider",
       "cookies": {
         "^okta-oauth-": ""
+      },
+      "headers": {
+        "^X-Okta-Request-Id$": ""
+      },
+      "url": [
+        ".okta.com",
+        ".oktapreview.com",
+        "/app/UserHome"
+      ],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [
+        "ok1static.oktacdn.com",
+        "/auth/services/devicefingerprint"
+      ],
+      "scriptjs": {
+        "OktaUtil": "",
+        "OktaAuth": ""
       }
     },
     {
@@ -30,6 +89,24 @@
       "cookies": {
         "^FedAuth$": "",
         "^rtFa$": ""
+      },
+      "headers": {
+        "^X-MS-Server-Fqdn$": ""
+      },
+      "url": [
+        "/adfs/ls/",
+        "/adfs/services/trust"
+      ],
+      "meta": {},
+      "robots": [
+        "/adfs/",
+        "Disallow: /adfs/"
+      ],
+      "scriptSrc": [
+        "/adfs/portal/script/"
+      ],
+      "scriptjs": {
+        "AdfsOnLoad": ""
       },
       "implies": [
         ".NET"
@@ -40,6 +117,22 @@
       "category": "Identity Provider",
       "cookies": {
         "^x-ms-cpim-": ""
+      },
+      "headers": {
+        "^X-Ms-Gateway-": ""
+      },
+      "url": [
+        ".b2clogin.com",
+        "/oauth2/v2.0/authorize"
+      ],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [
+        "/javascript/",
+        "b2clogin.com"
+      ],
+      "scriptjs": {
+        "SETTINGS": ""
       }
     },
     {
@@ -52,6 +145,24 @@
         "^esctx": "",
         "^buid$": "",
         "^stsservicecookie$": ""
+      },
+      "headers": {
+        "^X-Ms-Request-Id$": ""
+      },
+      "url": [
+        "login.microsoftonline.com",
+        "/common/oauth2/",
+        "/.well-known/openid-configuration"
+      ],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [
+        "aadcdn.msauth.net",
+        "aadcdn.msftauth.net"
+      ],
+      "scriptjs": {
+        "ESTS": "",
+        "msal": ""
       }
     },
     {
@@ -60,6 +171,26 @@
       "cookies": {
         "^iPlanetDirectoryPro$": "",
         "^amlbcookie$": ""
+      },
+      "headers": {
+        "^X-ForgeRock-TransactionId$": ""
+      },
+      "url": [
+        "/openam/",
+        "/am/XUI/",
+        "/am/oauth2/"
+      ],
+      "meta": {},
+      "robots": [
+        "/openam/",
+        "Disallow: /openam/"
+      ],
+      "scriptSrc": [
+        "/openam/XUI/",
+        "/am/XUI/"
+      ],
+      "scriptjs": {
+        "forgerock": ""
       },
       "implies": [
         "Java"
@@ -71,7 +202,23 @@
       "cookies": {
         "^_shibsession_": "",
         "^_shibstate_": ""
-      }
+      },
+      "headers": {
+        "^Server$": "Shibboleth"
+      },
+      "url": [
+        "/Shibboleth.sso/",
+        "/shibboleth-sp/"
+      ],
+      "meta": {},
+      "robots": [
+        "/Shibboleth.sso/",
+        "Disallow: /Shibboleth.sso/"
+      ],
+      "scriptSrc": [
+        "/Shibboleth.sso/"
+      ],
+      "scriptjs": {}
     },
     {
       "name": "Apereo CAS",
@@ -80,6 +227,25 @@
         "^CASTGC$": "",
         "^CASPRIVACY$": ""
       },
+      "headers": {
+        "^X-Powered-By$": "CAS"
+      },
+      "url": [
+        "/cas/login",
+        "/cas/logout",
+        "/cas/oidc/"
+      ],
+      "meta": {
+        "generator": "^Apereo CAS ?([\\d.]+)?"
+      },
+      "robots": [
+        "/cas/",
+        "Disallow: /cas/"
+      ],
+      "scriptSrc": [
+        "/cas/themes/"
+      ],
+      "scriptjs": {},
       "implies": [
         "Java"
       ]
@@ -91,7 +257,23 @@
         "^SMSESSION$": "",
         "^SMCHALLENGE$": "",
         "^SMIDENTITY$": ""
-      }
+      },
+      "headers": {
+        "^Server$": "SiteMinder"
+      },
+      "url": [
+        "/siteminderagent/",
+        "/affwebservices/"
+      ],
+      "meta": {},
+      "robots": [
+        "/siteminderagent/",
+        "Disallow: /siteminderagent/"
+      ],
+      "scriptSrc": [
+        "/siteminderagent/"
+      ],
+      "scriptjs": {}
     },
     {
       "name": "Oracle Access Manager",
@@ -101,6 +283,22 @@
         "^OAMAuthnCookie": "",
         "^OAM_ID$": ""
       },
+      "headers": {
+        "^Server$": "Oracle-Application-Server"
+      },
+      "url": [
+        "/oam/server/",
+        "/access/oblix/"
+      ],
+      "meta": {},
+      "robots": [
+        "/oam/",
+        "Disallow: /oam/"
+      ],
+      "scriptSrc": [
+        "/oam/server/"
+      ],
+      "scriptjs": {},
       "implies": [
         "Java"
       ]
@@ -110,7 +308,78 @@
       "category": "Identity Provider",
       "cookies": {
         "^sub_session_onelogin$": ""
+      },
+      "headers": {
+        "^X-OneLogin-": ""
+      },
+      "url": [
+        ".onelogin.com",
+        "/trust/saml2/"
+      ],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [
+        "cdn.onelogin.com"
+      ],
+      "scriptjs": {
+        "OneLogin": ""
       }
+    },
+    {
+      "name": "PingFederate / PingOne",
+      "category": "Identity Provider",
+      "cookies": {
+        "^PF$": "",
+        "^PA.global$": "",
+        "^ST$": ""
+      },
+      "headers": {
+        "^X-Instance-Id$": ""
+      },
+      "url": [
+        "/idp/startSSO.ping",
+        "/as/authorization.oauth2",
+        ".pingone.com"
+      ],
+      "meta": {},
+      "robots": [
+        "/idp/",
+        "Disallow: /idp/"
+      ],
+      "scriptSrc": [
+        "/idp/resources/"
+      ],
+      "scriptjs": {},
+      "implies": [
+        "Java"
+      ]
+    },
+    {
+      "name": "IBM Security Verify / Tivoli Access Manager",
+      "category": "Identity Provider",
+      "cookies": {
+        "^PD-S-SESSION-ID$": "",
+        "^PD_STATEFUL_": ""
+      },
+      "headers": {
+        "^Server$": "IBM_HTTP_Server"
+      },
+      "url": [
+        "/mga/sps/",
+        "/pkmslogout"
+      ],
+      "meta": {},
+      "robots": [
+        "/mga/",
+        "Disallow: /mga/"
+      ],
+      "scriptSrc": [
+        "/mga/sps/"
+      ],
+      "scriptjs": {},
+      "implies": [
+        "Java"
+      ]
     },
     {
       "name": "Google Account",
@@ -127,6 +396,24 @@
         "^SAPISID$": "",
         "^APISID$": "",
         "^SIDCC$": ""
+      },
+      "headers": {
+        "^X-Goog-": ""
+      },
+      "url": [
+        "accounts.google.com",
+        "/o/oauth2/",
+        "/.well-known/openid-configuration"
+      ],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [
+        "apis.google.com",
+        "accounts.google.com/gsi/client"
+      ],
+      "scriptjs": {
+        "gapi": "",
+        "google.accounts": ""
       }
     }
   ]
