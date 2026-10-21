@@ -1,0 +1,288 @@
+{
+  "vulnerabilities": [
+    {
+      "name": "Web Cache Poisoning via Unkeyed Host Header",
+      "category": "Cache Vulnerability",
+      "cwe": "CWE-444",
+      "severity": "High",
+      "description": "Response is cached without the Host header as part of the cache key, while origin output depends on Host (links, redirects, canonical URLs).",
+      "applies_to": [
+        "Varnish Cache",
+        "Fastly",
+        "Nginx Cache (proxy_cache / fastcgi_cache)",
+        "Akamai Edge Cache",
+        "Amazon CloudFront Cache"
+      ],
+      "headers": {
+        "request": {
+          "^Host$": ".+",
+          "^X-Host$": "",
+          "^X-Original-Host$": ""
+        },
+        "response": {
+          "^Cache-Control$": "public|s-maxage|max-age",
+          "^X-Cache$": "HIT|MISS",
+          "^Age$": "",
+          "^Vary$": "^(?!.*Host).*$"
+        }
+      },
+      "references": [
+        "https://portswigger.net/web-security/web-cache-poisoning",
+        "https://cwe.mitre.org/data/definitions/444.html"
+      ]
+    },
+    {
+      "name": "Web Cache Poisoning via Unkeyed X-Forwarded-* Headers",
+      "category": "Cache Vulnerability",
+      "cwe": "CWE-444",
+      "severity": "High",
+      "description": "Origin trusts forwarded-proto/host headers to build absolute URLs, but the cache key does not include them.",
+      "applies_to": [
+        "Varnish Cache",
+        "Nginx Cache (proxy_cache / fastcgi_cache)",
+        "Squid",
+        "Apache Traffic Server",
+        "Amazon CloudFront Cache"
+      ],
+      "headers": {
+        "request": {
+          "^X-Forwarded-Host$": "",
+          "^X-Forwarded-Scheme$": "",
+          "^X-Forwarded-Proto$": "",
+          "^X-Forwarded-Port$": "",
+          "^X-Forwarded-Server$": ""
+        },
+        "response": {
+          "^Cache-Control$": "public|s-maxage|max-age",
+          "^X-Cache$": "HIT|MISS",
+          "^Vary$": "^(?!.*X-Forwarded).*$"
+        }
+      },
+      "references": [
+        "https://portswigger.net/web-security/web-cache-poisoning/exploiting-design-flaws",
+        "https://cwe.mitre.org/data/definitions/444.html"
+      ]
+    },
+    {
+      "name": "Cache Key Normalization Flaw (Parameter Cloaking / Query String)",
+      "category": "Cache Vulnerability",
+      "cwe": "CWE-444",
+      "severity": "Medium",
+      "description": "Cache normalizes or ignores query-string parameters/delimiters that the origin treats as significant.",
+      "applies_to": [
+        "Varnish Cache",
+        "Squid",
+        "Nginx Cache (proxy_cache / fastcgi_cache)",
+        "Fastly",
+        "CDN77",
+        "KeyCDN"
+      ],
+      "headers": {
+        "request": {
+          "^X-HTTP-Method-Override$": ""
+        },
+        "response": {
+          "^Cache-Control$": "public|s-maxage|max-age",
+          "^X-Cache$": "HIT|MISS",
+          "^X-Cache-Key$": "",
+          "^Surrogate-Key$": ""
+        }
+      },
+      "references": [
+        "https://portswigger.net/web-security/web-cache-poisoning/exploiting-implementation-flaws",
+        "https://cwe.mitre.org/data/definitions/444.html"
+      ]
+    },
+    {
+      "name": "Web Cache Deception",
+      "category": "Cache Vulnerability",
+      "cwe": "CWE-524",
+      "severity": "High",
+      "description": "Cache rule keys off path/extension pattern rather than Content-Type, allowing a dynamic authenticated response to be stored as if static.",
+      "applies_to": [
+        "Varnish Cache",
+        "Nginx Cache (proxy_cache / fastcgi_cache)",
+        "Akamai Edge Cache",
+        "Amazon CloudFront Cache",
+        "Cloudflare Cache"
+      ],
+      "headers": {
+        "request": {
+          "^Cookie$": "session|auth|token"
+        },
+        "response": {
+          "^Cache-Control$": "public|s-maxage|max-age",
+          "^X-Cache$": "HIT",
+          "^CF-Cache-Status$": "HIT",
+          "^Content-Type$": "text/html"
+        }
+      },
+      "references": [
+        "https://portswigger.net/web-security/web-cache-deception",
+        "https://cwe.mitre.org/data/definitions/524.html"
+      ]
+    },
+    {
+      "name": "Fat GET / Body-Based Cache Poisoning",
+      "category": "Cache Vulnerability",
+      "cwe": "CWE-444",
+      "severity": "Medium",
+      "description": "Origin processes a body on GET requests but the cache key omits the body, serving body-influenced output under one shared key.",
+      "applies_to": [
+        "Varnish Cache",
+        "Nginx Cache (proxy_cache / fastcgi_cache)",
+        "Apache Traffic Server"
+      ],
+      "headers": {
+        "request": {
+          "^Content-Length$": "^(?!0$).*$",
+          "^Content-Type$": "application/json|application/x-www-form-urlencoded"
+        },
+        "response": {
+          "^Cache-Control$": "public|s-maxage|max-age",
+          "^X-Cache$": "HIT|MISS"
+        }
+      },
+      "references": [
+        "https://portswigger.net/web-security/web-cache-poisoning/exploiting-implementation-flaws",
+        "https://cwe.mitre.org/data/definitions/444.html"
+      ]
+    },
+    {
+      "name": "Missing or Misconfigured Vary Header",
+      "category": "Cache Vulnerability",
+      "cwe": "CWE-525",
+      "severity": "Medium",
+      "description": "Response content depends on a request header that is not declared in Vary, so one cached variant leaks to users who should get another.",
+      "applies_to": [
+        "Varnish Cache",
+        "Squid",
+        "Nginx Cache (proxy_cache / fastcgi_cache)",
+        "Fastly",
+        "Amazon CloudFront Cache"
+      ],
+      "headers": {
+        "request": {
+          "^Accept-Language$": "",
+          "^User-Agent$": "",
+          "^Accept-Encoding$": ""
+        },
+        "response": {
+          "^Cache-Control$": "public|s-maxage|max-age",
+          "^X-Cache$": "HIT",
+          "^Vary$": "^$|^(?!.*(Accept-Language|User-Agent|Accept-Encoding)).*$"
+        }
+      },
+      "references": [
+        "https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Vary",
+        "https://cwe.mitre.org/data/definitions/525.html"
+      ]
+    },
+    {
+      "name": "Cache Poisoning via HTTP Request Smuggling",
+      "category": "Cache Vulnerability",
+      "cwe": "CWE-444",
+      "severity": "Critical",
+      "description": "Front-end/back-end disagreement on message framing lets a smuggled request's response be stored under a different request's cache key.",
+      "applies_to": [
+        "Varnish Cache",
+        "Squid",
+        "Apache Traffic Server",
+        "Nginx Cache (proxy_cache / fastcgi_cache)"
+      ],
+      "headers": {
+        "request": {
+          "^Content-Length$": "",
+          "^Transfer-Encoding$": "chunked"
+        },
+        "response": {
+          "^Cache-Control$": "public|s-maxage|max-age",
+          "^X-Cache$": "HIT|MISS",
+          "^Connection$": "keep-alive"
+        }
+      },
+      "references": [
+        "https://portswigger.net/web-security/request-smuggling",
+        "https://cwe.mitre.org/data/definitions/444.html"
+      ]
+    },
+    {
+      "name": "Edge Side Includes (ESI) Injection",
+      "category": "Cache Vulnerability",
+      "cwe": "CWE-94",
+      "severity": "High",
+      "description": "A surrogate that parses Edge Side Includes processes attacker-influenced response content as ESI directives.",
+      "applies_to": [
+        "Varnish Cache",
+        "Akamai Edge Cache",
+        "Apache Traffic Server"
+      ],
+      "headers": {
+        "request": {},
+        "response": {
+          "^Surrogate-Control$": "ESI/1\\.0",
+          "^Surrogate-Capability$": "",
+          "^X-Esi$": ""
+        }
+      },
+      "references": [
+        "https://www.w3.org/TR/esi-lang/",
+        "https://portswigger.net/research/esi-injection-part-2-abusing-specific-implementations"
+      ]
+    },
+    {
+      "name": "Stale-While-Revalidate / Stale Cache Serving Sensitive Data",
+      "category": "Cache Vulnerability",
+      "cwe": "CWE-525",
+      "severity": "Medium",
+      "description": "stale-while-revalidate/stale-if-error directives keep serving a previously cached, possibly sensitive response during revalidation or backend failure.",
+      "applies_to": [
+        "Varnish Cache",
+        "Fastly",
+        "Cloudflare Cache",
+        "Amazon CloudFront Cache"
+      ],
+      "headers": {
+        "request": {},
+        "response": {
+          "^Cache-Control$": "stale-while-revalidate|stale-if-error",
+          "^Set-Cookie$": "session|auth|token"
+        }
+      },
+      "references": [
+        "https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control",
+        "https://cwe.mitre.org/data/definitions/525.html"
+      ]
+    },
+    {
+      "name": "Authenticated Response Cached as Public (Missing Private/No-Store Directive)",
+      "category": "Cache Vulnerability",
+      "cwe": "CWE-525",
+      "severity": "High",
+      "description": "Session-specific response lacks Cache-Control: private/no-store, so a shared cache stores and replays it to other users.",
+      "applies_to": [
+        "Varnish Cache",
+        "Squid",
+        "Nginx Cache (proxy_cache / fastcgi_cache)",
+        "Fastly",
+        "Akamai Edge Cache",
+        "Amazon CloudFront Cache",
+        "Cloudflare Cache"
+      ],
+      "headers": {
+        "request": {
+          "^Cookie$": "session|auth|token"
+        },
+        "response": {
+          "^Set-Cookie$": "",
+          "^Cache-Control$": "^(?!.*(private|no-store|no-cache)).*(public|s-maxage|max-age).*$",
+          "^X-Cache$": "HIT"
+        }
+      },
+      "references": [
+        "https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control",
+        "https://cwe.mitre.org/data/definitions/525.html"
+      ]
+    }
+  ]
+}
