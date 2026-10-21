@@ -10,6 +10,31 @@
         "^whostmgrrelogin$": "",
         "^cp_security_token$": "",
         "^whm_security_token$": ""
+      },
+      "headers": {
+        "^Server$": "cpsrvd"
+      },
+      "url": [
+        ":2082/",
+        ":2083/",
+        ":2086/",
+        ":2087/",
+        "/cpanel/",
+        "/frontend/"
+      ],
+      "meta": {},
+      "robots": [
+        "/cpanel/",
+        "Disallow: /cpanel/"
+      ],
+      "scriptSrc": [
+        "/cPanel_magic_revision_",
+        "/cjt/",
+        "/optimized/"
+      ],
+      "scriptjs": {
+        "CPANEL": "",
+        "WHM": ""
       }
     },
     {
@@ -19,6 +44,28 @@
         "^PLESKSESSID$": "",
         "^plesk-securitytoken$": "",
         "^plesk-": ""
+      },
+      "headers": {
+        "^X-Powered-By$": "Plesk"
+      },
+      "url": [
+        ":8443/",
+        "/smb/",
+        "/modules/"
+      ],
+      "meta": {
+        "generator": "^Plesk ?([\\d.]+)?"
+      },
+      "robots": [
+        "/admin/",
+        "Disallow: /admin/"
+      ],
+      "scriptSrc": [
+        "/plesk-",
+        "/skins/"
+      ],
+      "scriptjs": {
+        "Plesk": ""
       }
     },
     {
@@ -26,6 +73,26 @@
       "category": "Hosting Control Panel",
       "cookies": {
         "^DirectAdmin": ""
+      },
+      "headers": {
+        "^Server$": "DirectAdmin"
+      },
+      "url": [
+        ":2222/",
+        "/CMD_LOGIN",
+        "/CMD_"
+      ],
+      "meta": {},
+      "robots": [
+        "/CMD_",
+        "Disallow: /CMD_"
+      ],
+      "scriptSrc": [
+        "/skins/",
+        "/themes/"
+      ],
+      "scriptjs": {
+        "DA": ""
       }
     },
     {
@@ -34,9 +101,340 @@
       "cookies": {
         "^ISPCSESS$": ""
       },
+      "headers": {
+        "^X-Powered-By$": "ISPConfig"
+      },
+      "url": [
+        ":8080/",
+        "/ispconfig/"
+      ],
+      "meta": {
+        "generator": "^ISPConfig ?([\\d.]+)?"
+      },
+      "robots": [
+        "/ispconfig/",
+        "Disallow: /ispconfig/"
+      ],
+      "scriptSrc": [
+        "/themes/default/",
+        "/lib/classes/"
+      ],
+      "scriptjs": {
+        "ISPConfig": ""
+      },
       "implies": [
         "PHP"
       ]
+    },
+    {
+      "name": "Webmin / Virtualmin",
+      "category": "Hosting Control Panel",
+      "cookies": {
+        "^sid$": "",
+        "^testing$": ""
+      },
+      "headers": {
+        "^Server$": "MiniServ"
+      },
+      "url": [
+        ":10000/",
+        ":20000/",
+        "/virtual-server/"
+      ],
+      "meta": {},
+      "robots": [
+        "/",
+        "Disallow: /"
+      ],
+      "scriptSrc": [
+        "/unauthenticated/",
+        "/webmin/"
+      ],
+      "scriptjs": {
+        "webminVersion": ""
+      }
+    },
+    {
+      "name": "CyberPanel",
+      "category": "Hosting Control Panel",
+      "cookies": {
+        "^csrftoken$": "",
+        "^sessionid$": ""
+      },
+      "headers": {
+        "^Server$": "LiteSpeed"
+      },
+      "url": [
+        ":8090/",
+        "/dashboard/",
+        "/websites/"
+      ],
+      "meta": {
+        "generator": "^CyberPanel"
+      },
+      "robots": [
+        "/dashboard/",
+        "Disallow: /dashboard/"
+      ],
+      "scriptSrc": [
+        "/static/css/custom.css",
+        "/static/js/"
+      ],
+      "scriptjs": {
+        "CyberPanel": ""
+      },
+      "implies": [
+        "Python",
+        "OpenLiteSpeed"
+      ]
+    },
+    {
+      "name": "CentOS Web Panel (CWP)",
+      "category": "Hosting Control Panel",
+      "cookies": {
+        "^cwpsrv$": "",
+        "^cwp_": ""
+      },
+      "headers": {
+        "^Server$": "CentOS-WebPanel"
+      },
+      "url": [
+        ":2030/",
+        ":2031/",
+        "/cwp_"
+      ],
+      "meta": {},
+      "robots": [
+        "/cwp_",
+        "Disallow: /cwp_"
+      ],
+      "scriptSrc": [
+        "/design/",
+        "/cwp_"
+      ],
+      "scriptjs": {
+        "CWP": ""
+      }
+    },
+    {
+      "name": "VestaCP",
+      "category": "Hosting Control Panel",
+      "cookies": {
+        "^vst_token$": ""
+      },
+      "headers": {
+        "^Server$": "nginx.*Vesta"
+      },
+      "url": [
+        ":8083/",
+        "/list/",
+        "/edit/"
+      ],
+      "meta": {
+        "generator": "^Vesta ?([\\d.]+)?"
+      },
+      "robots": [
+        "/list/",
+        "Disallow: /list/"
+      ],
+      "scriptSrc": [
+        "/css/vesta/",
+        "/js/vesta/"
+      ],
+      "scriptjs": {
+        "VESTA": ""
+      }
+    },
+    {
+      "name": "HestiaCP",
+      "category": "Hosting Control Panel",
+      "cookies": {
+        "^hestia_token$": ""
+      },
+      "headers": {
+        "^Server$": "nginx.*Hestia"
+      },
+      "url": [
+        ":8083/",
+        "/list/",
+        "/edit/"
+      ],
+      "meta": {
+        "generator": "^Hestia ?([\\d.]+)?"
+      },
+      "robots": [
+        "/list/",
+        "Disallow: /list/"
+      ],
+      "scriptSrc": [
+        "/css/hestia/",
+        "/js/hestia/"
+      ],
+      "scriptjs": {
+        "HESTIA": ""
+      }
+    },
+    {
+      "name": "InterWorx",
+      "category": "Hosting Control Panel",
+      "cookies": {
+        "^inx_session$": ""
+      },
+      "headers": {
+        "^Server$": "Apache.*InterWorx"
+      },
+      "url": [
+        ":2080/",
+        ":2443/",
+        "/nodeworx/",
+        "/siteworx/"
+      ],
+      "meta": {},
+      "robots": [
+        "/nodeworx/",
+        "Disallow: /nodeworx/"
+      ],
+      "scriptSrc": [
+        "/nodeworx/img/",
+        "/siteworx/img/"
+      ],
+      "scriptjs": {
+        "InterWorx": ""
+      }
+    },
+    {
+      "name": "Froxlor",
+      "category": "Hosting Control Panel",
+      "cookies": {
+        "^froxlor_sess_": ""
+      },
+      "headers": {
+        "^X-Powered-By$": "Froxlor"
+      },
+      "url": [
+        "/admin_index.php",
+        "/index.php?page="
+      ],
+      "meta": {
+        "generator": "^Froxlor ?([\\d.]+)?"
+      },
+      "robots": [
+        "/admin_index.php",
+        "Disallow: /admin_index.php"
+      ],
+      "scriptSrc": [
+        "/templates/",
+        "/css/froxlor"
+      ],
+      "scriptjs": {
+        "Froxlor": ""
+      },
+      "implies": [
+        "PHP"
+      ]
+    },
+    {
+      "name": "Ajenti",
+      "category": "Hosting Control Panel",
+      "cookies": {
+        "^ajenti_session$": ""
+      },
+      "headers": {
+        "^Server$": "Ajenti"
+      },
+      "url": [
+        ":8000/",
+        "/ajenti:"
+      ],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [
+        "/resources/",
+        "/ajenti-core/"
+      ],
+      "scriptjs": {
+        "ajentiVersion": ""
+      }
+    },
+    {
+      "name": "Webuzo",
+      "category": "Hosting Control Panel",
+      "cookies": {
+        "^webuzo_session$": ""
+      },
+      "headers": {
+        "^Server$": "Webuzo"
+      },
+      "url": [
+        ":2004/",
+        ":2005/",
+        "/webuzo/"
+      ],
+      "meta": {
+        "generator": "^Webuzo ?([\\d.]+)?"
+      },
+      "robots": [
+        "/webuzo/",
+        "Disallow: /webuzo/"
+      ],
+      "scriptSrc": [
+        "/softaculous/",
+        "/webuzo/"
+      ],
+      "scriptjs": {
+        "Webuzo": ""
+      }
+    },
+    {
+      "name": "SolusVM",
+      "category": "Hosting Control Panel",
+      "cookies": {
+        "^SolusVM$": "",
+        "^svm_session$": ""
+      },
+      "headers": {
+        "^X-Powered-By$": "SolusVM"
+      },
+      "url": [
+        ":5656/",
+        "/vmachines/"
+      ],
+      "meta": {
+        "generator": "^SolusVM ?([\\d.]+)?"
+      },
+      "robots": [
+        "/vmachines/",
+        "Disallow: /vmachines/"
+      ],
+      "scriptSrc": [
+        "/assets/solusvm/",
+        "/js/solusvm/"
+      ],
+      "scriptjs": {
+        "SolusVM": ""
+      }
+    },
+    {
+      "name": "GoDaddy Hosting Connection",
+      "category": "Hosting Control Panel",
+      "cookies": {
+        "^gdhc_session$": ""
+      },
+      "headers": {
+        "^X-GoDaddy-": ""
+      },
+      "url": [
+        "/hosting/",
+        "/connection/"
+      ],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [
+        "/gd-hosting/"
+      ],
+      "scriptjs": {
+        "GDHC": ""
+      }
     }
   ]
 }
