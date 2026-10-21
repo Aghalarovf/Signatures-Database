@@ -1,0 +1,71 @@
+{
+  "technologies": [
+    {
+      "name": "F5 APM (Access Policy Manager)",
+      "category": "VPN",
+      "cookies": {
+        "^MRHSequence$": "",
+        "^MRHSHint$": ""
+      }
+    },
+    {
+      "name": "Fortinet FortiGate SSL VPN",
+      "category": "VPN",
+      "cookies": {
+        "^SVPNCOOKIE$": "",
+        "^SVPNNETWORKCOOKIE$": "",
+        "^FGTServer$": ""
+      }
+    },
+    {
+      "name": "Citrix NetScaler Gateway",
+      "category": "VPN",
+      "cookies": {
+        "^NSC_AAAC$": "",
+        "^NSC_TMAA$": "",
+        "^NSC_TMAS$": "",
+        "^NSC_PERS$": "",
+        "^CtxsAuthId$": ""
+      }
+    },
+    {
+      "name": "Pulse Secure / Ivanti Connect Secure",
+      "category": "VPN",
+      "cookies": {
+        "^DSID$": "",
+        "^DSFirstAccess$": "",
+        "^DSLastAccess$": "",
+        "^DSSignInURL$": "",
+        "^DSPREAUTH$": ""
+      }
+    },
+    {
+      "name": "Cisco ASA / AnyConnect WebVPN",
+      "category": "VPN",
+      "cookies": {
+        "^webvpn$": "",
+        "^webvpnlogin$": "",
+        "^webvpnc$": "",
+        "^webvpncontext$": "",
+        "^ASASessionID$": ""
+      }
+    },
+    {
+      "name": "Palo Alto GlobalProtect",
+      "category": "VPN",
+      "cookies": {
+        "^PHPSESSID_GP$": "",
+        "^SESSID_GP$": "",
+        "^PAN_": ""
+      }
+    },
+    {
+      "name": "SonicWall",
+      "category": "VPN",
+      "cookies": {
+        "^SNWL": "",
+        "^SonicWALL": ""
+      }
+    }
+  ]
+}
