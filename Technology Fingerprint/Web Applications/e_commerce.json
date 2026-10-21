@@ -8,6 +8,29 @@
         "^woocommerce_items_in_cart$": "",
         "^wp_woocommerce_session_": ""
       },
+      "headers": {
+        "^X-Powered-By$": "WooCommerce"
+      },
+      "url": [
+        "/wp-content/plugins/woocommerce/",
+        "/?page_id=",
+        "/product/"
+      ],
+      "meta": {
+        "generator": "^WooCommerce ?([\\d.]+)?"
+      },
+      "robots": [
+        "/wp-content/plugins/woocommerce/",
+        "Disallow: /cart/"
+      ],
+      "scriptSrc": [
+        "/wp-content/plugins/woocommerce/",
+        "/wc-ajax="
+      ],
+      "scriptjs": {
+        "woocommerce_params": "",
+        "wc_add_to_cart_params": ""
+      },
       "implies": [
         "WordPress"
       ]
@@ -21,6 +44,30 @@
         "^mage-cache-storage$": "",
         "^mage-messages$": ""
       },
+      "headers": {
+        "^X-Magento-": ""
+      },
+      "url": [
+        "/skin/frontend/",
+        "/js/mage/",
+        "/catalog/product/view/"
+      ],
+      "meta": {
+        "generator": "^Magento ?([\\d.]+)?"
+      },
+      "robots": [
+        "/index.php/",
+        "Disallow: /index.php/"
+      ],
+      "scriptSrc": [
+        "/skin/frontend/",
+        "/js/mage/",
+        "/js/varien/"
+      ],
+      "scriptjs": {
+        "Mage": "",
+        "varienLoader": ""
+      },
       "implies": [
         "PHP"
       ]
@@ -31,6 +78,30 @@
       "cookies": {
         "^PrestaShop-": ""
       },
+      "headers": {
+        "^X-Powered-By$": "PrestaShop"
+      },
+      "url": [
+        "/modules/",
+        "/themes/",
+        "/index.php?controller="
+      ],
+      "meta": {
+        "generator": "^PrestaShop ?([\\d.]+)?"
+      },
+      "robots": [
+        "/admin/",
+        "Disallow: /modules/"
+      ],
+      "scriptSrc": [
+        "/themes/",
+        "/js/jquery/",
+        "/modules/"
+      ],
+      "scriptjs": {
+        "prestashop": "",
+        "PrestaShop": ""
+      },
       "implies": [
         "PHP"
       ]
@@ -40,6 +111,28 @@
       "category": "E-commerce",
       "cookies": {
         "^OCSESSID$": ""
+      },
+      "headers": {
+        "^X-Powered-By$": "OpenCart"
+      },
+      "url": [
+        "/index.php?route=",
+        "/catalog/view/",
+        "/system/storage/"
+      ],
+      "meta": {
+        "generator": "^OpenCart"
+      },
+      "robots": [
+        "/index.php?route=account/",
+        "Disallow: /index.php?route=product/search"
+      ],
+      "scriptSrc": [
+        "/catalog/view/javascript/",
+        "/catalog/view/theme/"
+      ],
+      "scriptjs": {
+        "opencart": ""
       },
       "implies": [
         "PHP"
@@ -53,6 +146,31 @@
         "^_shopify_s$": "",
         "^secure_customer_sig$": "",
         "^_shopify_fs$": ""
+      },
+      "headers": {
+        "^X-Shopify-Stage$": "",
+        "^X-ShopId$": "",
+        "^X-Sorting-Hat-ShopId$": ""
+      },
+      "url": [
+        "cdn.shopify.com",
+        "/cdn/shop/",
+        "myshopify.com"
+      ],
+      "meta": {
+        "generator": "^Shopify"
+      },
+      "robots": [
+        "/admin",
+        "Disallow: /admin"
+      ],
+      "scriptSrc": [
+        "cdn.shopify.com",
+        "/cdn/shop/"
+      ],
+      "scriptjs": {
+        "Shopify": "",
+        "ShopifyAnalytics": ""
       }
     },
     {
@@ -61,6 +179,28 @@
       "cookies": {
         "^SHOP_SESSION_TOKEN$": "",
         "^fornax_anonymousId$": ""
+      },
+      "headers": {
+        "^X-BC-": ""
+      },
+      "url": [
+        "cdn11.bigcommerce.com",
+        ".mybigcommerce.com"
+      ],
+      "meta": {
+        "generator": "^BigCommerce"
+      },
+      "robots": [
+        "/manage/",
+        "Disallow: /manage/"
+      ],
+      "scriptSrc": [
+        "cdn11.bigcommerce.com",
+        "cdn.bcapp.dev"
+      ],
+      "scriptjs": {
+        "BCData": "",
+        "Bigcommerce": ""
       }
     },
     {
@@ -69,6 +209,29 @@
       "cookies": {
         "^session-$": "",
         "^sw-cache-hash$": ""
+      },
+      "headers": {
+        "^sw-version-id$": "",
+        "^X-Powered-By$": "Shopware"
+      },
+      "url": [
+        "/widgets/checkout/",
+        "/theme/",
+        "/media/"
+      ],
+      "meta": {
+        "generator": "^Shopware ?([\\d.]+)?"
+      },
+      "robots": [
+        "/admin",
+        "Disallow: /admin"
+      ],
+      "scriptSrc": [
+        "/theme/",
+        "/bundles/storefront/"
+      ],
+      "scriptjs": {
+        "Shopware": ""
       },
       "implies": [
         "PHP"
@@ -81,6 +244,28 @@
         "^\\.Nop\\.Customer$": "",
         "^\\.Nop\\.Antiforgery$": ""
       },
+      "headers": {
+        "^X-Powered-By$": "nopCommerce"
+      },
+      "url": [
+        "/Themes/",
+        "/Plugins/",
+        "/Content/Images/thumbs/"
+      ],
+      "meta": {
+        "generator": "^nopCommerce ?([\\d.]+)?"
+      },
+      "robots": [
+        "/admin",
+        "Disallow: /admin"
+      ],
+      "scriptSrc": [
+        "/Themes/",
+        "/Scripts/nopCommerce"
+      ],
+      "scriptjs": {
+        "nopCommerce": ""
+      },
       "implies": [
         "ASP.NET"
       ]
@@ -90,6 +275,28 @@
       "category": "E-commerce",
       "cookies": {
         "^anonymous-consents$": ""
+      },
+      "headers": {
+        "^Server$": "SAP Commerce Cloud|Hybris"
+      },
+      "url": [
+        "/medias/",
+        "/_ui/",
+        "/yacceleratorstorefront/"
+      ],
+      "meta": {
+        "generator": "^SAP Commerce Cloud|^Hybris"
+      },
+      "robots": [
+        "/_ui/",
+        "Disallow: /_ui/"
+      ],
+      "scriptSrc": [
+        "/_ui/responsive/",
+        "/medias/sys_master/"
+      ],
+      "scriptjs": {
+        "ACC": ""
       },
       "implies": [
         "Java"
@@ -105,6 +312,30 @@
         "^X-Magento-Vary$": "",
         "^product_data_storage$": ""
       },
+      "headers": {
+        "^X-Magento-Cache-Debug$": "",
+        "^X-Magento-Tags$": ""
+      },
+      "url": [
+        "/static/frontend/",
+        "/static/version",
+        "/pub/static/"
+      ],
+      "meta": {
+        "generator": "^Magento ?2? ?([\\d.]+)?"
+      },
+      "robots": [
+        "/media/catalog/",
+        "Disallow: /media/catalog/product/cache/"
+      ],
+      "scriptSrc": [
+        "/static/frontend/",
+        "/requirejs/"
+      ],
+      "scriptjs": {
+        "Magento_Customer": "",
+        "require": ""
+      },
       "implies": [
         "PHP"
       ]
@@ -117,6 +348,27 @@
         "^dwanonymous_": "",
         "^__cq_uuid$": "",
         "^__cq_seg$": ""
+      },
+      "headers": {
+        "^Server$": "Demandware"
+      },
+      "url": [
+        "/on/demandware.store/",
+        "/dw/image/"
+      ],
+      "meta": {
+        "generator": "^Demandware|^Salesforce Commerce Cloud"
+      },
+      "robots": [
+        "/on/demandware.store/",
+        "Disallow: /on/demandware.store/Sites-"
+      ],
+      "scriptSrc": [
+        "/on/demandware.static/",
+        "/dw/image/"
+      ],
+      "scriptjs": {
+        "dw": ""
       }
     }
   ]
