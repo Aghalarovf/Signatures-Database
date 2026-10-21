@@ -6,6 +6,25 @@
       "cookies": {
         "^MRHSequence$": "",
         "^MRHSHint$": ""
+      },
+      "headers": {
+        "^Server$": "BigIP|BIG-IP"
+      },
+      "url": [
+        "/my.policy",
+        "/vdesk/"
+      ],
+      "meta": {},
+      "robots": [
+        "/vdesk/",
+        "Disallow: /vdesk/"
+      ],
+      "scriptSrc": [
+        "/vdesk/",
+        "/public/css/"
+      ],
+      "scriptjs": {
+        "f5_cs_cache_bust_tbl": ""
       }
     },
     {
@@ -15,6 +34,25 @@
         "^SVPNCOOKIE$": "",
         "^SVPNNETWORKCOOKIE$": "",
         "^FGTServer$": ""
+      },
+      "headers": {
+        "^Server$": "FortiGate|xxxxxxxx-xxxxx-xxxxxxx"
+      },
+      "url": [
+        "/remote/login",
+        "/remote/fgt_lang"
+      ],
+      "meta": {},
+      "robots": [
+        "/remote/",
+        "Disallow: /remote/"
+      ],
+      "scriptSrc": [
+        "/remote/fgt_lang",
+        "/sslvpn/js/"
+      ],
+      "scriptjs": {
+        "fgt_lang": ""
       }
     },
     {
@@ -26,6 +64,26 @@
         "^NSC_TMAS$": "",
         "^NSC_PERS$": "",
         "^CtxsAuthId$": ""
+      },
+      "headers": {
+        "^Via$": "NS-CACHE",
+        "^Server$": "NetScaler"
+      },
+      "url": [
+        "/vpn/index.html",
+        "/logon/LogonPoint/"
+      ],
+      "meta": {},
+      "robots": [
+        "/vpn/",
+        "Disallow: /vpn/"
+      ],
+      "scriptSrc": [
+        "/vpn/js/",
+        "/logon/themes/"
+      ],
+      "scriptjs": {
+        "ctxs": ""
       }
     },
     {
@@ -37,6 +95,25 @@
         "^DSLastAccess$": "",
         "^DSSignInURL$": "",
         "^DSPREAUTH$": ""
+      },
+      "headers": {
+        "^Server$": "Apache"
+      },
+      "url": [
+        "/dana-na/",
+        "/dana/home/"
+      ],
+      "meta": {},
+      "robots": [
+        "/dana-na/",
+        "Disallow: /dana-na/"
+      ],
+      "scriptSrc": [
+        "/dana-na/css/",
+        "/dana-na/imgs/"
+      ],
+      "scriptjs": {
+        "dsLoginExists": ""
       }
     },
     {
@@ -48,7 +125,24 @@
         "^webvpnc$": "",
         "^webvpncontext$": "",
         "^ASASessionID$": ""
-      }
+      },
+      "headers": {
+        "^Server$": "cisco-IOS|Cisco Systems"
+      },
+      "url": [
+        "/+CSCOE+/",
+        "/+webvpn+/"
+      ],
+      "meta": {},
+      "robots": [
+        "/+CSCOE+/",
+        "Disallow: /+CSCOE+/"
+      ],
+      "scriptSrc": [
+        "/+CSCOE+/",
+        "/+webvpn+/"
+      ],
+      "scriptjs": {}
     },
     {
       "name": "Palo Alto GlobalProtect",
@@ -57,6 +151,25 @@
         "^PHPSESSID_GP$": "",
         "^SESSID_GP$": "",
         "^PAN_": ""
+      },
+      "headers": {
+        "^Server$": "PanWeb Server"
+      },
+      "url": [
+        "/global-protect/login.esp",
+        "/global-protect/portal/"
+      ],
+      "meta": {},
+      "robots": [
+        "/global-protect/",
+        "Disallow: /global-protect/"
+      ],
+      "scriptSrc": [
+        "/global-protect/portal/css/",
+        "/global-protect/js/"
+      ],
+      "scriptjs": {
+        "gp_portal": ""
       }
     },
     {
@@ -65,7 +178,120 @@
       "cookies": {
         "^SNWL": "",
         "^SonicWALL": ""
-      }
+      },
+      "headers": {
+        "^Server$": "SonicWALL"
+      },
+      "url": [
+        "/sslvpn/portal",
+        "/cgi-bin/welcome"
+      ],
+      "meta": {},
+      "robots": [
+        "/sslvpn/",
+        "Disallow: /sslvpn/"
+      ],
+      "scriptSrc": [
+        "/sslvpn/images/",
+        "/cgi-bin/"
+      ],
+      "scriptjs": {}
+    },
+    {
+      "name": "Check Point Mobile Access",
+      "category": "VPN",
+      "cookies": {
+        "^CPWEBSESSION$": "",
+        "^cpcookie$": ""
+      },
+      "headers": {
+        "^Server$": "Check ?Point ?SVN ?foundation"
+      },
+      "url": [
+        "/sslvpn/Login/Login",
+        "/Portal/Main"
+      ],
+      "meta": {},
+      "robots": [
+        "/sslvpn/",
+        "Disallow: /sslvpn/"
+      ],
+      "scriptSrc": [
+        "/sslvpn/Portal/"
+      ],
+      "scriptjs": {}
+    },
+    {
+      "name": "WatchGuard Mobile VPN / Firebox",
+      "category": "VPN",
+      "cookies": {
+        "^WatchGuard$": "",
+        "^wgAuthCookie$": ""
+      },
+      "headers": {
+        "^Server$": "WatchGuard"
+      },
+      "url": [
+        "/firebox-sslvpn/",
+        "/wgcgi.cgi"
+      ],
+      "meta": {},
+      "robots": [
+        "/firebox-sslvpn/",
+        "Disallow: /firebox-sslvpn/"
+      ],
+      "scriptSrc": [
+        "/firebox-sslvpn/"
+      ],
+      "scriptjs": {}
+    },
+    {
+      "name": "Array Networks SSL VPN",
+      "category": "VPN",
+      "cookies": {
+        "^AN_SESSION_COOKIE$": "",
+        "^NSVPN": ""
+      },
+      "headers": {
+        "^Server$": "Array"
+      },
+      "url": [
+        "/prx/000/http/",
+        "/an/login"
+      ],
+      "meta": {},
+      "robots": [
+        "/prx/",
+        "Disallow: /prx/"
+      ],
+      "scriptSrc": [
+        "/an/js/"
+      ],
+      "scriptjs": {}
+    },
+    {
+      "name": "Barracuda SSL VPN",
+      "category": "VPN",
+      "cookies": {
+        "^BNES_SSLVPN$": "",
+        "^barracuda_": ""
+      },
+      "headers": {
+        "^Server$": "Barracuda"
+      },
+      "url": [
+        "/cgi-mod/index.cgi",
+        "/vpn/login"
+      ],
+      "meta": {},
+      "robots": [
+        "/cgi-mod/",
+        "Disallow: /cgi-mod/"
+      ],
+      "scriptSrc": [
+        "/cgi-mod/images/"
+      ],
+      "scriptjs": {}
     }
   ]
 }
