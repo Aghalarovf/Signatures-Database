@@ -7,6 +7,29 @@
         "^atlassian\\.xsrf\\.token$": "",
         "^studio\\.crowd\\.tokenkey$": ""
       },
+      "headers": {
+        "^X-AREQUESTID$": "",
+        "^X-Confluence-Request-Time$": ""
+      },
+      "url": [
+        "/browse/",
+        "/wiki/",
+        "/secure/Dashboard.jspa"
+      ],
+      "meta": {
+        "generator": "^Jira ?([\\d.]+)?|^Confluence ?([\\d.]+)?"
+      },
+      "robots": [
+        "/secure/",
+        "Disallow: /secure/"
+      ],
+      "scriptSrc": [
+        "/s/",
+        "/download/resources/"
+      ],
+      "scriptjs": {
+        "AJS": ""
+      },
       "implies": [
         "Java"
       ]
@@ -16,6 +39,30 @@
       "category": "CI/CD",
       "cookies": {
         "^JSESSIONID\\.": ""
+      },
+      "headers": {
+        "^X-Jenkins$": "",
+        "^X-Jenkins-Session$": "",
+        "^X-Hudson$": ""
+      },
+      "url": [
+        "/jenkins/",
+        "/view/all/",
+        "/job/"
+      ],
+      "meta": {
+        "generator": "^Jenkins ?([\\d.]+)?"
+      },
+      "robots": [
+        "/jenkins/",
+        "Disallow: /jenkins/"
+      ],
+      "scriptSrc": [
+        "/static/",
+        "/adjuncts/"
+      ],
+      "scriptjs": {
+        "Jenkins": ""
       },
       "implies": [
         "Java"
@@ -28,6 +75,27 @@
         "^_gitlab_session$": "",
         "^remember_user_token$": ""
       },
+      "headers": {
+        "^X-Gitlab-": ""
+      },
+      "url": [
+        "/users/sign_in",
+        "/-/health",
+        "/help"
+      ],
+      "meta": {
+        "generator": "^GitLab ?([\\d.]+)?"
+      },
+      "robots": [
+        "/admin/",
+        "Disallow: /admin/"
+      ],
+      "scriptSrc": [
+        "/assets/webpack/"
+      ],
+      "scriptjs": {
+        "gon": ""
+      },
       "implies": [
         "Ruby on Rails"
       ]
@@ -38,7 +106,21 @@
       "cookies": {
         "^jweToken$": "",
         "^kubernetes-dashboard": ""
-      }
+      },
+      "headers": {
+        "^X-Kubernetes-": ""
+      },
+      "url": [
+        "/api/v1/namespaces/",
+        "/#!/login"
+      ],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [
+        "/static/vendor."
+      ],
+      "scriptjs": {},
+      "implies": []
     },
     {
       "name": "Portainer",
@@ -46,7 +128,23 @@
       "cookies": {
         "^portainer\\.": "",
         "^portainer_": ""
-      }
+      },
+      "headers": {
+        "^X-Powered-By$": "Portainer"
+      },
+      "url": [
+        "/#!/auth",
+        "/api/status"
+      ],
+      "meta": {
+        "generator": "^Portainer ?([\\d.]+)?"
+      },
+      "robots": [],
+      "scriptSrc": [
+        "/js/app."
+      ],
+      "scriptjs": {},
+      "implies": []
     },
     {
       "name": "SonarQube",
@@ -55,6 +153,24 @@
         "^JWT-SESSION$": "",
         "^SONAR_": ""
       },
+      "headers": {
+        "^X-Powered-By$": "SonarQube"
+      },
+      "url": [
+        "/sonar/",
+        "/api/system/status"
+      ],
+      "meta": {
+        "generator": "^SonarQube ?([\\d.]+)?"
+      },
+      "robots": [
+        "/sonar/",
+        "Disallow: /sonar/"
+      ],
+      "scriptSrc": [
+        "/static/sonar/"
+      ],
+      "scriptjs": {},
       "implies": [
         "Java"
       ]
@@ -66,6 +182,24 @@
         "^NXSESSIONID$": "",
         "^NX-ANTI-CSRF-TOKEN$": ""
       },
+      "headers": {
+        "^X-Nexus-": ""
+      },
+      "url": [
+        "/nexus/",
+        "/service/rest/v1/status"
+      ],
+      "meta": {
+        "generator": "^Nexus Repository Manager ?([\\d.]+)?"
+      },
+      "robots": [
+        "/nexus/",
+        "Disallow: /nexus/"
+      ],
+      "scriptSrc": [
+        "/static/rapture/"
+      ],
+      "scriptjs": {},
       "implies": [
         "Java"
       ]
@@ -77,6 +211,24 @@
         "^ARTIFACTORYSESSIONID$": "",
         "^ARTIFACTORY_": ""
       },
+      "headers": {
+        "^X-Artifactory-": ""
+      },
+      "url": [
+        "/artifactory/",
+        "/artifactory/api/system/ping"
+      ],
+      "meta": {
+        "generator": "^JFrog Artifactory ?([\\d.]+)?"
+      },
+      "robots": [
+        "/artifactory/",
+        "Disallow: /artifactory/"
+      ],
+      "scriptSrc": [
+        "/artifactory/webapp/"
+      ],
+      "scriptjs": {},
       "implies": [
         "Java"
       ]
@@ -87,6 +239,23 @@
       "cookies": {
         "^TCSESSIONID$": "",
         "^TeamCityMeta": ""
+      },
+      "headers": {
+        "^X-TeamCity-": ""
+      },
+      "url": [
+        "/login.html",
+        "/favicon.ico?teamcity"
+      ],
+      "meta": {
+        "generator": "^TeamCity ?([\\d.]+)?"
+      },
+      "robots": [],
+      "scriptSrc": [
+        "/res/"
+      ],
+      "scriptjs": {
+        "BS": ""
       },
       "implies": [
         "Java"
@@ -99,7 +268,25 @@
         "^i_like_gitea$": "",
         "^i_like_gogs$": "",
         "^gitea_awesome$": ""
-      }
+      },
+      "headers": {
+        "^Server$": "gitea|gogs"
+      },
+      "url": [
+        "/explore/repos",
+        "/api/v1/version"
+      ],
+      "meta": {
+        "generator": "^Gitea ?([\\d.]+)?|^Gogs ?([\\d.]+)?"
+      },
+      "robots": [],
+      "scriptSrc": [
+        "/assets/js/"
+      ],
+      "scriptjs": {},
+      "implies": [
+        "Go"
+      ]
     },
     {
       "name": "GitHub",
@@ -110,7 +297,272 @@
         "^__Host-user_session_same_site$": "",
         "^dotcom_user$": "",
         "^_octo$": ""
-      }
+      },
+      "headers": {
+        "^X-GitHub-Request-Id$": ""
+      },
+      "url": [
+        "github.com"
+      ],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [
+        "github.githubassets.com"
+      ],
+      "scriptjs": {}
+    },
+    {
+      "name": "Atlassian Bamboo",
+      "category": "CI/CD",
+      "cookies": {
+        "^BAMBOO_SESSION_ID$": ""
+      },
+      "headers": {
+        "^X-AREQUESTID$": ""
+      },
+      "url": [
+        "/start.action",
+        "/build/admin/"
+      ],
+      "meta": {
+        "generator": "^Bamboo ?([\\d.]+)?"
+      },
+      "robots": [
+        "/build/",
+        "Disallow: /build/admin/"
+      ],
+      "scriptSrc": [
+        "/download/resources/"
+      ],
+      "scriptjs": {
+        "AJS": ""
+      },
+      "implies": [
+        "Java"
+      ]
+    },
+    {
+      "name": "Bitbucket Server",
+      "category": "DevOps",
+      "cookies": {
+        "^BITBUCKETSESSIONID$": "",
+        "^JSESSIONID$": ""
+      },
+      "headers": {
+        "^X-AREQUESTID$": "",
+        "^X-Ausername$": ""
+      },
+      "url": [
+        "/projects/",
+        "/scm/",
+        "/plugins/servlet/"
+      ],
+      "meta": {
+        "generator": "^Bitbucket ?([\\d.]+)?"
+      },
+      "robots": [
+        "/plugins/",
+        "Disallow: /plugins/"
+      ],
+      "scriptSrc": [
+        "/s/",
+        "/download/resources/"
+      ],
+      "scriptjs": {
+        "AJS": ""
+      },
+      "implies": [
+        "Java"
+      ]
+    },
+    {
+      "name": "Drone CI",
+      "category": "CI/CD",
+      "cookies": {
+        "^_drone_session$": ""
+      },
+      "headers": {
+        "^X-Drone-": ""
+      },
+      "url": [
+        "/api/user",
+        "/login"
+      ],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [
+        "/static/"
+      ],
+      "scriptjs": {},
+      "implies": [
+        "Go"
+      ]
+    },
+    {
+      "name": "Argo CD",
+      "category": "DevOps",
+      "cookies": {
+        "^argocd\\.token$": ""
+      },
+      "headers": {
+        "^Grpc-Metadata-": ""
+      },
+      "url": [
+        "/applications",
+        "/api/version"
+      ],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [
+        "/assets/"
+      ],
+      "scriptjs": {},
+      "implies": []
+    },
+    {
+      "name": "Rancher",
+      "category": "DevOps",
+      "cookies": {
+        "^R_SESS$": "",
+        "^R_USERNAME$": ""
+      },
+      "headers": {
+        "^X-Api-Cattle-Auth$": ""
+      },
+      "url": [
+        "/dashboard/",
+        "/v3/settings"
+      ],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [
+        "/assets/rancher"
+      ],
+      "scriptjs": {},
+      "implies": []
+    },
+    {
+      "name": "Harbor",
+      "category": "DevOps",
+      "cookies": {
+        "^harbor-lang$": "",
+        "^sid$": ""
+      },
+      "headers": {
+        "^X-Harbor-": ""
+      },
+      "url": [
+        "/harbor/",
+        "/api/v2.0/systeminfo"
+      ],
+      "meta": {
+        "generator": "^Harbor ?([\\d.]+)?"
+      },
+      "robots": [],
+      "scriptSrc": [
+        "/harbor/"
+      ],
+      "scriptjs": {},
+      "implies": [
+        "Go"
+      ]
+    },
+    {
+      "name": "HashiCorp Vault",
+      "category": "DevOps",
+      "cookies": {},
+      "headers": {
+        "^X-Vault-": ""
+      },
+      "url": [
+        "/v1/sys/health",
+        "/ui/vault/"
+      ],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [
+        "/ui/"
+      ],
+      "scriptjs": {},
+      "implies": [
+        "Go"
+      ]
+    },
+    {
+      "name": "HashiCorp Consul",
+      "category": "DevOps",
+      "cookies": {},
+      "headers": {
+        "^X-Consul-": ""
+      },
+      "url": [
+        "/v1/agent/self",
+        "/ui/"
+      ],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [
+        "/ui/"
+      ],
+      "scriptjs": {},
+      "implies": [
+        "Go"
+      ]
+    },
+    {
+      "name": "Octopus Deploy",
+      "category": "CI/CD",
+      "cookies": {
+        "^Octopus-Session$": ""
+      },
+      "headers": {
+        "^X-Octopus-": ""
+      },
+      "url": [
+        "/app#/",
+        "/api/serverstatus"
+      ],
+      "meta": {
+        "generator": "^Octopus Deploy ?([\\d.]+)?"
+      },
+      "robots": [],
+      "scriptSrc": [
+        "/app/"
+      ],
+      "scriptjs": {},
+      "implies": [
+        ".NET"
+      ]
+    },
+    {
+      "name": "Azure DevOps Server (TFS)",
+      "category": "DevOps",
+      "cookies": {
+        "^\\.AspNet\\.ApplicationCookie$": ""
+      },
+      "headers": {
+        "^X-TFS-": "",
+        "^X-VSS-": ""
+      },
+      "url": [
+        "/tfs/",
+        "/_git/",
+        "/DefaultCollection/"
+      ],
+      "meta": {
+        "generator": "^Team Foundation Server ?([\\d.]+)?"
+      },
+      "robots": [
+        "/tfs/",
+        "Disallow: /tfs/"
+      ],
+      "scriptSrc": [
+        "/_static/"
+      ],
+      "scriptjs": {},
+      "implies": [
+        "ASP.NET"
+      ]
     }
   ]
 }
