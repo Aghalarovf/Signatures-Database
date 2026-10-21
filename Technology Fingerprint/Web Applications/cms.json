@@ -10,6 +10,30 @@
         "^wordpress_sec_": "",
         "^wordpress_test_cookie$": ""
       },
+      "headers": {
+        "^Link$": "rel=\"https://api\\.w\\.org/\"",
+        "^X-Pingback$": "xmlrpc\\.php$"
+      },
+      "url": [
+        "/wp-content/",
+        "/wp-includes/",
+        "/wp-json/"
+      ],
+      "meta": {
+        "generator": "^WordPress ?([\\d.]+)?"
+      },
+      "robots": [
+        "/wp-admin/",
+        "Disallow: /wp-admin/"
+      ],
+      "scriptSrc": [
+        "/wp-content/",
+        "/wp-includes/js/"
+      ],
+      "scriptjs": {
+        "wp": "",
+        "wpApiSettings": ""
+      },
       "implies": [
         "PHP"
       ]
@@ -20,6 +44,32 @@
       "cookies": {
         "^S?SESS[0-9a-f]{32}$": "",
         "^Drupal\\.visitor\\.": ""
+      },
+      "headers": {
+        "^X-Generator$": "^Drupal ?([\\d]+)?",
+        "^X-Drupal-Cache$": "",
+        "^X-Drupal-Dynamic-Cache$": ""
+      },
+      "url": [
+        "/sites/default/",
+        "/sites/all/",
+        "/node/"
+      ],
+      "meta": {
+        "generator": "^Drupal ?([\\d]+)?"
+      },
+      "robots": [
+        "/core/",
+        "Disallow: /core/"
+      ],
+      "scriptSrc": [
+        "/sites/default/files/",
+        "/core/misc/drupal.js",
+        "/misc/drupal.js"
+      ],
+      "scriptjs": {
+        "Drupal": "",
+        "drupalSettings": ""
       },
       "implies": [
         "PHP"
@@ -32,6 +82,28 @@
         "^joomla_user_state$": "",
         "^joomla_remember_me__": ""
       },
+      "headers": {
+        "^X-Content-Encoded-By$": "Joomla"
+      },
+      "url": [
+        "/administrator/",
+        "/components/com_",
+        "/media/com_"
+      ],
+      "meta": {
+        "generator": "^Joomla!? ?-? ?Open Source Content Management ?([\\d.]+)?"
+      },
+      "robots": [
+        "/administrator/",
+        "Disallow: /administrator/"
+      ],
+      "scriptSrc": [
+        "/media/jui/js/",
+        "/media/system/js/"
+      ],
+      "scriptjs": {
+        "Joomla": ""
+      },
       "implies": [
         "PHP"
       ]
@@ -42,6 +114,27 @@
       "cookies": {
         "^ghost-admin-api-session$": "",
         "^ghost-members-ssr$": ""
+      },
+      "headers": {
+        "^X-Ghost-Cache-Status$": ""
+      },
+      "url": [
+        "/ghost/",
+        "/content/images/"
+      ],
+      "meta": {
+        "generator": "^Ghost ?([\\d.]+)?"
+      },
+      "robots": [
+        "/ghost/",
+        "Disallow: /ghost/"
+      ],
+      "scriptSrc": [
+        "/public/ghost-sdk.js",
+        "/public/cards.min.js"
+      ],
+      "scriptjs": {
+        "ghost": ""
       }
     },
     {
@@ -50,6 +143,26 @@
       "cookies": {
         "^CraftSessionId$": "",
         "^CRAFT_CSRF_TOKEN$": ""
+      },
+      "headers": {
+        "^X-Powered-By$": "Craft CMS"
+      },
+      "url": [
+        "/cpresources/",
+        "/admin/dashboard"
+      ],
+      "meta": {
+        "generator": "^Craft CMS ?([\\d.]+)?"
+      },
+      "robots": [
+        "/admin/",
+        "Disallow: /admin/"
+      ],
+      "scriptSrc": [
+        "/cpresources/"
+      ],
+      "scriptjs": {
+        "Craft": ""
       },
       "implies": [
         "PHP"
@@ -62,6 +175,29 @@
         "^fe_typo_user$": "",
         "^be_typo_user$": ""
       },
+      "headers": {
+        "^X-TYPO3-Parsetime$": "",
+        "^X-Powered-By$": "TYPO3"
+      },
+      "url": [
+        "/typo3/",
+        "/typo3conf/",
+        "/fileadmin/"
+      ],
+      "meta": {
+        "generator": "^TYPO3 ?([\\d.]+)?"
+      },
+      "robots": [
+        "/typo3/",
+        "Disallow: /typo3/"
+      ],
+      "scriptSrc": [
+        "/typo3conf/",
+        "/typo3temp/"
+      ],
+      "scriptjs": {
+        "TYPO3": ""
+      },
       "implies": [
         "PHP"
       ]
@@ -73,6 +209,28 @@
         "^UMB_UCONTEXT$": "",
         "^UMB-XSRF-TOKEN$": ""
       },
+      "headers": {
+        "^X-Umbraco-Version$": "",
+        "^X-Powered-By$": "Umbraco"
+      },
+      "url": [
+        "/umbraco/",
+        "/umbraco_client/"
+      ],
+      "meta": {
+        "generator": "^Umbraco ?([\\d.]+)?"
+      },
+      "robots": [
+        "/umbraco/",
+        "Disallow: /umbraco/"
+      ],
+      "scriptSrc": [
+        "/umbraco_client/",
+        "/umbraco/lib/"
+      ],
+      "scriptjs": {
+        "Umbraco": ""
+      },
       "implies": [
         "ASP.NET"
       ]
@@ -82,6 +240,28 @@
       "category": "CMS",
       "cookies": {
         "^SC_ANALYTICS_GLOBAL_COOKIE$": ""
+      },
+      "headers": {
+        "^X-Powered-By$": "Sitecore"
+      },
+      "url": [
+        "/sitecore/",
+        "/-/media/",
+        "/-/jssmedia/"
+      ],
+      "meta": {
+        "generator": "^Sitecore ?([\\d.]+)?"
+      },
+      "robots": [
+        "/sitecore/",
+        "Disallow: /sitecore/"
+      ],
+      "scriptSrc": [
+        "/sitecore/shell/",
+        "/sitecore modules/"
+      ],
+      "scriptjs": {
+        "Sitecore": ""
       },
       "implies": [
         "ASP.NET"
@@ -93,6 +273,28 @@
       "cookies": {
         "^CONCRETE5$": ""
       },
+      "headers": {
+        "^X-Powered-By$": "concrete5|Concrete CMS"
+      },
+      "url": [
+        "/concrete/",
+        "/application/files/"
+      ],
+      "meta": {
+        "generator": "^Concrete ?CMS ?([\\d.]+)?|^concrete5 ?([\\d.]+)?"
+      },
+      "robots": [
+        "/concrete/",
+        "Disallow: /concrete/"
+      ],
+      "scriptSrc": [
+        "/concrete/js/",
+        "/application/files/"
+      ],
+      "scriptjs": {
+        "CCM_IMAGE_PATH": "",
+        "ccm_": ""
+      },
       "implies": [
         "PHP"
       ]
@@ -102,6 +304,27 @@
       "category": "CMS",
       "cookies": {
         "^contao_": ""
+      },
+      "headers": {
+        "^X-Powered-By$": "Contao"
+      },
+      "url": [
+        "/contao/",
+        "/typo3conf/ext/contao/"
+      ],
+      "meta": {
+        "generator": "^Contao Open Source CMS ?([\\d.]+)?"
+      },
+      "robots": [
+        "/contao/",
+        "Disallow: /contao/"
+      ],
+      "scriptSrc": [
+        "/bundles/contao",
+        "/system/modules/"
+      ],
+      "scriptjs": {
+        "Contao": ""
       },
       "implies": [
         "PHP"
@@ -113,6 +336,27 @@
       "cookies": {
         "^statamic_session$": ""
       },
+      "headers": {
+        "^X-Statamic$": ""
+      },
+      "url": [
+        "/cp/",
+        "/!/statamic/"
+      ],
+      "meta": {
+        "generator": "^Statamic ?([\\d.]+)?"
+      },
+      "robots": [
+        "/cp/",
+        "Disallow: /cp/"
+      ],
+      "scriptSrc": [
+        "/vendor/statamic/",
+        "/cp/dist/"
+      ],
+      "scriptjs": {
+        "Statamic": ""
+      },
       "implies": [
         "PHP"
       ]
@@ -123,30 +367,29 @@
       "cookies": {
         "^exp_": ""
       },
+      "headers": {
+        "^X-Powered-By$": "ExpressionEngine"
+      },
+      "url": [
+        "/system/expressionengine/",
+        "/ee_control_panel"
+      ],
+      "meta": {
+        "generator": "^ExpressionEngine ?([\\d.]+)?"
+      },
+      "robots": [
+        "/system/",
+        "Disallow: /system/"
+      ],
+      "scriptSrc": [
+        "/themes/ee/",
+        "/system/expressionengine/"
+      ],
+      "scriptjs": {
+        "EE": ""
+      },
       "implies": [
         "PHP"
-      ]
-    },
-    {
-      "name": "Keystone",
-      "category": "CMS",
-      "cookies": {
-        "^keystone\\.sid$": "",
-        "^keystonejs-session$": ""
-      },
-      "implies": [
-        "Node.js"
-      ]
-    },
-    {
-      "name": "Zope / Plone",
-      "category": "CMS",
-      "cookies": {
-        "^__ac$": "",
-        "^_ZopeId$": ""
-      },
-      "implies": [
-        "Python"
       ]
     },
     {
@@ -156,6 +399,28 @@
         "^LFR_SESSION_STATE_\\d+$": "",
         "^GUEST_LANGUAGE_ID$": "",
         "^COOKIE_SUPPORT$": ""
+      },
+      "headers": {
+        "^Liferay-Portal$": ""
+      },
+      "url": [
+        "/web/guest/",
+        "/group/",
+        "/c/portal/"
+      ],
+      "meta": {
+        "generator": "^Liferay ?Portal ?([\\d.]+)?"
+      },
+      "robots": [
+        "/c/portal/",
+        "Disallow: /c/portal/login"
+      ],
+      "scriptSrc": [
+        "/html/js/liferay/",
+        "/o/liferay/"
+      ],
+      "scriptjs": {
+        "Liferay": ""
       },
       "implies": [
         "Java"
@@ -167,6 +432,30 @@
       "cookies": {
         "^login-token$": "",
         "^cq-authoring-mode$": ""
+      },
+      "headers": {
+        "^Server$": "AEM Dispatcher",
+        "^X-Vhost$": ""
+      },
+      "url": [
+        "/content/dam/",
+        "/etc.clientlibs/",
+        "/libs/granite/"
+      ],
+      "meta": {
+        "generator": "^Adobe Experience Manager"
+      },
+      "robots": [
+        "/content/dam/",
+        "Disallow: /etc/"
+      ],
+      "scriptSrc": [
+        "/etc.clientlibs/",
+        "/libs/clientlibs/"
+      ],
+      "scriptjs": {
+        "CQ": "",
+        "Granite": ""
       },
       "implies": [
         "Java"
@@ -180,6 +469,27 @@
         "^alfUsername3$": "",
         "^ALF_": ""
       },
+      "headers": {
+        "^X-Alfresco-Request-Id$": ""
+      },
+      "url": [
+        "/alfresco/",
+        "/share/page/"
+      ],
+      "meta": {
+        "generator": "^Alfresco ?([\\d.]+)?"
+      },
+      "robots": [
+        "/alfresco/",
+        "Disallow: /alfresco/"
+      ],
+      "scriptSrc": [
+        "/share/res/",
+        "/alfresco/webdav/"
+      ],
+      "scriptjs": {
+        "Alfresco": ""
+      },
       "implies": [
         "Java"
       ]
@@ -191,6 +501,27 @@
         "^dnn_IsMobile$": "",
         "^DNNPersonalization": "",
         "^\\.DOTNETNUKE$": ""
+      },
+      "headers": {
+        "^X-Powered-By$": "DotNetNuke"
+      },
+      "url": [
+        "/DesktopModules/",
+        "/Portals/0/"
+      ],
+      "meta": {
+        "generator": "^DotNetNuke ?([\\d.]+)?|^DNN Platform ?([\\d.]+)?"
+      },
+      "robots": [
+        "/DesktopModules/",
+        "Disallow: /DesktopModules/"
+      ],
+      "scriptSrc": [
+        "/DesktopModules/",
+        "/js/dnncore.js"
+      ],
+      "scriptjs": {
+        "dnn": ""
       },
       "implies": [
         "ASP.NET"
@@ -205,6 +536,27 @@
         "^CMSCookieLevel$": "",
         "^CMSCurrentTheme$": ""
       },
+      "headers": {
+        "^X-Powered-By$": "Kentico"
+      },
+      "url": [
+        "/CMSPages/",
+        "/getmedia/"
+      ],
+      "meta": {
+        "generator": "^Kentico ?([\\d.]+)?"
+      },
+      "robots": [
+        "/CMSPages/",
+        "Disallow: /CMSPages/"
+      ],
+      "scriptSrc": [
+        "/CMSScripts/",
+        "/App_Themes/"
+      ],
+      "scriptjs": {
+        "CMS": ""
+      },
       "implies": [
         "ASP.NET"
       ]
@@ -216,6 +568,27 @@
         "^EPiServer": "",
         "^\\.EPiForm_": ""
       },
+      "headers": {
+        "^X-Powered-By$": "Episerver|Optimizely"
+      },
+      "url": [
+        "/episerver/",
+        "/globalassets/"
+      ],
+      "meta": {
+        "generator": "^Episerver ?([\\d.]+)?|^Optimizely ?([\\d.]+)?"
+      },
+      "robots": [
+        "/episerver/",
+        "Disallow: /episerver/"
+      ],
+      "scriptSrc": [
+        "/EPiServer/",
+        "/util/javascript/"
+      ],
+      "scriptjs": {
+        "epi": ""
+      },
       "implies": [
         "ASP.NET"
       ]
@@ -225,6 +598,27 @@
       "category": "CMS",
       "cookies": {
         "^\\.Orchard\\.": ""
+      },
+      "headers": {
+        "^X-Generator$": "Orchard"
+      },
+      "url": [
+        "/Themes/",
+        "/Modules/Orchard"
+      ],
+      "meta": {
+        "generator": "^Orchard"
+      },
+      "robots": [
+        "/Admin/",
+        "Disallow: /Admin/"
+      ],
+      "scriptSrc": [
+        "/Themes/",
+        "/OrchardCore/"
+      ],
+      "scriptjs": {
+        "Orchard": ""
       },
       "implies": [
         "ASP.NET"
@@ -238,6 +632,27 @@
         "^BX_USER_ID$": "",
         "^BITRIX_CONVERSION": ""
       },
+      "headers": {
+        "^X-Powered-CMS$": "Bitrix Site Manager"
+      },
+      "url": [
+        "/bitrix/",
+        "/upload/iblock/"
+      ],
+      "meta": {
+        "generator": "^Bitrix ?([\\d.]+)?"
+      },
+      "robots": [
+        "/bitrix/",
+        "Disallow: /bitrix/"
+      ],
+      "scriptSrc": [
+        "/bitrix/js/",
+        "/bitrix/templates/"
+      ],
+      "scriptjs": {
+        "BX": ""
+      },
       "implies": [
         "PHP"
       ]
@@ -249,6 +664,27 @@
         "^LOGINLICENSE$": "",
         "^modx": ""
       },
+      "headers": {
+        "^X-Powered-By$": "MODX"
+      },
+      "url": [
+        "/manager/",
+        "/connectors/"
+      ],
+      "meta": {
+        "generator": "^MODX ?([\\d.]+)?"
+      },
+      "robots": [
+        "/manager/",
+        "Disallow: /manager/"
+      ],
+      "scriptSrc": [
+        "/assets/modx/",
+        "/manager/assets/"
+      ],
+      "scriptjs": {
+        "MODx": ""
+      },
       "implies": [
         "PHP"
       ]
@@ -258,6 +694,27 @@
       "category": "CMS",
       "cookies": {
         "^SilverStripe": ""
+      },
+      "headers": {
+        "^X-Powered-By$": "SilverStripe|SS_"
+      },
+      "url": [
+        "/admin/pages/",
+        "/assets/Uploads/"
+      ],
+      "meta": {
+        "generator": "^SilverStripe ?([\\d.]+)?"
+      },
+      "robots": [
+        "/admin/",
+        "Disallow: /admin/"
+      ],
+      "scriptSrc": [
+        "/cms/client/",
+        "/framework/client/"
+      ],
+      "scriptjs": {
+        "ss": ""
       },
       "implies": [
         "PHP"
@@ -270,6 +727,28 @@
         "^october_session$": "",
         "^admin_auth$": ""
       },
+      "headers": {
+        "^X-OctoberCMS$": ""
+      },
+      "url": [
+        "/modules/system/",
+        "/plugins/",
+        "/themes/"
+      ],
+      "meta": {
+        "generator": "^OctoberCMS ?([\\d.]+)?"
+      },
+      "robots": [
+        "/backend/",
+        "Disallow: /backend/"
+      ],
+      "scriptSrc": [
+        "/modules/system/assets/",
+        "/plugins/"
+      ],
+      "scriptjs": {
+        "oc": ""
+      },
       "implies": [
         "Laravel"
       ]
@@ -280,8 +759,1018 @@
       "cookies": {
         "^strapi_": ""
       },
+      "headers": {
+        "^X-Powered-By$": "Strapi"
+      },
+      "url": [
+        "/admin/",
+        "/api/",
+        "/uploads/"
+      ],
+      "meta": {
+        "generator": "^Strapi ?([\\d.]+)?"
+      },
+      "robots": [
+        "/admin/",
+        "Disallow: /admin/"
+      ],
+      "scriptSrc": [
+        "/strapi-admin/",
+        "/admin/strapi-admin"
+      ],
+      "scriptjs": {
+        "strapi": ""
+      },
       "implies": [
         "Node.js"
+      ]
+    },
+    {
+      "name": "Zope / Plone",
+      "category": "CMS",
+      "cookies": {
+        "^__ac$": "",
+        "^_ZopeId$": ""
+      },
+      "headers": {
+        "^Server$": "Zope|Plone"
+      },
+      "url": [
+        "/@@",
+        "/portal_skins/",
+        "/Plone"
+      ],
+      "meta": {
+        "generator": "^Plone ?([\\d.]+)?|^Zope"
+      },
+      "robots": [
+        "/portal_skins/",
+        "Disallow: /portal_skins/"
+      ],
+      "scriptSrc": [
+        "/++resource++",
+        "/portal_javascripts/"
+      ],
+      "scriptjs": {
+        "Plone": ""
+      },
+      "implies": [
+        "Python"
+      ]
+    },
+    {
+      "name": "Keystone",
+      "category": "CMS",
+      "cookies": {
+        "^keystone\\.sid$": "",
+        "^keystonejs-session$": ""
+      },
+      "headers": {
+        "^X-Powered-By$": "KeystoneJS|Express"
+      },
+      "url": [
+        "/keystone/",
+        "/admin/api/"
+      ],
+      "meta": {
+        "generator": "^KeystoneJS ?([\\d.]+)?"
+      },
+      "robots": [
+        "/keystone/",
+        "Disallow: /keystone/"
+      ],
+      "scriptSrc": [
+        "/keystone.js",
+        "/js/keystone/"
+      ],
+      "scriptjs": {
+        "Keystone": ""
+      },
+      "implies": [
+        "Node.js"
+      ]
+    },
+    {
+      "name": "Magnolia CMS",
+      "category": "CMS",
+      "cookies": {
+        "^JSESSIONID$": ""
+      },
+      "headers": {
+        "^X-Powered-By$": "Magnolia"
+      },
+      "url": [
+        "/.magnolia/",
+        "/dam/jcr:"
+      ],
+      "meta": {
+        "generator": "^Magnolia ?([\\d.]+)?"
+      },
+      "robots": [
+        "/.magnolia/",
+        "Disallow: /.magnolia/"
+      ],
+      "scriptSrc": [
+        "/.resources/",
+        "/.magnolia/"
+      ],
+      "scriptjs": {
+        "mgnl": ""
+      },
+      "implies": [
+        "Java"
+      ]
+    },
+    {
+      "name": "Contentful",
+      "category": "CMS",
+      "cookies": {},
+      "headers": {
+        "^X-Contentful-Request-Id$": ""
+      },
+      "url": [
+        "cdn.contentful.com",
+        "api.contentful.com"
+      ],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [
+        "cdn.contentful.com"
+      ],
+      "scriptjs": {
+        "contentful": ""
+      }
+    },
+    {
+      "name": "Sanity",
+      "category": "CMS",
+      "cookies": {},
+      "headers": {
+        "^X-Sanity-": ""
+      },
+      "url": [
+        "cdn.sanity.io",
+        "/v1/data/query/"
+      ],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [
+        "cdn.sanity.io"
+      ],
+      "scriptjs": {
+        "__sanity": ""
+      }
+    },
+    {
+      "name": "Webiny",
+      "category": "CMS",
+      "cookies": {},
+      "headers": {
+        "^X-Powered-By$": "Webiny"
+      },
+      "url": [
+        "/webiny/",
+        "/cms/"
+      ],
+      "meta": {
+        "generator": "^Webiny ?([\\d.]+)?"
+      },
+      "robots": [],
+      "scriptSrc": [
+        "/webiny-"
+      ],
+      "scriptjs": {
+        "Webiny": ""
+      },
+      "implies": [
+        "Node.js"
+      ]
+    },
+    {
+      "name": "Directus",
+      "category": "CMS",
+      "cookies": {
+        "^directus_session_token$": ""
+      },
+      "headers": {
+        "^X-Powered-By$": "Directus"
+      },
+      "url": [
+        "/admin/",
+        "/items/",
+        "/assets/"
+      ],
+      "meta": {
+        "generator": "^Directus ?([\\d.]+)?"
+      },
+      "robots": [
+        "/admin/",
+        "Disallow: /admin/"
+      ],
+      "scriptSrc": [
+        "/admin/assets/"
+      ],
+      "scriptjs": {
+        "directus": ""
+      },
+      "implies": [
+        "Node.js"
+      ]
+    },
+    {
+      "name": "Grav CMS",
+      "category": "CMS",
+      "cookies": {
+        "^grav-site-": ""
+      },
+      "headers": {
+        "^X-Powered-By$": "Grav"
+      },
+      "url": [
+        "/user/pages/",
+        "/user/plugins/"
+      ],
+      "meta": {
+        "generator": "^Grav ?([\\d.]+)?"
+      },
+      "robots": [
+        "/user/",
+        "Disallow: /user/"
+      ],
+      "scriptSrc": [
+        "/system/assets/",
+        "/user/themes/"
+      ],
+      "scriptjs": {
+        "GravAdmin": ""
+      },
+      "implies": [
+        "PHP"
+      ]
+    },
+    {
+      "name": "Pico CMS",
+      "category": "CMS",
+      "cookies": {},
+      "headers": {
+        "^X-Powered-By$": "Pico"
+      },
+      "url": [
+        "/content/",
+        "/plugins/",
+        "/themes/"
+      ],
+      "meta": {
+        "generator": "^Pico ?([\\d.]+)?"
+      },
+      "robots": [],
+      "scriptSrc": [
+        "/plugins/",
+        "/themes/"
+      ],
+      "scriptjs": {},
+      "implies": [
+        "PHP"
+      ]
+    },
+    {
+      "name": "Textpattern",
+      "category": "CMS",
+      "cookies": {
+        "^txp_login_public$": "",
+        "^txp_session_": ""
+      },
+      "headers": {
+        "^X-Powered-By$": "Textpattern"
+      },
+      "url": [
+        "/textpattern/",
+        "/images/"
+      ],
+      "meta": {
+        "generator": "^Textpattern ?([\\d.]+)?"
+      },
+      "robots": [
+        "/textpattern/",
+        "Disallow: /textpattern/"
+      ],
+      "scriptSrc": [
+        "/textpattern/js/"
+      ],
+      "scriptjs": {
+        "textpattern": ""
+      },
+      "implies": [
+        "PHP"
+      ]
+    },
+    {
+      "name": "PyroCMS",
+      "category": "CMS",
+      "cookies": {
+        "^pyrocms_session$": ""
+      },
+      "headers": {
+        "^X-Powered-By$": "PyroCMS"
+      },
+      "url": [
+        "/admin/",
+        "/addons/"
+      ],
+      "meta": {
+        "generator": "^PyroCMS ?([\\d.]+)?"
+      },
+      "robots": [
+        "/admin/",
+        "Disallow: /admin/"
+      ],
+      "scriptSrc": [
+        "/addons/",
+        "/themes/"
+      ],
+      "scriptjs": {
+        "PyroStreams": ""
+      },
+      "implies": [
+        "Laravel"
+      ]
+    },
+    {
+      "name": "Anchor CMS",
+      "category": "CMS",
+      "cookies": {
+        "^anchor_session$": ""
+      },
+      "headers": {
+        "^X-Powered-By$": "Anchor CMS"
+      },
+      "url": [
+        "/admin/",
+        "/content/themes/"
+      ],
+      "meta": {
+        "generator": "^Anchor CMS ?([\\d.]+)?"
+      },
+      "robots": [
+        "/admin/",
+        "Disallow: /admin/"
+      ],
+      "scriptSrc": [
+        "/content/themes/"
+      ],
+      "scriptjs": {},
+      "implies": [
+        "PHP"
+      ]
+    },
+    {
+      "name": "Bolt CMS",
+      "category": "CMS",
+      "cookies": {
+        "^bolt_session$": "",
+        "^bolt_authtoken$": ""
+      },
+      "headers": {
+        "^X-Powered-By$": "Bolt"
+      },
+      "url": [
+        "/bolt/",
+        "/thumbs/"
+      ],
+      "meta": {
+        "generator": "^Bolt ?([\\d.]+)?"
+      },
+      "robots": [
+        "/bolt/",
+        "Disallow: /bolt/"
+      ],
+      "scriptSrc": [
+        "/bolt-public/",
+        "/extensions/"
+      ],
+      "scriptjs": {
+        "Bolt": ""
+      },
+      "implies": [
+        "Symfony"
+      ]
+    },
+    {
+      "name": "Pimcore",
+      "category": "CMS",
+      "cookies": {
+        "^pimcore_admin_sid$": ""
+      },
+      "headers": {
+        "^X-Powered-By$": "Pimcore"
+      },
+      "url": [
+        "/admin/",
+        "/var/assets/"
+      ],
+      "meta": {
+        "generator": "^Pimcore ?([\\d.]+)?"
+      },
+      "robots": [
+        "/admin/",
+        "Disallow: /admin/"
+      ],
+      "scriptSrc": [
+        "/bundles/pimcoreadmin/",
+        "/pimcore/static/"
+      ],
+      "scriptjs": {
+        "pimcore": ""
+      },
+      "implies": [
+        "Symfony"
+      ]
+    },
+    {
+      "name": "Neos CMS",
+      "category": "CMS",
+      "cookies": {
+        "^Neos_Flow_Session$": ""
+      },
+      "headers": {
+        "^X-Powered-By$": "Neos"
+      },
+      "url": [
+        "/neos/",
+        "/_Resources/"
+      ],
+      "meta": {
+        "generator": "^Neos ?CMS ?([\\d.]+)?"
+      },
+      "robots": [
+        "/neos/",
+        "Disallow: /neos/"
+      ],
+      "scriptSrc": [
+        "/_Resources/Static/",
+        "/neos/neos-ui/"
+      ],
+      "scriptjs": {
+        "Neos": ""
+      },
+      "implies": [
+        "PHP"
+      ]
+    },
+    {
+      "name": "Backdrop CMS",
+      "category": "CMS",
+      "cookies": {
+        "^S?SESS[0-9a-f]{32}$": ""
+      },
+      "headers": {
+        "^X-Generator$": "^Backdrop CMS"
+      },
+      "url": [
+        "/core/",
+        "/files/"
+      ],
+      "meta": {
+        "generator": "^Backdrop CMS ?([\\d.]+)?"
+      },
+      "robots": [
+        "/core/",
+        "Disallow: /core/"
+      ],
+      "scriptSrc": [
+        "/core/misc/backdrop.js"
+      ],
+      "scriptjs": {
+        "Backdrop": ""
+      },
+      "implies": [
+        "PHP"
+      ]
+    },
+    {
+      "name": "OpenCms",
+      "category": "CMS",
+      "cookies": {
+        "^JSESSIONID$": "",
+        "^OpenCmsLocale$": ""
+      },
+      "headers": {
+        "^X-Powered-By$": "OpenCms"
+      },
+      "url": [
+        "/opencms/",
+        "/system/workplace/"
+      ],
+      "meta": {
+        "generator": "^OpenCms ?([\\d.]+)?"
+      },
+      "robots": [
+        "/opencms/system/",
+        "Disallow: /opencms/system/"
+      ],
+      "scriptSrc": [
+        "/opencms/system/workplace/"
+      ],
+      "scriptjs": {},
+      "implies": [
+        "Java"
+      ]
+    },
+    {
+      "name": "Hippo CMS / BloomReach",
+      "category": "CMS",
+      "cookies": {
+        "^JSESSIONID$": ""
+      },
+      "headers": {
+        "^X-Powered-By$": "Hippo CMS|BloomReach"
+      },
+      "url": [
+        "/site/",
+        "/cms/",
+        "/binaries/"
+      ],
+      "meta": {
+        "generator": "^Hippo CMS ?([\\d.]+)?|^BloomReach"
+      },
+      "robots": [
+        "/cms/",
+        "Disallow: /cms/"
+      ],
+      "scriptSrc": [
+        "/cms/skin/",
+        "/site/binaries/"
+      ],
+      "scriptjs": {},
+      "implies": [
+        "Java"
+      ]
+    },
+    {
+      "name": "eZ Platform / Ibexa DXP",
+      "category": "CMS",
+      "cookies": {
+        "^eZSESSID$": "",
+        "^ezpublish_session$": ""
+      },
+      "headers": {
+        "^X-Powered-By$": "eZ Platform|Ibexa"
+      },
+      "url": [
+        "/var/ezdemo_site/",
+        "/ibexa/"
+      ],
+      "meta": {
+        "generator": "^eZ Platform ?([\\d.]+)?|^Ibexa ?DXP ?([\\d.]+)?"
+      },
+      "robots": [
+        "/ibexa/",
+        "Disallow: /ibexa/"
+      ],
+      "scriptSrc": [
+        "/bundles/ezplatform",
+        "/bundles/ibexa"
+      ],
+      "scriptjs": {},
+      "implies": [
+        "Symfony"
+      ]
+    },
+    {
+      "name": "Kirby CMS",
+      "category": "CMS",
+      "cookies": {
+        "^kirby_session$": ""
+      },
+      "headers": {
+        "^X-Powered-By$": "Kirby"
+      },
+      "url": [
+        "/panel/",
+        "/content/"
+      ],
+      "meta": {
+        "generator": "^Kirby ?([\\d.]+)?"
+      },
+      "robots": [
+        "/panel/",
+        "Disallow: /panel/"
+      ],
+      "scriptSrc": [
+        "/panel/js/",
+        "/media/panel/"
+      ],
+      "scriptjs": {
+        "panel": ""
+      },
+      "implies": [
+        "PHP"
+      ]
+    },
+    {
+      "name": "ProcessWire",
+      "category": "CMS",
+      "cookies": {
+        "^wire_challenge_": "",
+        "^PHPSESSID$": ""
+      },
+      "headers": {
+        "^X-Powered-By$": "ProcessWire"
+      },
+      "url": [
+        "/processwire/",
+        "/site/templates/"
+      ],
+      "meta": {
+        "generator": "^ProcessWire ?([\\d.]+)?"
+      },
+      "robots": [
+        "/processwire/",
+        "Disallow: /processwire/"
+      ],
+      "scriptSrc": [
+        "/wire/templates-admin/",
+        "/site/templates/"
+      ],
+      "scriptjs": {
+        "ProcessWire": ""
+      },
+      "implies": [
+        "PHP"
+      ]
+    },
+    {
+      "name": "Perch CMS",
+      "category": "CMS",
+      "cookies": {
+        "^perch_": ""
+      },
+      "headers": {
+        "^X-Powered-By$": "Perch"
+      },
+      "url": [
+        "/perch/",
+        "/resources/perch/"
+      ],
+      "meta": {
+        "generator": "^Perch ?([\\d.]+)?"
+      },
+      "robots": [
+        "/perch/",
+        "Disallow: /perch/"
+      ],
+      "scriptSrc": [
+        "/resources/perch/"
+      ],
+      "scriptjs": {},
+      "implies": [
+        "PHP"
+      ]
+    },
+    {
+      "name": "Jahia",
+      "category": "CMS",
+      "cookies": {
+        "^JSESSIONID$": "",
+        "^jahia\\.": ""
+      },
+      "headers": {
+        "^X-Powered-By$": "Jahia"
+      },
+      "url": [
+        "/jahia/",
+        "/cms/render/"
+      ],
+      "meta": {
+        "generator": "^Jahia ?([\\d.]+)?"
+      },
+      "robots": [
+        "/jahia/",
+        "Disallow: /jahia/"
+      ],
+      "scriptSrc": [
+        "/modules/",
+        "/engines/"
+      ],
+      "scriptjs": {},
+      "implies": [
+        "Java"
+      ]
+    },
+    {
+      "name": "Sitefinity",
+      "category": "CMS",
+      "cookies": {
+        "^.ASPXFORMSAUTH$": "",
+        "^sf_": ""
+      },
+      "headers": {
+        "^X-Powered-By$": "Sitefinity"
+      },
+      "url": [
+        "/Sitefinity/",
+        "/sfimages/"
+      ],
+      "meta": {
+        "generator": "^Sitefinity ?([\\d.]+)?"
+      },
+      "robots": [
+        "/Sitefinity/",
+        "Disallow: /Sitefinity/"
+      ],
+      "scriptSrc": [
+        "/ResourcePackages/",
+        "/Sitefinity/WebsiteTemplates/"
+      ],
+      "scriptjs": {
+        "Telerik": ""
+      },
+      "implies": [
+        "ASP.NET"
+      ]
+    },
+    {
+      "name": "GraphCMS / Hygraph",
+      "category": "CMS",
+      "cookies": {},
+      "headers": {
+        "^X-Hygraph-": ""
+      },
+      "url": [
+        "api-eu-central-1.hygraph.com",
+        "api-eu-central-1.graphcms.com"
+      ],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [
+        "hygraph.com"
+      ],
+      "scriptjs": {}
+    },
+    {
+      "name": "Prismic",
+      "category": "CMS",
+      "cookies": {
+        "^io.prismic.preview$": ""
+      },
+      "headers": {
+        "^X-Powered-By$": "Prismic"
+      },
+      "url": [
+        ".prismic.io",
+        "/previews/"
+      ],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [
+        "static.cdn.prismic.io"
+      ],
+      "scriptjs": {
+        "Prismic": ""
+      }
+    },
+    {
+      "name": "Storyblok",
+      "category": "CMS",
+      "cookies": {
+        "^storyblok": ""
+      },
+      "headers": {
+        "^X-Powered-By$": "Storyblok"
+      },
+      "url": [
+        "a.storyblok.com",
+        "app.storyblok.com"
+      ],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [
+        "app.storyblok.com/f/storyblok-"
+      ],
+      "scriptjs": {
+        "storyblok": ""
+      }
+    },
+    {
+      "name": "Netlify CMS / Decap CMS",
+      "category": "CMS",
+      "cookies": {},
+      "headers": {},
+      "url": [
+        "/admin/config.yml",
+        "/admin/#/"
+      ],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [
+        "/admin/decap-cms",
+        "/admin/netlify-cms"
+      ],
+      "scriptjs": {
+        "CMS": "",
+        "decap-cms": ""
+      }
+    },
+    {
+      "name": "NetCat CMS",
+      "category": "CMS",
+      "cookies": {
+        "^netcat_session$": ""
+      },
+      "headers": {
+        "^X-Powered-By$": "NetCat"
+      },
+      "url": [
+        "/netcat/",
+        "/ii/"
+      ],
+      "meta": {
+        "generator": "^NetCat ?([\\d.]+)?"
+      },
+      "robots": [
+        "/netcat/",
+        "Disallow: /netcat/"
+      ],
+      "scriptSrc": [
+        "/netcat/modules/"
+      ],
+      "scriptjs": {},
+      "implies": [
+        "PHP"
+      ]
+    },
+    {
+      "name": "UMI.CMS",
+      "category": "CMS",
+      "cookies": {
+        "^UMI\\.CMS$": "",
+        "^umi_cms_session$": ""
+      },
+      "headers": {
+        "^X-Powered-By$": "UMI.CMS"
+      },
+      "url": [
+        "/udata/",
+        "/bitrix-like/"
+      ],
+      "meta": {
+        "generator": "^UMI\\.CMS ?([\\d.]+)?"
+      },
+      "robots": [
+        "/udata/",
+        "Disallow: /udata/"
+      ],
+      "scriptSrc": [
+        "/udata/"
+      ],
+      "scriptjs": {},
+      "implies": [
+        "PHP"
+      ]
+    },
+    {
+      "name": "AMIRO.CMS",
+      "category": "CMS",
+      "cookies": {
+        "^amiro_session$": ""
+      },
+      "headers": {
+        "^X-Powered-By$": "AMIRO.CMS"
+      },
+      "url": [
+        "/engine/",
+        "/templates/"
+      ],
+      "meta": {
+        "generator": "^AMIRO\\.CMS ?([\\d.]+)?"
+      },
+      "robots": [
+        "/engine/",
+        "Disallow: /engine/"
+      ],
+      "scriptSrc": [
+        "/engine/"
+      ],
+      "scriptjs": {},
+      "implies": [
+        "PHP"
+      ]
+    },
+    {
+      "name": "InstantCMS",
+      "category": "CMS",
+      "cookies": {
+        "^instantcms_session$": ""
+      },
+      "headers": {
+        "^X-Powered-By$": "InstantCMS"
+      },
+      "url": [
+        "/admin/",
+        "/upload/"
+      ],
+      "meta": {
+        "generator": "^InstantCMS ?([\\d.]+)?"
+      },
+      "robots": [
+        "/admin/",
+        "Disallow: /admin/"
+      ],
+      "scriptSrc": [
+        "/js/icms/"
+      ],
+      "scriptjs": {},
+      "implies": [
+        "PHP"
+      ]
+    },
+    {
+      "name": "DedeCMS",
+      "category": "CMS",
+      "cookies": {
+        "^DedeUserID$": "",
+        "^DedeLoginTime$": ""
+      },
+      "headers": {
+        "^X-Powered-By$": "DedeCMS"
+      },
+      "url": [
+        "/plus/",
+        "/data/",
+        "/templets/"
+      ],
+      "meta": {
+        "generator": "^DedeCMS ?([\\d.]+)?"
+      },
+      "robots": [
+        "/plus/",
+        "Disallow: /plus/"
+      ],
+      "scriptSrc": [
+        "/include/dedeajax",
+        "/templets/"
+      ],
+      "scriptjs": {},
+      "implies": [
+        "PHP"
+      ]
+    },
+    {
+      "name": "EmpireCMS",
+      "category": "CMS",
+      "cookies": {
+        "^ENC_admin_": ""
+      },
+      "headers": {
+        "^X-Powered-By$": "EmpireCMS"
+      },
+      "url": [
+        "/e/",
+        "/data/cache/"
+      ],
+      "meta": {
+        "generator": "^(帝国CMS|EmpireCMS) ?([\\d.]+)?"
+      },
+      "robots": [
+        "/e/admin/",
+        "Disallow: /e/admin/"
+      ],
+      "scriptSrc": [
+        "/e/data/",
+        "/e/class/"
+      ],
+      "scriptjs": {},
+      "implies": [
+        "PHP"
+      ]
+    },
+    {
+      "name": "PHPCMS",
+      "category": "CMS",
+      "cookies": {
+        "^PHPSESSID$": "",
+        "^phpcms_": ""
+      },
+      "headers": {
+        "^X-Powered-By$": "PHPCMS"
+      },
+      "url": [
+        "/phpcms/",
+        "/caches/"
+      ],
+      "meta": {
+        "generator": "^PHPCMS ?([\\d.]+)?"
+      },
+      "robots": [
+        "/phpcms/",
+        "Disallow: /phpcms/"
+      ],
+      "scriptSrc": [
+        "/phpcms/statics/"
+      ],
+      "scriptjs": {},
+      "implies": [
+        "PHP"
       ]
     }
   ]
