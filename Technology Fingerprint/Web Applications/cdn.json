@@ -1,0 +1,58 @@
+{
+  "technologies": [
+    {
+      "name": "Cloudflare",
+      "category": "CDN",
+      "cookies": {
+        "^__cf_bm$": "",
+        "^__cfduid$": "",
+        "^cf_clearance$": "",
+        "^__cflb$": ""
+      }
+    },
+    {
+      "name": "Amazon CloudFront (Signed Cookies)",
+      "category": "CDN",
+      "cookies": {
+        "^CloudFront-Policy$": "",
+        "^CloudFront-Signature$": "",
+        "^CloudFront-Key-Pair-Id$": ""
+      }
+    },
+    {
+      "name": "Azure Front Door",
+      "category": "CDN",
+      "cookies": {
+        "^ASLBSA$": "",
+        "^ASLBSACORS$": ""
+      }
+    },
+    {
+      "name": "Fastly",
+      "category": "CDN",
+      "cookies": {
+        "^fastly-": ""
+      }
+    },
+    {
+      "name": "Akamai Edge",
+      "category": "CDN",
+      "cookies": {
+        "^akacd_": "",
+        "^akaalb_": "",
+        "^AKA_A2$": "",
+        "^aka-cc$": "",
+        "^aka-ct$": "",
+        "^aka-cr$": ""
+      }
+    },
+    {
+      "name": "Cloudflare (extended)",
+      "category": "CDN",
+      "cookies": {
+        "^__cfruid$": "",
+        "^_cfuvid$": ""
+      }
+    }
+  ]
+}
