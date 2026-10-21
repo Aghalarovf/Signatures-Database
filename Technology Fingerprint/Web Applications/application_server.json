@@ -8,6 +8,26 @@
         "^WASReqURL$": "",
         "^WASPostParam$": ""
       },
+      "headers": {
+        "^Server$": "WebSphere Application Server",
+        "^X-Powered-By$": "Servlet/.*WebSphere"
+      },
+      "url": [
+        "/ibm/console/",
+        "/wps/portal/"
+      ],
+      "meta": {
+        "generator": "^IBM WebSphere ?([\\d.]+)?"
+      },
+      "robots": [
+        "/ibm/console/",
+        "Disallow: /ibm/console/"
+      ],
+      "scriptSrc": [
+        "/ibm/console/",
+        "/wps/"
+      ],
+      "scriptjs": {},
       "implies": [
         "Java"
       ]
@@ -16,8 +36,29 @@
       "name": "Oracle WebLogic",
       "category": "Application Server",
       "cookies": {
-        "^ADMINCONSOLESESSION$": ""
+        "^ADMINCONSOLESESSION$": "",
+        "^JSESSIONID$": ""
       },
+      "headers": {
+        "^Server$": "WebLogic Server|Oracle-WebLogic",
+        "^X-Powered-By$": "Servlet/.*WebLogic"
+      },
+      "url": [
+        "/console/",
+        "/console/login/LoginForm.jsp"
+      ],
+      "meta": {
+        "generator": "^Oracle WebLogic ?([\\d.]+)?"
+      },
+      "robots": [
+        "/console/",
+        "Disallow: /console/"
+      ],
+      "scriptSrc": [
+        "/console/framework/",
+        "/console/skins/"
+      ],
+      "scriptjs": {},
       "implies": [
         "Java"
       ]
@@ -28,7 +69,339 @@
       "cookies": {
         "^ORA_WWV_APP_\\d+$": "",
         "^WWV_FLOW_": ""
+      },
+      "headers": {
+        "^Server$": "Oracle Application Express"
+      },
+      "url": [
+        "/apex/",
+        "/ords/",
+        "/pls/apex/"
+      ],
+      "meta": {
+        "generator": "^Oracle Application Express ?([\\d.]+)?"
+      },
+      "robots": [
+        "/apex/",
+        "Disallow: /apex/admin"
+      ],
+      "scriptSrc": [
+        "/i/libraries/apex/",
+        "/ords/"
+      ],
+      "scriptjs": {
+        "apex": ""
       }
+    },
+    {
+      "name": "Apache Tomcat",
+      "category": "Application Server",
+      "cookies": {
+        "^JSESSIONID$": ""
+      },
+      "headers": {
+        "^Server$": "Apache-Coyote",
+        "^X-Powered-By$": "Servlet.*Tomcat"
+      },
+      "url": [
+        "/manager/html",
+        "/host-manager/html",
+        "/examples/servlets/"
+      ],
+      "meta": {
+        "generator": "^Apache Tomcat ?([\\d.]+)?"
+      },
+      "robots": [
+        "/manager/",
+        "Disallow: /manager/"
+      ],
+      "scriptSrc": [
+        "/manager/images/"
+      ],
+      "scriptjs": {},
+      "implies": [
+        "Java"
+      ]
+    },
+    {
+      "name": "JBoss / WildFly",
+      "category": "Application Server",
+      "cookies": {
+        "^JSESSIONID$": ""
+      },
+      "headers": {
+        "^Server$": "JBoss|WildFly",
+        "^X-Powered-By$": "Undertow"
+      },
+      "url": [
+        "/console/",
+        "/management",
+        "/jmx-console/"
+      ],
+      "meta": {
+        "generator": "^WildFly ?([\\d.]+)?|^JBoss ?([\\d.]+)?"
+      },
+      "robots": [
+        "/console/",
+        "Disallow: /console/"
+      ],
+      "scriptSrc": [
+        "/console/app/",
+        "/wildfly/"
+      ],
+      "scriptjs": {},
+      "implies": [
+        "Java"
+      ]
+    },
+    {
+      "name": "GlassFish",
+      "category": "Application Server",
+      "cookies": {
+        "^JSESSIONID$": ""
+      },
+      "headers": {
+        "^Server$": "GlassFish Server"
+      },
+      "url": [
+        "/common/",
+        "/management/domain/"
+      ],
+      "meta": {
+        "generator": "^GlassFish ?([\\d.]+)?"
+      },
+      "robots": [
+        "/common/",
+        "Disallow: /common/"
+      ],
+      "scriptSrc": [
+        "/theme/com/"
+      ],
+      "scriptjs": {},
+      "implies": [
+        "Java"
+      ]
+    },
+    {
+      "name": "Payara",
+      "category": "Application Server",
+      "cookies": {
+        "^JSESSIONID$": ""
+      },
+      "headers": {
+        "^Server$": "Payara Server"
+      },
+      "url": [
+        "/common/",
+        "/management/domain/"
+      ],
+      "meta": {
+        "generator": "^Payara ?([\\d.]+)?"
+      },
+      "robots": [
+        "/common/",
+        "Disallow: /common/"
+      ],
+      "scriptSrc": [
+        "/theme/com/"
+      ],
+      "scriptjs": {},
+      "implies": [
+        "Java"
+      ]
+    },
+    {
+      "name": "Eclipse Jetty",
+      "category": "Application Server",
+      "cookies": {
+        "^JSESSIONID$": ""
+      },
+      "headers": {
+        "^Server$": "Jetty"
+      },
+      "url": [
+        "/status.html",
+        "/hello"
+      ],
+      "meta": {
+        "generator": "^Jetty ?([\\d.]+)?"
+      },
+      "robots": [],
+      "scriptSrc": [],
+      "scriptjs": {},
+      "implies": [
+        "Java"
+      ]
+    },
+    {
+      "name": "Caucho Resin",
+      "category": "Application Server",
+      "cookies": {
+        "^JSESSIONID$": ""
+      },
+      "headers": {
+        "^Server$": "Resin"
+      },
+      "url": [
+        "/resin-doc/",
+        "/resin-admin/"
+      ],
+      "meta": {
+        "generator": "^Resin ?([\\d.]+)?"
+      },
+      "robots": [
+        "/resin-admin/",
+        "Disallow: /resin-admin/"
+      ],
+      "scriptSrc": [],
+      "scriptjs": {},
+      "implies": [
+        "Java"
+      ]
+    },
+    {
+      "name": "Apache TomEE",
+      "category": "Application Server",
+      "cookies": {
+        "^JSESSIONID$": ""
+      },
+      "headers": {
+        "^Server$": "Apache-Coyote",
+        "^X-Powered-By$": "TomEE"
+      },
+      "url": [
+        "/tomee/",
+        "/manager/html"
+      ],
+      "meta": {
+        "generator": "^Apache TomEE ?([\\d.]+)?"
+      },
+      "robots": [
+        "/manager/",
+        "Disallow: /manager/"
+      ],
+      "scriptSrc": [],
+      "scriptjs": {},
+      "implies": [
+        "Java"
+      ]
+    },
+    {
+      "name": "Microsoft IIS",
+      "category": "Application Server",
+      "cookies": {
+        "^ASP\\.NET_SessionId$": ""
+      },
+      "headers": {
+        "^Server$": "Microsoft-IIS/[\\d.]+",
+        "^X-Powered-By$": "ASP\\.NET"
+      },
+      "url": [
+        "/iisstart.htm",
+        "/aspnet_client/"
+      ],
+      "meta": {
+        "generator": "^Microsoft IIS ?([\\d.]+)?"
+      },
+      "robots": [],
+      "scriptSrc": [
+        "/aspnet_client/"
+      ],
+      "scriptjs": {},
+      "implies": [
+        "ASP.NET"
+      ]
+    },
+    {
+      "name": "Zend Server",
+      "category": "Application Server",
+      "cookies": {
+        "^ZDE_": ""
+      },
+      "headers": {
+        "^X-Powered-By$": "Zend Server"
+      },
+      "url": [
+        "/ZendServer/",
+        "/zend_monitor/"
+      ],
+      "meta": {
+        "generator": "^Zend Server ?([\\d.]+)?"
+      },
+      "robots": [
+        "/ZendServer/",
+        "Disallow: /ZendServer/"
+      ],
+      "scriptSrc": [],
+      "scriptjs": {},
+      "implies": [
+        "PHP"
+      ]
+    },
+    {
+      "name": "Phusion Passenger",
+      "category": "Application Server",
+      "cookies": {},
+      "headers": {
+        "^Server$": "Phusion Passenger|nginx.*Phusion",
+        "^X-Powered-By$": "Phusion Passenger"
+      },
+      "url": [],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [],
+      "scriptjs": {},
+      "implies": [
+        "Ruby"
+      ]
+    },
+    {
+      "name": "uWSGI",
+      "category": "Application Server",
+      "cookies": {},
+      "headers": {
+        "^Server$": "uWSGI"
+      },
+      "url": [],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [],
+      "scriptjs": {},
+      "implies": [
+        "Python"
+      ]
+    },
+    {
+      "name": "Gunicorn",
+      "category": "Application Server",
+      "cookies": {},
+      "headers": {
+        "^Server$": "gunicorn"
+      },
+      "url": [],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [],
+      "scriptjs": {},
+      "implies": [
+        "Python"
+      ]
+    },
+    {
+      "name": "PM2 / Node.js Process Manager",
+      "category": "Application Server",
+      "cookies": {},
+      "headers": {
+        "^X-Powered-By$": "Express|Node\\.js"
+      },
+      "url": [],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [],
+      "scriptjs": {},
+      "implies": [
+        "Node.js"
+      ]
     }
   ]
 }
