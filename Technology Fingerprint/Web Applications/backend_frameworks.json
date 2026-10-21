@@ -1,0 +1,368 @@
+{
+  "technologies": [
+    {
+      "name": "Laravel",
+      "category": "Backend Framework",
+      "cookies": {
+        "^laravel_session$": "",
+        "^XSRF-TOKEN$": ""
+      },
+      "headers": {
+        "^X-Powered-By$": "PHP"
+      },
+      "url": [
+        "/vendor/laravel/",
+        "/storage/"
+      ],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [],
+      "scriptjs": {
+        "Laravel": ""
+      },
+      "implies": [
+        "PHP"
+      ]
+    },
+    {
+      "name": "Symfony",
+      "category": "Backend Framework",
+      "cookies": {
+        "^PHPSESSID$": ""
+      },
+      "headers": {
+        "^X-Debug-Token$": "",
+        "^X-Debug-Token-Link$": ""
+      },
+      "url": [
+        "/_profiler/",
+        "/_wdt/"
+      ],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [
+        "/bundles/"
+      ],
+      "scriptjs": {},
+      "implies": [
+        "PHP"
+      ]
+    },
+    {
+      "name": "Django",
+      "category": "Backend Framework",
+      "cookies": {
+        "^csrftoken$": "",
+        "^sessionid$": ""
+      },
+      "headers": {
+        "^X-Frame-Options$": "SAMEORIGIN"
+      },
+      "url": [
+        "/static/admin/",
+        "/__debug__/"
+      ],
+      "meta": {},
+      "robots": [
+        "/admin/",
+        "Disallow: /admin/"
+      ],
+      "scriptSrc": [
+        "/static/admin/js/"
+      ],
+      "scriptjs": {},
+      "implies": [
+        "Python"
+      ]
+    },
+    {
+      "name": "Flask",
+      "category": "Backend Framework",
+      "cookies": {
+        "^session$": ""
+      },
+      "headers": {
+        "^Server$": "Werkzeug"
+      },
+      "url": [],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [],
+      "scriptjs": {},
+      "implies": [
+        "Python"
+      ]
+    },
+    {
+      "name": "Ruby on Rails",
+      "category": "Backend Framework",
+      "cookies": {
+        "^_rails_session$": "",
+        "^_session_id$": ""
+      },
+      "headers": {
+        "^X-Runtime$": "",
+        "^X-Powered-By$": "Phusion Passenger"
+      },
+      "url": [
+        "/assets/application-",
+        "/rails/"
+      ],
+      "meta": {
+        "csrf-param": "authenticity_token"
+      },
+      "robots": [],
+      "scriptSrc": [
+        "/assets/application-"
+      ],
+      "scriptjs": {
+        "Rails": ""
+      },
+      "implies": [
+        "Ruby"
+      ]
+    },
+    {
+      "name": "Express.js",
+      "category": "Backend Framework",
+      "cookies": {
+        "^connect.sid$": ""
+      },
+      "headers": {
+        "^X-Powered-By$": "Express"
+      },
+      "url": [],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [],
+      "scriptjs": {},
+      "implies": [
+        "Node.js"
+      ]
+    },
+    {
+      "name": "NestJS",
+      "category": "Backend Framework",
+      "cookies": {},
+      "headers": {
+        "^X-Powered-By$": "Express"
+      },
+      "url": [
+        "/api/v",
+        "/swagger"
+      ],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [],
+      "scriptjs": {},
+      "implies": [
+        "Node.js"
+      ]
+    },
+    {
+      "name": "Spring Boot",
+      "category": "Backend Framework",
+      "cookies": {
+        "^JSESSIONID$": ""
+      },
+      "headers": {
+        "^X-Application-Context$": ""
+      },
+      "url": [
+        "/actuator/",
+        "/actuator/health"
+      ],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [],
+      "scriptjs": {},
+      "implies": [
+        "Java"
+      ]
+    },
+    {
+      "name": "ASP.NET MVC / Core",
+      "category": "Backend Framework",
+      "cookies": {
+        "^\\.AspNetCore\\.": "",
+        "^\\.AspNetCore\\.Antiforgery\\.": ""
+      },
+      "headers": {
+        "^X-Powered-By$": "ASP\\.NET",
+        "^X-AspNetMvc-Version$": ""
+      },
+      "url": [
+        "/__browserLink/"
+      ],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [
+        "/lib/bootstrap/"
+      ],
+      "scriptjs": {},
+      "implies": [
+        ".NET"
+      ]
+    },
+    {
+      "name": "CodeIgniter",
+      "category": "Backend Framework",
+      "cookies": {
+        "^ci_session$": ""
+      },
+      "headers": {},
+      "url": [
+        "/index.php/"
+      ],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [],
+      "scriptjs": {},
+      "implies": [
+        "PHP"
+      ]
+    },
+    {
+      "name": "CakePHP",
+      "category": "Backend Framework",
+      "cookies": {
+        "^CAKEPHP$": ""
+      },
+      "headers": {
+        "^X-Powered-By$": "CakePHP"
+      },
+      "url": [],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [],
+      "scriptjs": {},
+      "implies": [
+        "PHP"
+      ]
+    },
+    {
+      "name": "Yii Framework",
+      "category": "Backend Framework",
+      "cookies": {
+        "^YII_CSRF_TOKEN$": "",
+        "^PHPSESSID$": ""
+      },
+      "headers": {},
+      "url": [],
+      "meta": {
+        "generator": "^Yii ?([\\d.]+)?"
+      },
+      "robots": [],
+      "scriptSrc": [
+        "/assets/"
+      ],
+      "scriptjs": {
+        "yii": ""
+      },
+      "implies": [
+        "PHP"
+      ]
+    },
+    {
+      "name": "FastAPI",
+      "category": "Backend Framework",
+      "cookies": {},
+      "headers": {
+        "^Server$": "uvicorn"
+      },
+      "url": [
+        "/docs",
+        "/openapi.json"
+      ],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [],
+      "scriptjs": {},
+      "implies": [
+        "Python"
+      ]
+    },
+    {
+      "name": "Phoenix Framework",
+      "category": "Backend Framework",
+      "cookies": {
+        "^_.*_key$": ""
+      },
+      "headers": {
+        "^X-Request-Id$": ""
+      },
+      "url": [
+        "/phoenix/"
+      ],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [
+        "phoenix.js"
+      ],
+      "scriptjs": {
+        "Phoenix": ""
+      },
+      "implies": [
+        "Elixir"
+      ]
+    },
+    {
+      "name": "Gin (Go)",
+      "category": "Backend Framework",
+      "cookies": {
+        "^gin_session$": ""
+      },
+      "headers": {},
+      "url": [],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [],
+      "scriptjs": {},
+      "implies": [
+        "Go"
+      ]
+    },
+    {
+      "name": "Play Framework",
+      "category": "Backend Framework",
+      "cookies": {
+        "^PLAY_SESSION$": ""
+      },
+      "headers": {
+        "^X-Powered-By$": "Play"
+      },
+      "url": [],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [],
+      "scriptjs": {},
+      "implies": [
+        "Java"
+      ]
+    },
+    {
+      "name": "Meteor",
+      "category": "Backend Framework",
+      "cookies": {
+        "^meteor_login_token$": ""
+      },
+      "headers": {},
+      "url": [
+        "/sockjs/",
+        "/packages/"
+      ],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [
+        "/meteor_runtime_config.js"
+      ],
+      "scriptjs": {
+        "Meteor": "",
+        "__meteor_runtime_config__": ""
+      },
+      "implies": [
+        "Node.js"
+      ]
+    }
+  ]
+}
