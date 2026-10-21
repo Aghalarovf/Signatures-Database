@@ -8,7 +8,37 @@
         "^__cfduid$": "",
         "^cf_clearance$": "",
         "^__cflb$": ""
-      }
+      },
+      "headers": {
+        "^Server$": "cloudflare",
+        "^CF-RAY$": "",
+        "^CF-Cache-Status$": ""
+      },
+      "url": [],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [
+        "cdnjs.cloudflare.com"
+      ],
+      "scriptjs": {}
+    },
+    {
+      "name": "Cloudflare (extended)",
+      "category": "CDN",
+      "cookies": {
+        "^__cfruid$": "",
+        "^_cfuvid$": ""
+      },
+      "headers": {
+        "^CF-RAY$": "",
+        "^CF-Cache-Status$": "",
+        "^cf-edge-cache$": ""
+      },
+      "url": [],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [],
+      "scriptjs": {}
     },
     {
       "name": "Amazon CloudFront (Signed Cookies)",
@@ -17,7 +47,36 @@
         "^CloudFront-Policy$": "",
         "^CloudFront-Signature$": "",
         "^CloudFront-Key-Pair-Id$": ""
-      }
+      },
+      "headers": {
+        "^X-Cache$": "cloudfront|CloudFront",
+        "^X-Amz-Cf-Id$": "",
+        "^X-Amz-Cf-Pop$": ""
+      },
+      "url": [],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [],
+      "scriptjs": {}
+    },
+    {
+      "name": "Amazon CloudFront",
+      "category": "CDN",
+      "cookies": {},
+      "headers": {
+        "^Via$": "CloudFront",
+        "^X-Amz-Cf-Id$": "",
+        "^X-Amz-Cf-Pop$": ""
+      },
+      "url": [
+        "cloudfront.net"
+      ],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [
+        "cloudfront.net"
+      ],
+      "scriptjs": {}
     },
     {
       "name": "Azure Front Door",
@@ -25,14 +84,35 @@
       "cookies": {
         "^ASLBSA$": "",
         "^ASLBSACORS$": ""
-      }
+      },
+      "headers": {
+        "^X-Azure-Ref$": "",
+        "^X-Fd-": ""
+      },
+      "url": [
+        "azurefd.net"
+      ],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [],
+      "scriptjs": {}
     },
     {
       "name": "Fastly",
       "category": "CDN",
       "cookies": {
         "^fastly-": ""
-      }
+      },
+      "headers": {
+        "^X-Served-By$": "cache-",
+        "^X-Fastly-Request-ID$": "",
+        "^Fastly-Debug-Digest$": ""
+      },
+      "url": [],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [],
+      "scriptjs": {}
     },
     {
       "name": "Akamai Edge",
@@ -44,15 +124,228 @@
         "^aka-cc$": "",
         "^aka-ct$": "",
         "^aka-cr$": ""
-      }
+      },
+      "headers": {
+        "^X-Akamai-Transformed$": "",
+        "^X-Akamai-Request-ID$": "",
+        "^Server$": "AkamaiGHost"
+      },
+      "url": [],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [],
+      "scriptjs": {}
     },
     {
-      "name": "Cloudflare (extended)",
+      "name": "KeyCDN",
+      "category": "CDN",
+      "cookies": {},
+      "headers": {
+        "^Server$": "KeyCDN",
+        "^X-Edge-Location$": ""
+      },
+      "url": [
+        "kxcdn.com"
+      ],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [
+        "kxcdn.com"
+      ],
+      "scriptjs": {}
+    },
+    {
+      "name": "StackPath",
+      "category": "CDN",
+      "cookies": {},
+      "headers": {
+        "^Server$": "StackPath",
+        "^X-HW$": ""
+      },
+      "url": [
+        "stackpathcdn.com",
+        "stackpathdns.com"
+      ],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [
+        "stackpathcdn.com"
+      ],
+      "scriptjs": {}
+    },
+    {
+      "name": "Google Cloud CDN",
+      "category": "CDN",
+      "cookies": {},
+      "headers": {
+        "^Server$": "Google Frontend|gws",
+        "^X-Goog-": ""
+      },
+      "url": [
+        "googleusercontent.com"
+      ],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [],
+      "scriptjs": {}
+    },
+    {
+      "name": "Limelight Networks",
+      "category": "CDN",
+      "cookies": {},
+      "headers": {
+        "^Server$": "LLNW|Limelight",
+        "^X-LLNW-": ""
+      },
+      "url": [
+        "llnwd.net"
+      ],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [],
+      "scriptjs": {}
+    },
+    {
+      "name": "CDN77",
+      "category": "CDN",
+      "cookies": {},
+      "headers": {
+        "^Server$": "CDN77-Turbo",
+        "^X-77-": ""
+      },
+      "url": [
+        "cdn77.org",
+        "rsc.cdn77.org"
+      ],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [
+        "cdn77.org"
+      ],
+      "scriptjs": {}
+    },
+    {
+      "name": "Bunny CDN",
+      "category": "CDN",
+      "cookies": {},
+      "headers": {
+        "^Server$": "BunnyCDN",
+        "^CDN-": ""
+      },
+      "url": [
+        "b-cdn.net"
+      ],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [
+        "b-cdn.net"
+      ],
+      "scriptjs": {}
+    },
+    {
+      "name": "jsDelivr",
+      "category": "CDN",
+      "cookies": {},
+      "headers": {
+        "^X-Served-By$": "cdn.jsdelivr.net"
+      },
+      "url": [
+        "cdn.jsdelivr.net"
+      ],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [
+        "cdn.jsdelivr.net"
+      ],
+      "scriptjs": {}
+    },
+    {
+      "name": "cdnjs (Cloudflare)",
+      "category": "CDN",
+      "cookies": {},
+      "headers": {},
+      "url": [
+        "cdnjs.cloudflare.com"
+      ],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [
+        "cdnjs.cloudflare.com"
+      ],
+      "scriptjs": {}
+    },
+    {
+      "name": "Alibaba Cloud CDN",
       "category": "CDN",
       "cookies": {
-        "^__cfruid$": "",
-        "^_cfuvid$": ""
-      }
+        "^aliyungf_tc$": ""
+      },
+      "headers": {
+        "^Server$": "Tengine",
+        "^Via$": "cache.*aliyun"
+      },
+      "url": [
+        "alicdn.com"
+      ],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [
+        "alicdn.com"
+      ],
+      "scriptjs": {}
+    },
+    {
+      "name": "Tencent Cloud CDN",
+      "category": "CDN",
+      "cookies": {},
+      "headers": {
+        "^Server$": "Tencent",
+        "^X-NWS-LOG-UUID$": ""
+      },
+      "url": [
+        "myqcloud.com"
+      ],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [
+        "myqcloud.com"
+      ],
+      "scriptjs": {}
+    },
+    {
+      "name": "Edgio / Verizon EdgeCast",
+      "category": "CDN",
+      "cookies": {},
+      "headers": {
+        "^Server$": "ECS|ECAcc",
+        "^X-EC-": ""
+      },
+      "url": [
+        "edgecastcdn.net",
+        "edgio.net"
+      ],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [],
+      "scriptjs": {}
+    },
+    {
+      "name": "Microsoft Azure CDN",
+      "category": "CDN",
+      "cookies": {},
+      "headers": {
+        "^X-Cache$": "",
+        "^X-MSEdge-Ref$": ""
+      },
+      "url": [
+        "azureedge.net"
+      ],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [
+        "azureedge.net"
+      ],
+      "scriptjs": {}
     }
   ]
 }
