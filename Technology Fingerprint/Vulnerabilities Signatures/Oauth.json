@@ -1,0 +1,378 @@
+{
+  "technologies": [
+    {
+      "name": "Google OAuth / Sign in with Google",
+      "category": "OAuth Provider",
+      "cookies": {},
+      "headers": {},
+      "url": [
+        "accounts.google.com/o/oauth2/",
+        "accounts.google.com/gsi/"
+      ],
+      "meta": {
+        "google-signin-client_id": ""
+      },
+      "robots": [],
+      "scriptSrc": [
+        "accounts.google.com/gsi/client",
+        "apis.google.com/js/platform.js"
+      ],
+      "scriptjs": {
+        "google.accounts.id": ""
+      }
+    },
+    {
+      "name": "Facebook Login",
+      "category": "OAuth Provider",
+      "cookies": {
+        "^fbsr_\\d+$": ""
+      },
+      "headers": {},
+      "url": [
+        "facebook.com/v\\d+\\.\\d+/dialog/oauth",
+        "facebook.com/dialog/oauth"
+      ],
+      "meta": {
+        "fb:app_id": ""
+      },
+      "robots": [],
+      "scriptSrc": [
+        "connect.facebook.net"
+      ],
+      "scriptjs": {
+        "FB": "",
+        "fbAsyncInit": ""
+      }
+    },
+    {
+      "name": "GitHub OAuth",
+      "category": "OAuth Provider",
+      "cookies": {},
+      "headers": {},
+      "url": [
+        "github.com/login/oauth/authorize"
+      ],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [],
+      "scriptjs": {}
+    },
+    {
+      "name": "Sign in with Apple",
+      "category": "OAuth Provider",
+      "cookies": {},
+      "headers": {},
+      "url": [
+        "appleid.apple.com/auth/authorize"
+      ],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [
+        "appleid.cdn-apple.com"
+      ],
+      "scriptjs": {
+        "AppleID": ""
+      }
+    },
+    {
+      "name": "LinkedIn OAuth",
+      "category": "OAuth Provider",
+      "cookies": {},
+      "headers": {},
+      "url": [
+        "linkedin.com/oauth/v2/authorization"
+      ],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [
+        "platform.linkedin.com"
+      ],
+      "scriptjs": {
+        "IN": ""
+      }
+    },
+    {
+      "name": "Twitter / X OAuth",
+      "category": "OAuth Provider",
+      "cookies": {},
+      "headers": {},
+      "url": [
+        "twitter.com/i/oauth2/authorize",
+        "x.com/i/oauth2/authorize"
+      ],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [
+        "platform.twitter.com"
+      ],
+      "scriptjs": {
+        "twttr": ""
+      }
+    },
+    {
+      "name": "Discord OAuth",
+      "category": "OAuth Provider",
+      "cookies": {},
+      "headers": {},
+      "url": [
+        "discord.com/api/oauth2/authorize",
+        "discord.com/oauth2/authorize"
+      ],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [],
+      "scriptjs": {}
+    },
+    {
+      "name": "Login with Amazon",
+      "category": "OAuth Provider",
+      "cookies": {},
+      "headers": {},
+      "url": [
+        "amazon.com/ap/oa"
+      ],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [
+        "api-cdn.amazon.com/sdk/login1.js"
+      ],
+      "scriptjs": {
+        "amazon": ""
+      }
+    },
+    {
+      "name": "Spotify OAuth",
+      "category": "OAuth Provider",
+      "cookies": {},
+      "headers": {},
+      "url": [
+        "accounts.spotify.com/authorize"
+      ],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [],
+      "scriptjs": {}
+    },
+    {
+      "name": "Twitch OAuth",
+      "category": "OAuth Provider",
+      "cookies": {},
+      "headers": {},
+      "url": [
+        "id.twitch.tv/oauth2/authorize"
+      ],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [],
+      "scriptjs": {}
+    },
+    {
+      "name": "Microsoft OAuth (Live/MSA)",
+      "category": "OAuth Provider",
+      "cookies": {
+        "^MSPAuth$": "",
+        "^MSPProf$": ""
+      },
+      "headers": {},
+      "url": [
+        "login.live.com/oauth20_authorize.srf"
+      ],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [],
+      "scriptjs": {}
+    },
+    {
+      "name": "Slack OAuth",
+      "category": "OAuth Provider",
+      "cookies": {},
+      "headers": {},
+      "url": [
+        "slack.com/oauth/v2/authorize"
+      ],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [],
+      "scriptjs": {}
+    },
+    {
+      "name": "VK OAuth",
+      "category": "OAuth Provider",
+      "cookies": {},
+      "headers": {},
+      "url": [
+        "oauth.vk.com/authorize"
+      ],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [
+        "vk.com/js/api/openapi.js"
+      ],
+      "scriptjs": {
+        "VK": ""
+      }
+    },
+    {
+      "name": "ORY Hydra",
+      "category": "OAuth Provider",
+      "cookies": {
+        "^ory_hydra_session$": ""
+      },
+      "headers": {
+        "^Ory-": ""
+      },
+      "url": [
+        "/oauth2/auth",
+        "/oauth2/token",
+        "/.well-known/openid-configuration"
+      ],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [],
+      "scriptjs": {}
+    },
+    {
+      "name": "ORY Kratos",
+      "category": "OAuth Provider",
+      "cookies": {
+        "^ory_kratos_session$": ""
+      },
+      "headers": {
+        "^Ory-": ""
+      },
+      "url": [
+        "/self-service/login",
+        "/self-service/registration"
+      ],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [],
+      "scriptjs": {}
+    },
+    {
+      "name": "Duende/IdentityServer",
+      "category": "OAuth Provider",
+      "cookies": {
+        "^idsrv$": "",
+        "^idsrv.session$": ""
+      },
+      "headers": {},
+      "url": [
+        "/connect/authorize",
+        "/connect/token",
+        "/.well-known/openid-configuration"
+      ],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [],
+      "scriptjs": {},
+      "implies": [
+        ".NET"
+      ]
+    },
+    {
+      "name": "Gluu Server",
+      "category": "OAuth Provider",
+      "cookies": {
+        "^oxd_session$": "",
+        "^session_state$": ""
+      },
+      "headers": {
+        "^Server$": "Gluu"
+      },
+      "url": [
+        "/oxauth/restv1/authorize",
+        "/.well-known/openid-configuration"
+      ],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [],
+      "scriptjs": {},
+      "implies": [
+        "Java"
+      ]
+    },
+    {
+      "name": "WSO2 Identity Server",
+      "category": "OAuth Provider",
+      "cookies": {
+        "^commonAuthId$": "",
+        "^opbs$": ""
+      },
+      "headers": {},
+      "url": [
+        "/oauth2/authorize",
+        "/oidc/authorize"
+      ],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [
+        "/authenticationendpoint/"
+      ],
+      "scriptjs": {},
+      "implies": [
+        "Java"
+      ]
+    },
+    {
+      "name": "Authentik",
+      "category": "OAuth Provider",
+      "cookies": {
+        "^authentik_session$": ""
+      },
+      "headers": {
+        "^X-Powered-By$": "authentik"
+      },
+      "url": [
+        "/application/o/authorize/",
+        "/if/flow/"
+      ],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [
+        "/static/dist/"
+      ],
+      "scriptjs": {}
+    },
+    {
+      "name": "Zitadel",
+      "category": "OAuth Provider",
+      "cookies": {
+        "^zitadel.session$": ""
+      },
+      "headers": {
+        "^X-Zitadel-": ""
+      },
+      "url": [
+        "/oauth/v2/authorize",
+        "/.well-known/openid-configuration"
+      ],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [],
+      "scriptjs": {}
+    },
+    {
+      "name": "SuperTokens",
+      "category": "OAuth Provider",
+      "cookies": {
+        "^sAccessToken$": "",
+        "^sRefreshToken$": "",
+        "^sIdRefreshToken$": ""
+      },
+      "headers": {
+        "^fdi-version$": ""
+      },
+      "url": [
+        "/auth/signin",
+        "/auth/signup"
+      ],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [],
+      "scriptjs": {
+        "supertokens": ""
+      }
+    }
+  ]
+}
