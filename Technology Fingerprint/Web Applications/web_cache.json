@@ -1,0 +1,369 @@
+{
+  "technologies": [
+    {
+      "name": "Varnish Cache",
+      "category": "Web Cache",
+      "cookies": {},
+      "headers": {
+        "^X-Varnish$": "",
+        "^Via$": "varnish",
+        "^X-Cache$": "HIT from varnish|MISS from varnish"
+      },
+      "url": [],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [],
+      "scriptjs": {}
+    },
+    {
+      "name": "Squid",
+      "category": "Web Cache",
+      "cookies": {},
+      "headers": {
+        "^Via$": "squid",
+        "^X-Cache$": "HIT from|MISS from",
+        "^X-Cache-Lookup$": ""
+      },
+      "url": [
+        "/squid-internal-mgr/"
+      ],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [],
+      "scriptjs": {}
+    },
+    {
+      "name": "Nginx Cache (proxy_cache / fastcgi_cache)",
+      "category": "Web Cache",
+      "cookies": {},
+      "headers": {
+        "^X-Cache-Status$": "HIT|MISS|BYPASS|EXPIRED|STALE|UPDATING",
+        "^X-Nginx-Cache$": ""
+      },
+      "url": [],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [],
+      "scriptjs": {},
+      "implies": [
+        "Nginx"
+      ]
+    },
+    {
+      "name": "Apache Traffic Server",
+      "category": "Web Cache",
+      "cookies": {},
+      "headers": {
+        "^Server$": "ATS/?([\\d.]+)?",
+        "^Via$": "ApacheTrafficServer"
+      },
+      "url": [],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [],
+      "scriptjs": {}
+    },
+    {
+      "name": "Fastly",
+      "category": "Web Cache",
+      "cookies": {},
+      "headers": {
+        "^X-Served-By$": "cache-",
+        "^X-Fastly-Request-Id$": "",
+        "^X-Cache$": "HIT|MISS",
+        "^Fastly-Debug-Digest$": ""
+      },
+      "url": [
+        "fastly.net"
+      ],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [],
+      "scriptjs": {}
+    },
+    {
+      "name": "Akamai Edge Cache",
+      "category": "Web Cache",
+      "cookies": {},
+      "headers": {
+        "^X-Akamai-Transformed$": "",
+        "^Server$": "AkamaiGHost",
+        "^X-Cache$": "TCP_HIT|TCP_MISS"
+      },
+      "url": [],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [],
+      "scriptjs": {}
+    },
+    {
+      "name": "Cloudflare Cache",
+      "category": "Web Cache",
+      "cookies": {},
+      "headers": {
+        "^CF-Cache-Status$": "",
+        "^CF-RAY$": "",
+        "^Server$": "cloudflare"
+      },
+      "url": [],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [],
+      "scriptjs": {}
+    },
+    {
+      "name": "Amazon CloudFront Cache",
+      "category": "Web Cache",
+      "cookies": {},
+      "headers": {
+        "^X-Cache$": "Hit from cloudfront|Miss from cloudfront|RefreshHit from cloudfront",
+        "^X-Amz-Cf-Pop$": "",
+        "^Via$": "CloudFront"
+      },
+      "url": [
+        ".cloudfront.net"
+      ],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [],
+      "scriptjs": {}
+    },
+    {
+      "name": "KeyCDN",
+      "category": "Web Cache",
+      "cookies": {},
+      "headers": {
+        "^Server$": "Keycdn-Engine",
+        "^X-Cache$": "HIT|MISS",
+        "^X-Edge-Location$": ""
+      },
+      "url": [
+        ".kxcdn.com"
+      ],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [],
+      "scriptjs": {}
+    },
+    {
+      "name": "StackPath CDN",
+      "category": "Web Cache",
+      "cookies": {},
+      "headers": {
+        "^Server$": "NetDNA-cache|StackPath",
+        "^X-HW$": ""
+      },
+      "url": [
+        ".stackpathcdn.com",
+        ".netdna-cdn.com"
+      ],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [],
+      "scriptjs": {}
+    },
+    {
+      "name": "BunnyCDN",
+      "category": "Web Cache",
+      "cookies": {},
+      "headers": {
+        "^Server$": "BunnyCDN",
+        "^CDN-Cache$": "HIT|MISS",
+        "^CDN-RequestCountryCode$": ""
+      },
+      "url": [
+        ".b-cdn.net"
+      ],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [],
+      "scriptjs": {}
+    },
+    {
+      "name": "CDN77",
+      "category": "Web Cache",
+      "cookies": {},
+      "headers": {
+        "^Server$": "CDN77-Turbo",
+        "^X-Cache$": "HIT|MISS"
+      },
+      "url": [
+        ".cdn77.org",
+        ".rsc.cdn77.org"
+      ],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [],
+      "scriptjs": {}
+    },
+    {
+      "name": "W3 Total Cache (WordPress)",
+      "category": "Web Cache",
+      "cookies": {},
+      "headers": {
+        "^X-Powered-By$": "W3 Total Cache"
+      },
+      "url": [
+        "/wp-content/cache/",
+        "/wp-content/plugins/w3-total-cache/"
+      ],
+      "meta": {},
+      "robots": [
+        "/wp-content/cache/",
+        "Disallow: /wp-content/cache/"
+      ],
+      "scriptSrc": [
+        "/wp-content/cache/minify/"
+      ],
+      "scriptjs": {},
+      "implies": [
+        "WordPress"
+      ]
+    },
+    {
+      "name": "WP Super Cache",
+      "category": "Web Cache",
+      "cookies": {
+        "^comment_author_": ""
+      },
+      "headers": {},
+      "url": [
+        "/wp-content/cache/supercache/",
+        "/wp-content/plugins/wp-super-cache/"
+      ],
+      "meta": {},
+      "robots": [
+        "/wp-content/cache/",
+        "Disallow: /wp-content/cache/"
+      ],
+      "scriptSrc": [],
+      "scriptjs": {},
+      "implies": [
+        "WordPress"
+      ]
+    },
+    {
+      "name": "WP Rocket",
+      "category": "Web Cache",
+      "cookies": {},
+      "headers": {},
+      "url": [
+        "/wp-content/cache/wp-rocket/",
+        "/wp-content/plugins/wp-rocket/"
+      ],
+      "meta": {},
+      "robots": [
+        "/wp-content/cache/",
+        "Disallow: /wp-content/cache/"
+      ],
+      "scriptSrc": [
+        "/wp-content/cache/busting/"
+      ],
+      "scriptjs": {
+        "RocketPreloadLinksConfig": ""
+      },
+      "implies": [
+        "WordPress"
+      ]
+    },
+    {
+      "name": "Redis (HTTP front / object cache)",
+      "category": "Web Cache",
+      "cookies": {},
+      "headers": {
+        "^X-Redis-Cache$": ""
+      },
+      "url": [],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [],
+      "scriptjs": {}
+    },
+    {
+      "name": "Memcached (edge-facing)",
+      "category": "Web Cache",
+      "cookies": {},
+      "headers": {
+        "^X-Memcached-": ""
+      },
+      "url": [],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [],
+      "scriptjs": {}
+    },
+    {
+      "name": "Drupal Internal Page Cache",
+      "category": "Web Cache",
+      "cookies": {},
+      "headers": {
+        "^X-Drupal-Cache$": "HIT|MISS",
+        "^X-Drupal-Dynamic-Cache$": "HIT|MISS"
+      },
+      "url": [],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [],
+      "scriptjs": {},
+      "implies": [
+        "Drupal"
+      ]
+    },
+    {
+      "name": "Magento Full Page Cache",
+      "category": "Web Cache",
+      "cookies": {
+        "^private_content_version$": ""
+      },
+      "headers": {
+        "^X-Magento-Cache-Debug$": "HIT|MISS"
+      },
+      "url": [],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [],
+      "scriptjs": {},
+      "implies": [
+        "Magento 2 / Adobe Commerce"
+      ]
+    },
+    {
+      "name": "Vercel Edge Cache",
+      "category": "Web Cache",
+      "cookies": {},
+      "headers": {
+        "^X-Vercel-Cache$": "HIT|MISS|STALE|PRERENDER",
+        "^X-Vercel-Id$": ""
+      },
+      "url": [
+        ".vercel.app"
+      ],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [],
+      "scriptjs": {},
+      "implies": [
+        "Vercel"
+      ]
+    },
+    {
+      "name": "Netlify Edge Cache",
+      "category": "Web Cache",
+      "cookies": {},
+      "headers": {
+        "^X-Nf-Request-Id$": "",
+        "^Cache-Status$": "\"Netlify Edge\""
+      },
+      "url": [
+        ".netlify.app"
+      ],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [],
+      "scriptjs": {},
+      "implies": [
+        "Netlify"
+      ]
+    }
+  ]
+}
