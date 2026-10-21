@@ -1,0 +1,123 @@
+{
+  "technologies": [
+    {
+      "name": "WooCommerce",
+      "category": "E-commerce",
+      "cookies": {
+        "^woocommerce_cart_hash$": "",
+        "^woocommerce_items_in_cart$": "",
+        "^wp_woocommerce_session_": ""
+      },
+      "implies": [
+        "WordPress"
+      ]
+    },
+    {
+      "name": "Magento",
+      "category": "E-commerce",
+      "cookies": {
+        "^frontend$": "",
+        "^mage-cache-sessid$": "",
+        "^mage-cache-storage$": "",
+        "^mage-messages$": ""
+      },
+      "implies": [
+        "PHP"
+      ]
+    },
+    {
+      "name": "PrestaShop",
+      "category": "E-commerce",
+      "cookies": {
+        "^PrestaShop-": ""
+      },
+      "implies": [
+        "PHP"
+      ]
+    },
+    {
+      "name": "OpenCart",
+      "category": "E-commerce",
+      "cookies": {
+        "^OCSESSID$": ""
+      },
+      "implies": [
+        "PHP"
+      ]
+    },
+    {
+      "name": "Shopify",
+      "category": "E-commerce",
+      "cookies": {
+        "^_shopify_y$": "",
+        "^_shopify_s$": "",
+        "^secure_customer_sig$": "",
+        "^_shopify_fs$": ""
+      }
+    },
+    {
+      "name": "BigCommerce",
+      "category": "E-commerce",
+      "cookies": {
+        "^SHOP_SESSION_TOKEN$": "",
+        "^fornax_anonymousId$": ""
+      }
+    },
+    {
+      "name": "Shopware",
+      "category": "E-commerce",
+      "cookies": {
+        "^session-$": "",
+        "^sw-cache-hash$": ""
+      },
+      "implies": [
+        "PHP"
+      ]
+    },
+    {
+      "name": "nopCommerce",
+      "category": "E-commerce",
+      "cookies": {
+        "^\\.Nop\\.Customer$": "",
+        "^\\.Nop\\.Antiforgery$": ""
+      },
+      "implies": [
+        "ASP.NET"
+      ]
+    },
+    {
+      "name": "SAP Commerce Cloud (Hybris)",
+      "category": "E-commerce",
+      "cookies": {
+        "^anonymous-consents$": ""
+      },
+      "implies": [
+        "Java"
+      ]
+    },
+    {
+      "name": "Magento 2 / Adobe Commerce",
+      "category": "E-commerce",
+      "cookies": {
+        "^private_content_version$": "",
+        "^section_data_ids$": "",
+        "^form_key$": "",
+        "^X-Magento-Vary$": "",
+        "^product_data_storage$": ""
+      },
+      "implies": [
+        "PHP"
+      ]
+    },
+    {
+      "name": "Salesforce Commerce Cloud (Demandware)",
+      "category": "E-commerce",
+      "cookies": {
+        "^dwsid$": "",
+        "^dwanonymous_": "",
+        "^__cq_uuid$": "",
+        "^__cq_seg$": ""
+      }
+    }
+  ]
+}
