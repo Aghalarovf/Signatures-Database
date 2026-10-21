@@ -1,0 +1,64 @@
+{
+  "technologies": [
+    {
+      "name": "PHP",
+      "category": "Programming Language"
+    },
+    {
+      "name": "Python",
+      "category": "Programming Language"
+    },
+    {
+      "name": "Node.js",
+      "category": "Programming Language"
+    },
+    {
+      "name": "Ruby",
+      "category": "Programming Language"
+    },
+    {
+      "name": ".NET",
+      "category": "Programming Language"
+    },
+    {
+      "name": "PHP Session",
+      "category": "Programming Language",
+      "cookies": {
+        "^PHPSESSID$": ""
+      },
+      "implies": [
+        "PHP"
+      ]
+    },
+    {
+      "name": "Java",
+      "category": "Programming Language",
+      "cookies": {
+        "^JSESSIONID$": ""
+      }
+    },
+    {
+      "name": "ColdFusion",
+      "category": "Programming Language",
+      "cookies": {
+        "^CFID$": "",
+        "^CFTOKEN$": "",
+        "^CFGLOBALS$": ""
+      }
+    },
+    {
+      "name": "Classic ASP",
+      "category": "Programming Language",
+      "cookies": {
+        "^ASPSESSIONID[A-Z]{8}$": ""
+      }
+    },
+    {
+      "name": "Perl CGI::Session",
+      "category": "Programming Language",
+      "cookies": {
+        "^CGISESSID$": ""
+      }
+    }
+  ]
+}
