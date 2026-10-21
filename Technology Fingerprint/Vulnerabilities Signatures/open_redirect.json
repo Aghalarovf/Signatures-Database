@@ -1,0 +1,271 @@
+{
+  "vulnerabilities": [
+    {
+      "name": "Unvalidated Redirect Parameter in Location Header",
+      "category": "Open Redirect Vulnerability",
+      "cwe": "CWE-601",
+      "severity": "Medium",
+      "description": "A request parameter (url, redirect, next, return, continue, dest, goto) is copied verbatim into the Location header of a 3xx response without validating it against an allow-list of permitted destinations.",
+      "url": [
+        "?url=",
+        "?redirect=",
+        "?redirect_uri=",
+        "?next=",
+        "?return=",
+        "?return_to=",
+        "?continue=",
+        "?dest=",
+        "?destination=",
+        "?goto=",
+        "?target=",
+        "?out=",
+        "?view=",
+        "?r=",
+        "?u="
+      ],
+      "headers": {
+        "request": {},
+        "response": {
+          "^Location$": "^https?://(?!trusted-domain-under-test).*$|^//.*$"
+        }
+      },
+      "html": {},
+      "notes": "Confirmed when the Location header value exactly mirrors (or is derived without sanitization from) the request parameter and points to an external host not on the application's own allow-list.",
+      "references": [
+        "https://owasp.org/www-community/attacks/Unvalidated_Redirects_and_Forwards_Cheat_Sheet",
+        "https://cwe.mitre.org/data/definitions/601.html"
+      ]
+    },
+    {
+      "name": "Protocol-Relative URL Bypass (//evil.com)",
+      "category": "Open Redirect Vulnerability",
+      "cwe": "CWE-601",
+      "severity": "Medium",
+      "description": "Validation checks only that the redirect target does not start with 'http://' or 'https://', missing that a scheme-relative URL (starting with //) is resolved by the browser as a full redirect to the given host.",
+      "url": [
+        "?redirect=//",
+        "?next=//",
+        "?return=//"
+      ],
+      "headers": {
+        "request": {},
+        "response": {
+          "^Location$": "^//.+"
+        }
+      },
+      "html": {},
+      "notes": "Confirmed by submitting a redirect parameter beginning with // followed by an external host and observing the Location header preserve it unmodified.",
+      "references": [
+        "https://owasp.org/www-community/attacks/Unvalidated_Redirects_and_Forwards_Cheat_Sheet",
+        "https://cwe.mitre.org/data/definitions/601.html"
+      ]
+    },
+    {
+      "name": "Backslash/Encoded-Slash Normalization Bypass",
+      "category": "Open Redirect Vulnerability",
+      "cwe": "CWE-601",
+      "severity": "Medium",
+      "description": "A redirect-target validator rejects values starting with '//' or 'http' but does not account for browsers normalizing backslashes to forward slashes, or for percent-encoded/double-encoded slashes, allowing the same effective scheme-relative URL to slip through as \\/\\/evil.com, /\\evil.com, or %2F%2Fevil.com.",
+      "url": [
+        "?redirect=/%5Cevil",
+        "?redirect=/\\\\",
+        "?next=%2F%2F",
+        "?next=%5C%5C"
+      ],
+      "headers": {
+        "request": {},
+        "response": {
+          "^Location$": "^(\\\\|%5[Cc]|%2[Ff]){2}.*$"
+        }
+      },
+      "html": {},
+      "notes": "Browsers treat backslashes in a URL's authority position the same as forward slashes; test each redirect validator against \\/, /\\, \\\\, and their percent-encoded forms.",
+      "references": [
+        "https://portswigger.net/kb/issues/00500100_open-redirection-reflected",
+        "https://cwe.mitre.org/data/definitions/601.html"
+      ]
+    },
+    {
+      "name": "Userinfo/@ Character Allow-List Bypass",
+      "category": "Open Redirect Vulnerability",
+      "cwe": "CWE-601",
+      "severity": "Medium",
+      "description": "Validation checks that the redirect value starts with (or contains) the trusted domain, but a URL of the form https://trusted-domain@evil.com parses the trusted domain as HTTP userinfo, with evil.com as the actual host the browser navigates to.",
+      "url": [
+        "?redirect=https://trusted-domain%40",
+        "?next=https://trusted-domain@"
+      ],
+      "headers": {
+        "request": {},
+        "response": {
+          "^Location$": "^https?://[^/]*@.+$"
+        }
+      },
+      "html": {},
+      "notes": "Confirmed when a validator that only does a substring/startswith check on the trusted domain accepts a value containing an @ character followed by an untrusted host.",
+      "references": [
+        "https://portswigger.net/web-security/ssrf/url-validation-bypass-cheat-sheet",
+        "https://cwe.mitre.org/data/definitions/601.html"
+      ]
+    },
+    {
+      "name": "Subdomain/Suffix Confusion Allow-List Bypass",
+      "category": "Open Redirect Vulnerability",
+      "cwe": "CWE-601",
+      "severity": "Medium",
+      "description": "Validation checks that the redirect target contains or ends with the trusted domain string, so attacker-registered lookalikes such as trusted-domain.evil.com or trusteddomain-evil.com pass the same check.",
+      "url": [
+        "?redirect=https://trusted-domain.",
+        "?next=https://trusted-domain-"
+      ],
+      "headers": {
+        "request": {},
+        "response": {
+          "^Location$": "^https?://[^/]*trusted-domain[^/]*\\..+$"
+        }
+      },
+      "html": {},
+      "notes": "Confirmed via differential testing: a value where the trusted domain is merely a substring of a longer, attacker-controlled hostname is still accepted.",
+      "references": [
+        "https://owasp.org/www-community/attacks/Unvalidated_Redirects_and_Forwards_Cheat_Sheet",
+        "https://cwe.mitre.org/data/definitions/601.html"
+      ]
+    },
+    {
+      "name": "Meta Refresh Tag Built From Unvalidated Parameter",
+      "category": "Open Redirect Vulnerability",
+      "cwe": "CWE-601",
+      "severity": "Low",
+      "description": "Instead of (or in addition to) a Location header, the server renders a client-side <meta http-equiv=\"refresh\"> tag whose URL content is built directly from a request parameter without validation.",
+      "url": [
+        "?redirect=",
+        "?url=",
+        "?next="
+      ],
+      "headers": {
+        "request": {},
+        "response": {
+          "^Content-Type$": "text/html"
+        }
+      },
+      "html": {
+        "sinks": {
+          "<meta[^>]+http-equiv=[\"']refresh[\"'][^>]+content=[\"'][^\"']*url=": ""
+        }
+      },
+      "notes": "Confirmed when the url= value inside the meta refresh content attribute reflects the request parameter unmodified and points off-domain.",
+      "references": [
+        "https://owasp.org/www-community/attacks/Unvalidated_Redirects_and_Forwards_Cheat_Sheet",
+        "https://cwe.mitre.org/data/definitions/601.html"
+      ]
+    },
+    {
+      "name": "Client-Side JavaScript Redirect From Unvalidated Source",
+      "category": "Open Redirect Vulnerability",
+      "cwe": "CWE-601",
+      "severity": "Medium",
+      "description": "Client-side script reads a redirect target from the URL (query string or fragment) and assigns it directly to window.location / location.href / location.replace / location.assign without validating the host against an allow-list.",
+      "url": [
+        "#redirect=",
+        "?redirect=",
+        "?returnUrl=",
+        "?next="
+      ],
+      "headers": {
+        "request": {},
+        "response": {}
+      },
+      "html": {
+        "sinks": {
+          "location(\\.href)?\\s*=\\s*[^;]*(getParameter|searchParams|location\\.(search|hash))": "",
+          "location\\.(assign|replace)\\s*\\(": "",
+          "window\\.open\\s*\\(": ""
+        },
+        "sources": {
+          "URLSearchParams": "",
+          "location\\.(search|hash)": "",
+          "document\\.referrer": ""
+        }
+      },
+      "notes": "Overlaps the javascript: URI DOM XSS sink entry; here the concern is navigation to an arbitrary external origin rather than script execution, so flag even when the value is scheme-restricted to http(s).",
+      "references": [
+        "https://portswigger.net/web-security/cross-site-scripting/dom-based",
+        "https://cwe.mitre.org/data/definitions/601.html"
+      ]
+    },
+    {
+      "name": "OAuth/SSO redirect_uri Open Redirect",
+      "category": "Open Redirect Vulnerability",
+      "cwe": "CWE-601",
+      "severity": "High",
+      "description": "An OAuth2/OIDC authorization or SSO login endpoint accepts a redirect_uri/return_url/post_logout_redirect_uri parameter that is not strictly matched against the set of URIs registered for the client, allowing the authorization code/token to be redirected to an attacker-controlled endpoint.",
+      "url": [
+        "/oauth2/authorize?redirect_uri=",
+        "/authorize?redirect_uri=",
+        "/login?return_url=",
+        "/logout?post_logout_redirect_uri="
+      ],
+      "headers": {
+        "request": {},
+        "response": {
+          "^Location$": "^https?://(?!registered-client-redirect-uri).*(code=|token=|id_token=)"
+        }
+      },
+      "html": {},
+      "notes": "Highest-severity variant of this class: a successful redirect here can leak authorization codes or tokens, not just send the user to a phishing page.",
+      "references": [
+        "https://datatracker.ietf.org/doc/html/rfc6819#section-4.4.1.7",
+        "https://cwe.mitre.org/data/definitions/601.html"
+      ]
+    },
+    {
+      "name": "Whitespace/Null-Byte/Control-Character Validator Bypass",
+      "category": "Open Redirect Vulnerability",
+      "cwe": "CWE-601",
+      "severity": "Low",
+      "description": "A validator checks the redirect value's prefix but does not strip or reject leading whitespace, tab, newline, or null-byte characters, which browsers ignore when parsing a URL scheme, letting a value like ' javascript:...' or '\\t//evil.com' slip past a naive startswith('http') check.",
+      "url": [
+        "?redirect=%09//",
+        "?redirect=%00//",
+        "?redirect=%0A//"
+      ],
+      "headers": {
+        "request": {},
+        "response": {
+          "^Location$": "^[\\s\\x00-\\x1f].*$"
+        }
+      },
+      "html": {},
+      "notes": "",
+      "references": [
+        "https://portswigger.net/kb/issues/00500100_open-redirection-reflected",
+        "https://cwe.mitre.org/data/definitions/601.html"
+      ]
+    },
+    {
+      "name": "Open Redirect Chained With CSRF/Phishing (Missing Interstitial Warning)",
+      "category": "Open Redirect Vulnerability",
+      "cwe": "CWE-601",
+      "severity": "Low",
+      "description": "A confirmed external redirect endpoint exists but the application redirects immediately with no interstitial 'you are leaving this site, continue?' confirmation page, maximizing the credibility of the redirect for phishing or OAuth token theft chains.",
+      "url": [
+        "?redirect=",
+        "?url=",
+        "?out="
+      ],
+      "headers": {
+        "request": {},
+        "response": {
+          "^Location$": "^https?://.+$",
+          "^Status$": "^30[1278]$"
+        }
+      },
+      "html": {},
+      "notes": "This is a severity-amplifying observation to pair with any confirmed open redirect entry above, not a standalone finding.",
+      "references": [
+        "https://owasp.org/www-community/attacks/Unvalidated_Redirects_and_Forwards_Cheat_Sheet",
+        "https://cwe.mitre.org/data/definitions/601.html"
+      ]
+    }
+  ]
+}
