@@ -1,0 +1,495 @@
+{
+  "vulnerabilities": [
+    {
+      "name": "SQL Injection via String Concatenation in Python Database Calls",
+      "category": "SQL Injection Vulnerability",
+      "sqli_type": "Code-level",
+      "cwe": "CWE-89",
+      "severity": "Critical",
+      "description": "User-controlled data is concatenated, %-formatted, .format()-ed, or f-string interpolated into a SQL string passed to a Python DB-API, SQLAlchemy, Django raw SQL, or similar call instead of being bound as a query parameter.",
+      "headers": {
+        "request": {},
+        "response": {}
+      },
+      "html": {
+        "sinks": {
+          "\\.(execute|executemany|executescript)\\s*\\(\\s*(f[\"']|[\"'][^\"']*[\"']\\s*(%|\\+)|[\"'][^\"']*[\"']\\s*\\.format\\s*\\()": "",
+          "cursor\\.execute\\s*\\(\\s*[^,)]*(\\+|%\\s*\\(|%\\s*\\w|\\.format\\s*\\()": "",
+          "\\.raw\\s*\\(\\s*(f[\"']|[\"'][^\"']*[\"']\\s*(%|\\+|\\.format))": "",
+          "\\.extra\\s*\\(\\s*(where|select|tables)\\s*=": "",
+          "RawSQL\\s*\\(\\s*(f[\"']|[\"'][^\"']*[\"']\\s*(%|\\+|\\.format))": "",
+          "text\\s*\\(\\s*(f[\"']|[\"'][^\"']*[\"']\\s*(%|\\+|\\.format))": "",
+          "engine\\.execute\\s*\\(\\s*(f[\"']|[\"'][^\"']*[\"']\\s*(%|\\+|\\.format))": "",
+          "session\\.execute\\s*\\(\\s*(f[\"']|[\"'][^\"']*[\"']\\s*(%|\\+|\\.format))": ""
+        },
+        "sources": {
+          "request\\.(args|form|values|json|data|cookies|headers|GET|POST|COOKIES|META)": "",
+          "flask\\.request": "",
+          "self\\.get_argument\\s*\\(": "",
+          "request\\.query_params": "",
+          "sys\\.argv": ""
+        }
+      },
+      "notes": "Flag when a source reaches the SQL string via concatenation, %, .format(), or an f-string. Parameterized forms such as cursor.execute('... WHERE id = %s', (value,)) are safe. Identifiers (table or column names) cannot be parameterized and need a strict allow-list.",
+      "references": [
+        "https://portswigger.net/web-security/sql-injection",
+        "https://cwe.mitre.org/data/definitions/89.html"
+      ]
+    },
+    {
+      "name": "SQL Injection via String Building in PHP (mysqli/PDO/legacy mysql_*)",
+      "category": "SQL Injection Vulnerability",
+      "sqli_type": "Code-level",
+      "cwe": "CWE-89",
+      "severity": "Critical",
+      "description": "Request variables are interpolated directly into SQL strings passed to mysqli_query, PDO::query/exec, mysql_query, pg_query, or sqlsrv_query without prepared statements.",
+      "headers": {
+        "request": {},
+        "response": {}
+      },
+      "html": {
+        "sinks": {
+          "mysqli_(multi_)?query\\s*\\(\\s*\\$?\\w+\\s*,\\s*[\"'][^\"']*(\\$|\\{\\$|[\"']\\s*\\.)": "",
+          "->(query|exec)\\s*\\(\\s*[\"'][^\"']*\\$": "",
+          "->(query|exec)\\s*\\(\\s*\\$\\w+\\s*\\)": "",
+          "->(query|exec)\\s*\\(\\s*[\"'][^\"']*[\"']\\s*\\.\\s*\\$": "",
+          "mysql_query\\s*\\(": "",
+          "pg_(query|send_query)\\s*\\(\\s*\\$?\\w+\\s*,\\s*[\"'][^\"']*(\\$|[\"']\\s*\\.)": "",
+          "sqlsrv_query\\s*\\(\\s*\\$?\\w+\\s*,\\s*[\"'][^\"']*\\$": "",
+          "(WHERE|AND|OR|VALUES|LIMIT|ORDER\\s+BY)[^\"';]*[\"']\\s*\\.\\s*\\$_(GET|POST|REQUEST|COOKIE)": "",
+          "DB::(select|statement|raw|unprepared)\\s*\\(\\s*[\"'][^\"']*(\\$|[\"']\\s*\\.)": "",
+          "whereRaw\\s*\\(\\s*[\"'][^\"']*(\\$|[\"']\\s*\\.)": "",
+          "orderByRaw\\s*\\(\\s*\\$": ""
+        },
+        "sources": {
+          "\\$_(GET|POST|REQUEST|COOKIE|SERVER)\\s*\\[": "",
+          "\\$request->(input|get|query|post|cookie|header|all)\\s*\\(": "",
+          "\\$request->\\w+": "",
+          "getallheaders\\s*\\(": ""
+        }
+      },
+      "notes": "Safe: PDO or mysqli prepared statements with bound parameters (prepare/bind_param/execute). mysqli_real_escape_string alone is not sufficient for numeric contexts or identifiers.",
+      "references": [
+        "https://cheatsheetseries.owasp.org/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.html",
+        "https://cwe.mitre.org/data/definitions/89.html"
+      ]
+    },
+    {
+      "name": "SQL Injection via Statement and String Concatenation in Java/JDBC/JPA/MyBatis",
+      "category": "SQL Injection Vulnerability",
+      "sqli_type": "Code-level",
+      "cwe": "CWE-89",
+      "severity": "Critical",
+      "description": "SQL, JPQL, or HQL text built through string concatenation or String.format is executed with Statement, createQuery, createNativeQuery, JdbcTemplate, or MyBatis ${} substitution, rather than bound parameters or #{} placeholders.",
+      "headers": {
+        "request": {},
+        "response": {}
+      },
+      "html": {
+        "sinks": {
+          "(createStatement\\s*\\(\\s*\\)\\s*\\.)?(executeQuery|executeUpdate|execute|addBatch)\\s*\\(\\s*[^)]*(\\+|String\\.format|\\.concat\\s*\\()": "",
+          "createNativeQuery\\s*\\(\\s*[^)]*(\\+|String\\.format)": "",
+          "createQuery\\s*\\(\\s*[\"'][^\"']*[\"']\\s*\\+": "",
+          "createSQLQuery\\s*\\(\\s*[^)]*\\+": "",
+          "jdbcTemplate\\.(query|queryForObject|queryForList|update|execute)\\s*\\(\\s*[^,)]*(\\+|String\\.format)": "",
+          "prepareStatement\\s*\\(\\s*[^)]*(\\+|String\\.format)": "",
+          "\\$\\{\\s*[A-Za-z_][\\w.]*\\s*\\}": "",
+          "@(Select|Update|Insert|Delete)\\s*\\(\\s*\"[^\"]*\\$\\{": "",
+          "ORDER\\s+BY\\s+\\$\\{": "",
+          "entityManager\\.createQuery\\s*\\([^)]*\\+": ""
+        },
+        "sources": {
+          "request\\.getParameter\\s*\\(": "",
+          "@RequestParam": "",
+          "@PathVariable": "",
+          "@RequestBody": "",
+          "request\\.getHeader\\s*\\(": "",
+          "request\\.getCookies\\s*\\(": "",
+          "getQueryString\\s*\\(": ""
+        }
+      },
+      "notes": "Note: prepareStatement with a concatenated string is still vulnerable, because the injection happens before preparation. In MyBatis, ${} performs raw substitution while #{} binds a parameter. Dynamic ORDER BY or table names need an allow-list.",
+      "references": [
+        "https://cheatsheetseries.owasp.org/cheatsheets/Query_Parameterization_Cheat_Sheet.html",
+        "https://cwe.mitre.org/data/definitions/89.html"
+      ]
+    },
+    {
+      "name": "SQL Injection via Template Literals and Concatenation in Node.js Database Clients",
+      "category": "SQL Injection Vulnerability",
+      "sqli_type": "Code-level",
+      "cwe": "CWE-89",
+      "severity": "Critical",
+      "description": "Request data is placed into a SQL string using template literals or concatenation and executed through mysql/mysql2, pg, sqlite3, mssql, Sequelize raw queries, Knex.raw, or TypeORM query().",
+      "headers": {
+        "request": {},
+        "response": {}
+      },
+      "html": {
+        "sinks": {
+          "\\.(query|execute|run|all|get|each|exec)\\s*\\(\\s*`[^`]*\\$\\{": "",
+          "\\.(query|execute|run|all|get|each|exec)\\s*\\(\\s*[\"'][^\"']*[\"']\\s*\\+": "",
+          "sequelize\\.query\\s*\\(\\s*(`[^`]*\\$\\{|[\"'][^\"']*[\"']\\s*\\+)": "",
+          "knex\\.raw\\s*\\(\\s*(`[^`]*\\$\\{|[\"'][^\"']*[\"']\\s*\\+)": "",
+          "\\.(whereRaw|havingRaw|orderByRaw|groupByRaw|joinRaw)\\s*\\(\\s*(`[^`]*\\$\\{|[\"'][^\"']*[\"']\\s*\\+)": "",
+          "(manager|connection|dataSource|repository)\\.query\\s*\\(\\s*(`[^`]*\\$\\{|[\"'][^\"']*[\"']\\s*\\+)": "",
+          "sql\\.unsafe\\s*\\(": "",
+          "Sequelize\\.literal\\s*\\(\\s*(`[^`]*\\$\\{|[\"'][^\"']*[\"']\\s*\\+|req\\.)": "",
+          "prisma\\.\\$(queryRawUnsafe|executeRawUnsafe)\\s*\\(": ""
+        },
+        "sources": {
+          "req\\.(query|body|params|cookies|headers)": "",
+          "request\\.(query|body|params)": "",
+          "ctx\\.(query|request\\.body|params)": "",
+          "event\\.queryStringParameters": "",
+          "process\\.argv": ""
+        }
+      },
+      "notes": "Safe: placeholders (? or $1) with a parameter array, tagged-template drivers that bind values (for example Prisma $queryRaw with tagged templates, postgres.js sql`...`). Flag the *Unsafe and literal variants when any source reaches them.",
+      "references": [
+        "https://cheatsheetseries.owasp.org/cheatsheets/Query_Parameterization_Cheat_Sheet.html",
+        "https://cwe.mitre.org/data/definitions/89.html"
+      ]
+    },
+    {
+      "name": "SQL Injection via Raw Query Construction in .NET, Ruby, and Go",
+      "category": "SQL Injection Vulnerability",
+      "sqli_type": "Code-level",
+      "cwe": "CWE-89",
+      "severity": "Critical",
+      "description": "Untrusted input is concatenated or interpolated into SQL strings used by SqlCommand, Entity Framework raw SQL, ActiveRecord where/find_by_sql, or Go's database/sql and GORM raw methods.",
+      "headers": {
+        "request": {},
+        "response": {}
+      },
+      "html": {
+        "sinks": {
+          "new\\s+SqlCommand\\s*\\(\\s*(\\$@?\"|@?\"[^\"]*\"\\s*\\+|string\\.Format\\s*\\()": "",
+          "\\.CommandText\\s*=\\s*(\\$@?\"|@?\"[^\"]*\"\\s*\\+|string\\.Format\\s*\\()": "",
+          "(FromSqlRaw|ExecuteSqlRaw|SqlQuery)\\s*\\(\\s*(\\$@?\"|@?\"[^\"]*\"\\s*\\+|string\\.Format\\s*\\()": "",
+          "\\.(where|find_by_sql|order|group|having|joins|pluck|select|from|exists\\?)\\s*\\(\\s*\"[^\"]*#\\{": "",
+          "\\.where\\s*\\(\\s*[\"'][^\"']*[\"']\\s*\\+": "",
+          "connection\\.(execute|exec_query|select_all|select_value)\\s*\\(\\s*\"[^\"]*#\\{": "",
+          "db\\.(Query|QueryRow|Exec|QueryContext|ExecContext)\\s*\\(\\s*(fmt\\.Sprintf|[\"`][^\"`]*[\"`]\\s*\\+)": "",
+          "\\.(Raw|Exec)\\s*\\(\\s*(fmt\\.Sprintf|[\"`][^\"`]*[\"`]\\s*\\+)": "",
+          "\\.Where\\s*\\(\\s*(fmt\\.Sprintf|[\"`][^\"`]*[\"`]\\s*\\+)": ""
+        },
+        "sources": {
+          "Request\\.(QueryString|Form|Cookies|Headers|Query)": "",
+          "\\[FromQuery\\]|\\[FromBody\\]|\\[FromRoute\\]": "",
+          "params\\s*\\[": "",
+          "cookies\\s*\\[": "",
+          "r\\.(URL\\.Query\\(\\)|FormValue\\(|PostFormValue\\(|Header\\.Get\\()": "",
+          "c\\.(Query|Param|PostForm|DefaultQuery)\\s*\\(": ""
+        }
+      },
+      "notes": "Safe: SqlParameter/@param binding, FromSql with interpolated string (EF Core parameterizes FromSql and ExecuteSql interpolation, but not the *Raw variants with concatenation), ActiveRecord hash or array conditions, Go placeholders ($1, ?) with arguments.",
+      "references": [
+        "https://cheatsheetseries.owasp.org/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.html",
+        "https://cwe.mitre.org/data/definitions/89.html"
+      ]
+    },
+    {
+      "name": "Error-Based SQL Injection Indicator: Database Error Messages in Response",
+      "category": "SQL Injection Vulnerability",
+      "sqli_type": "Error-based",
+      "cwe": "CWE-209",
+      "severity": "High",
+      "description": "A single quote, unbalanced parenthesis, or other syntax-breaking character in a parameter causes the response to contain a database engine error. This shows that the input reaches a SQL parser unescaped and identifies the DBMS.",
+      "headers": {
+        "request": {},
+        "response": {
+          "^Content-Type$": "text/html|application/json|text/plain|application/xml"
+        }
+      },
+      "html": {
+        "reflection_indicators": {
+          "You have an error in your SQL syntax[^<]{0,120}(MySQL|MariaDB)": "MySQL/MariaDB syntax error",
+          "Warning:\\s+mysqli?_[a-z_]+\\(|mysql_fetch_(array|assoc|row)\\(\\)": "PHP MySQL function warning",
+          "com\\.mysql\\.(cj\\.)?jdbc\\.exceptions|MySQLSyntaxErrorException|MySqlException": "MySQL driver exception",
+          "ERROR:\\s+syntax error at or near|PSQLException|pg_query\\(\\): Query failed|org\\.postgresql\\.util": "PostgreSQL error",
+          "unterminated quoted string at or near": "PostgreSQL unterminated string error",
+          "Unclosed quotation mark after the character string|Incorrect syntax near\\s+['\"\\w]": "Microsoft SQL Server syntax error",
+          "System\\.Data\\.SqlClient\\.SqlException|Microsoft OLE DB Provider for SQL Server|ODBC SQL Server Driver": "SQL Server driver error",
+          "ORA-\\d{5}[^<]{0,100}|quoted string not properly terminated|Oracle error": "Oracle database error",
+          "SQLite(3)?::(SQLException|query)|SQLITE_ERROR|unrecognized token:|near \"[^\"]{1,30}\": syntax error": "SQLite error",
+          "Microsoft Access Driver|JET Database Engine|ODBC Microsoft Access": "Microsoft Access error",
+          "DB2 SQL error|SQLCODE[=:\\s-]+\\d+|com\\.ibm\\.db2": "IBM DB2 error",
+          "Dynamic SQL Error|Firebird|Sybase message|com\\.sybase\\.jdbc": "Firebird or Sybase error",
+          "java\\.sql\\.(SQLException|SQLSyntaxErrorException)|SQLServerException|javax\\.persistence\\.PersistenceException": "Java SQL exception",
+          "django\\.db\\.utils\\.(ProgrammingError|OperationalError)|sqlalchemy\\.exc\\.(ProgrammingError|OperationalError)": "Python ORM database error",
+          "ActiveRecord::StatementInvalid|PG::SyntaxError|Mysql2::Error": "Ruby ActiveRecord or driver error",
+          "SequelizeDatabaseError|QueryFailedError|error: syntax error at or near|SqliteError": "Node.js database error",
+          "Npgsql\\.PostgresException|MySqlConnector\\.MySqlException|Microsoft\\.Data\\.SqlClient\\.SqlException": ".NET database driver error"
+        }
+      },
+      "notes": "Confirm with a pair of requests: one with a lone quote (error expected) and one with two quotes (no error expected), as the doubled quote becomes a valid empty string literal. Report the DBMS from the error string.",
+      "references": [
+        "https://portswigger.net/web-security/sql-injection",
+        "https://cwe.mitre.org/data/definitions/209.html"
+      ]
+    },
+    {
+      "name": "Boolean-Based Blind SQL Injection: Differential Response to True/False Conditions",
+      "category": "SQL Injection Vulnerability",
+      "sqli_type": "Boolean Blind",
+      "cwe": "CWE-89",
+      "severity": "High",
+      "description": "Appending logically true versus logically false conditions to a parameter yields consistently different responses (content, length, status, or element count), showing that the injected condition is evaluated by the database even though no error or data is displayed.",
+      "headers": {
+        "request": {},
+        "response": {
+          "^Content-Length$": ".+",
+          "^Content-Type$": "text/html|application/json|application/xml"
+        }
+      },
+      "html": {
+        "reflection_indicators": {
+          "(no (results?|records?|rows?|data|items?) (found|available)|0 results|nothing found|not found)": "empty-result message appearing for the false condition only",
+          "\"(count|total|length)\"\\s*:\\s*0\\b": "JSON result count of zero for the false condition only",
+          "\"(results|items|data|rows)\"\\s*:\\s*\\[\\s*\\]": "empty JSON result array for the false condition only"
+        }
+      },
+      "notes": "Use a three-request test: baseline value, baseline AND a true condition (should match baseline), baseline AND a false condition (should differ). Repeat to rule out unrelated page variation. Safe probes: AND 1=1 versus AND 1=2, adapted for numeric, single-quoted, and double-quoted contexts.",
+      "references": [
+        "https://portswigger.net/web-security/sql-injection/blind",
+        "https://cwe.mitre.org/data/definitions/89.html"
+      ]
+    },
+    {
+      "name": "Time-Based Blind SQL Injection: Response Delay From Injected Sleep Condition",
+      "category": "SQL Injection Vulnerability",
+      "sqli_type": "Time-based Blind",
+      "cwe": "CWE-89",
+      "severity": "High",
+      "description": "A short, harmless delay function injected into a parameter (SLEEP, pg_sleep, WAITFOR DELAY, dbms_pipe.receive_message, randomblob) makes the response take measurably longer than the baseline, and the delay scales with the requested duration.",
+      "headers": {
+        "request": {},
+        "response": {}
+      },
+      "html": {
+        "reflection_indicators": {
+          "(?i)(sleep\\s*\\(\\s*\\d+\\s*\\)|pg_sleep\\s*\\(\\s*\\d+\\s*\\)|waitfor\\s+delay\\s+'\\d+:\\d+:\\d+'|dbms_pipe\\.receive_message|dbms_lock\\.sleep|randomblob\\s*\\()": "delay function text echoed back in a reflected parameter or error message (indicates that the input reaches SQL text)"
+        }
+      },
+      "notes": "Detection is measured on timing, not on page content: send a baseline, a short delay (for example 3 seconds), and a longer delay (for example 6 seconds) and require roughly proportional response times across repeated trials. Keep delays short, and avoid heavy benchmark-style functions on production systems.",
+      "references": [
+        "https://portswigger.net/web-security/sql-injection/blind",
+        "https://cwe.mitre.org/data/definitions/89.html"
+      ]
+    },
+    {
+      "name": "UNION-Based SQL Injection: Injected Query Output Appears in Response",
+      "category": "SQL Injection Vulnerability",
+      "sqli_type": "UNION-based",
+      "cwe": "CWE-89",
+      "severity": "Critical",
+      "description": "The query result is displayed to the user and the injectable parameter allows appending a UNION SELECT with a matching number and type of columns. A unique marker value placed in the UNION result then appears in the page, proving that attacker-chosen data is returned.",
+      "headers": {
+        "request": {},
+        "response": {
+          "^Content-Type$": "text/html|application/json|application/xml"
+        }
+      },
+      "html": {
+        "reflection_indicators": {
+          "(?i)the used select statements have a different number of columns": "MySQL column-count mismatch error from a UNION probe",
+          "(?i)each union query must have the same number of columns": "PostgreSQL column-count mismatch error",
+          "(?i)all queries combined using a union.* must have an equal number of expressions": "SQL Server column-count mismatch error",
+          "(?i)ora-01789|query block has incorrect number of result columns": "Oracle column-count mismatch error",
+          "(?i)SELECTs to the left and right of UNION do not have the same number of result columns": "SQLite column-count mismatch error",
+          "(?i)conversion failed when converting|operand type clash|data type mismatch in criteria expression": "column type mismatch while probing UNION columns"
+        }
+      },
+      "notes": "Column-count and type-mismatch errors are strong evidence that a UNION probe reached the query. Confirm with a unique marker string (for example a random token) in a matching column and check that it is reflected in the page.",
+      "references": [
+        "https://portswigger.net/web-security/sql-injection/union-attacks",
+        "https://cwe.mitre.org/data/definitions/89.html"
+      ]
+    },
+    {
+      "name": "SQL Injection in ORDER BY, LIMIT, Table, or Column Name Parameters",
+      "category": "SQL Injection Vulnerability",
+      "sqli_type": "Identifier / Clause Injection",
+      "cwe": "CWE-89",
+      "severity": "High",
+      "description": "Sorting, pagination, or field-selection parameters (sort, order, orderby, dir, limit, offset, column, field, table) are placed into the query as raw SQL identifiers or clauses. These positions cannot be bound as parameters, so developers often interpolate them without an allow-list.",
+      "headers": {
+        "request": {},
+        "response": {}
+      },
+      "html": {
+        "sinks": {
+          "ORDER\\s+BY\\s*[\"'`]?\\s*(\\+|\\$|%s|\\{|#\\{|\\$\\{)": "",
+          "ORDER\\s+BY\\s*[\"']\\s*\\+": "",
+          "[\"'`]\\s*ORDER\\s+BY\\s*[\"'`]\\s*(\\+|\\.|%)": "",
+          "(order_by|orderBy|orderby|sort_by|sortBy|sort|sidx|sord)\\s*=\\s*[^;\\n]*(request|req|params|args|\\$_(GET|POST))": "",
+          "LIMIT\\s*[\"'`]?\\s*(\\+|\\$|%s|\\{|#\\{|\\$\\{)": "",
+          "(FROM|JOIN|INTO|UPDATE)\\s*[\"'`]?\\s*(\\+|\\$_(GET|POST)|%s|#\\{|\\$\\{)": "",
+          "SELECT\\s*[\"'`]\\s*(\\+|\\.)\\s*(columns|fields|cols)": ""
+        },
+        "sources": {
+          "(sort|order|orderby|order_by|dir|direction|column|col|field|fields|table|limit|offset|page_size|per_page)=": "",
+          "req\\.(query|body)\\.(sort|order|orderBy|column|field|table|limit)": "",
+          "request\\.(args|form|GET|POST)\\.?(get)?\\s*[\\[(]\\s*[\"'](sort|order|orderby|column|field|table|limit)[\"']": "",
+          "\\$_(GET|POST|REQUEST)\\s*\\[\\s*[\"'](sort|order|orderby|column|field|table|limit)[\"']": ""
+        }
+      },
+      "notes": "Behavioral test: change a sort value to a nonexistent column name and look for a SQL error, then to a valid but different column and check that ordering changes. The fix is a strict allow-list mapping from user-facing keys to fixed identifiers; escaping is not enough.",
+      "references": [
+        "https://cheatsheetseries.owasp.org/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.html",
+        "https://cwe.mitre.org/data/definitions/89.html"
+      ]
+    },
+    {
+      "name": "Second-Order (Stored) SQL Injection: Persisted Input Reused in Later Query",
+      "category": "SQL Injection Vulnerability",
+      "sqli_type": "Second-Order",
+      "cwe": "CWE-89",
+      "severity": "High",
+      "description": "Input is stored safely (for example with parameterization) but later read back from the database, a session, a cache, or a file and concatenated into a different SQL statement without binding. The injection fires in a separate request, often on a different page or by a different user or background job.",
+      "headers": {
+        "request": {},
+        "response": {}
+      },
+      "html": {
+        "sinks": {
+          "(row|result|record|user|profile|data|item|entry)\\s*\\[\\s*[\"']\\w+[\"']\\s*\\][^;\\n]{0,60}(\\.|\\+)[^;\\n]{0,20}(SELECT|UPDATE|INSERT|DELETE|WHERE)": "",
+          "[\"'][^\"']*(SELECT|UPDATE|INSERT|DELETE)[^\"']*[\"']\\s*(\\.|\\+|%)\\s*\\$?(row|result|user|profile|record|stored|saved|username|name|email)\\w*\\s*[\\[.]": "",
+          "f[\"'][^\"']*(SELECT|UPDATE|INSERT|DELETE)[^\"']*\\{(row|result|user|profile|record|stored|saved|username)[^}]*\\}": "",
+          "\\$\\{\\s*(row|result|user|profile|record|stored|saved)\\w*\\.\\w+\\s*\\}[^`]{0,80}`": "",
+          "(UPDATE|DELETE\\s+FROM|INSERT\\s+INTO)[^;\"']{0,80}[\"']\\s*\\.\\s*\\$(row|user|data|result)": ""
+        },
+        "sources": {
+          "fetch(_assoc|_array|_row|all|one)?\\s*\\(": "",
+          "cursor\\.fetch(one|all|many)\\s*\\(": "",
+          "\\.(first|find|findOne|findById|get)\\s*\\(": "",
+          "session\\s*\\[": "",
+          "\\$_SESSION\\s*\\[": "",
+          "cache\\.get\\s*\\(": "",
+          "getString\\s*\\(": ""
+        }
+      },
+      "notes": "Hard to detect from requests alone. Review code where database-sourced values (usernames, display names, addresses, filenames) are concatenated into new queries. Behavioral testing: store a harmless quote-containing value in a profile field, then trigger features that consume it and watch for SQL errors.",
+      "references": [
+        "https://portswigger.net/web-security/sql-injection",
+        "https://cwe.mitre.org/data/definitions/89.html"
+      ]
+    },
+    {
+      "name": "SQL Injection in HTTP Headers and Cookies (User-Agent, Referer, X-Forwarded-For, Cookie Values)",
+      "category": "SQL Injection Vulnerability",
+      "sqli_type": "Header / Cookie Injection",
+      "cwe": "CWE-89",
+      "severity": "High",
+      "description": "Values from request headers or cookies are logged to a database, used for session lookups, tracking, or analytics, and concatenated into SQL. These inputs are often skipped by input validation and by testing tools.",
+      "headers": {
+        "request": {
+          "^(User-Agent|Referer|X-Forwarded-For|X-Real-IP|X-Client-IP|Client-IP|X-Forwarded-Host|Accept-Language|Cookie)$": ".+"
+        },
+        "response": {}
+      },
+      "html": {
+        "sinks": {
+          "(INSERT\\s+INTO|UPDATE|SELECT)[^;\"']{0,120}[\"']\\s*(\\.|\\+)\\s*\\$_SERVER\\s*\\[\\s*[\"']HTTP_(USER_AGENT|REFERER|X_FORWARDED_FOR|CLIENT_IP|ACCEPT_LANGUAGE)": "",
+          "(INSERT\\s+INTO|UPDATE|SELECT)[^;\"']{0,120}[\"']\\s*(\\.|\\+)\\s*\\$_COOKIE": "",
+          "(INSERT\\s+INTO|UPDATE|SELECT)[^;\"']{0,120}[\"']\\s*\\+\\s*request\\.getHeader\\s*\\(": "",
+          "(INSERT\\s+INTO|UPDATE|SELECT)[^;\"']{0,120}[\"']\\s*\\+\\s*req\\.(headers|cookies|ip)": "",
+          "f[\"'][^\"']*(INSERT|UPDATE|SELECT)[^\"']*\\{request\\.(headers|META|COOKIES|remote_addr)": "",
+          "(INSERT\\s+INTO|UPDATE|SELECT)[^`]{0,120}\\$\\{\\s*req\\.(headers|cookies|ip|connection)": ""
+        },
+        "sources": {
+          "\\$_SERVER\\s*\\[\\s*[\"']HTTP_": "",
+          "\\$_COOKIE\\s*\\[": "",
+          "request\\.getHeader\\s*\\(": "",
+          "req\\.(headers|cookies|ip)": "",
+          "request\\.(headers|META|COOKIES|remote_addr)": ""
+        }
+      },
+      "notes": "Test by placing a lone single quote in User-Agent, Referer, X-Forwarded-For, or cookie values and comparing the response with a baseline and with a doubled quote. Reflected errors or changed behavior indicate injection.",
+      "references": [
+        "https://owasp.org/www-project-web-security-testing-guide/latest/4-Web_Application_Security_Testing/07-Input_Validation_Testing/05-Testing_for_SQL_Injection",
+        "https://cwe.mitre.org/data/definitions/89.html"
+      ]
+    },
+    {
+      "name": "NoSQL Injection via Operator Objects and Server-Side JavaScript (MongoDB)",
+      "category": "SQL Injection Vulnerability",
+      "sqli_type": "NoSQL Injection",
+      "cwe": "CWE-943",
+      "severity": "High",
+      "description": "Request-supplied objects or strings are passed directly into MongoDB-style query filters, letting an attacker supply operators ($ne, $gt, $regex, $where) or JavaScript expressions that change the query's meaning, for example to bypass authentication.",
+      "headers": {
+        "request": {
+          "^Content-Type$": "application/json|application/x-www-form-urlencoded"
+        },
+        "response": {}
+      },
+      "html": {
+        "sinks": {
+          "\\.(find|findOne|findOneAndUpdate|findOneAndDelete|updateOne|updateMany|deleteOne|deleteMany|countDocuments|aggregate)\\s*\\(\\s*(req\\.(body|query|params)|\\{[^}]*:\\s*req\\.(body|query|params)\\.\\w+)": "",
+          "\\.(find|findOne)\\s*\\(\\s*\\{\\s*(username|user|email|name|login|password|token)\\s*:\\s*req\\.(body|query)": "",
+          "\\$where\\s*:\\s*(`|[\"'])[^`\"']*(\\$\\{|[\"']\\s*\\+)": "",
+          "\\$where\\s*:\\s*(req|request|params|data)": "",
+          "\\$(accumulator|function)\\s*:": "",
+          "mapReduce\\s*\\(": "",
+          "collection\\.(find|findOne)\\s*\\(\\s*(request\\.(json|form|args)|json\\.loads)": "",
+          "db\\.\\w+\\.(find|find_one|update_one|delete_one)\\s*\\(\\s*request\\.(json|form|args|get_json)": ""
+        },
+        "sources": {
+          "req\\.(body|query|params)": "",
+          "request\\.(json|form|args|get_json\\s*\\()": "",
+          "ctx\\.request\\.body": "",
+          "\\$_(GET|POST|REQUEST)\\s*\\[": ""
+        },
+        "reflection_indicators": {
+          "(?i)(MongoError|MongoServerError|MongoNetworkError|CastError: Cast to \\w+ failed|BSONTypeError|unknown (top level )?operator: \\$\\w+)": "MongoDB or Mongoose error exposed in the response",
+          "(?i)(can't use \\$\\w+ with|\\$where is not allowed|bad query:)": "MongoDB operator rejection message"
+        }
+      },
+      "notes": "Behavioral test: send a JSON body with an operator object in place of a string (for example {\"field\": {\"$ne\": null}}) or bracket-notation parameters (field[$ne]=x) and compare with a baseline. Mitigations: schema validation, cast to string, express-mongo-sanitize, and disabling server-side JavaScript.",
+      "references": [
+        "https://portswigger.net/web-security/nosql-injection",
+        "https://cwe.mitre.org/data/definitions/943.html"
+      ]
+    },
+    {
+      "name": "SQL Injection Hardening Gap: Verbose DB Errors, Over-Privileged DB Accounts, Stacked Queries Enabled",
+      "category": "SQL Injection Vulnerability",
+      "sqli_type": "Mitigation Gap",
+      "cwe": "CWE-250",
+      "severity": "Medium",
+      "description": "The application is configured in ways that raise the impact of any SQL injection: detailed database errors are returned to clients, the application connects as a DBA or root account, multiple statements per call are allowed, or file and command features of the DBMS are reachable.",
+      "headers": {
+        "request": {},
+        "response": {
+          "^X-Powered-By$": "PHP|ASP\\.NET|Express",
+          "^Server$": "(?i)(apache|nginx|iis)[^\\n]*"
+        }
+      },
+      "html": {
+        "sinks": {
+          "(DB_USER(NAME)?|MYSQL_USER|POSTGRES_USER|DATABASE_USER|db_user(name)?)\\s*[=:]\\s*[\"']?(root|sa|postgres|admin|dba|sys|system)[\"']?\\b": "",
+          "[\"'](user(name)?|uid)[\"']\\s*:\\s*[\"'](root|sa|postgres|sys|system)[\"']": "",
+          "jdbc:[a-z0-9]+://[^\\s\"']*(user|username)=(root|sa|postgres)\\b": "",
+          "(allowMultiQueries|multipleStatements|multi_statements)\\s*[=:]\\s*(true|True|1|[\"']true[\"'])": "",
+          "MULTI_STATEMENTS|CLIENT\\.MULTI_STATEMENTS": "",
+          "display_errors\\s*=\\s*(On|1|true)": "",
+          "ini_set\\s*\\(\\s*[\"']display_errors[\"']\\s*,\\s*(1|true|[\"']1[\"'])": "",
+          "error_reporting\\s*\\(\\s*E_ALL": "",
+          "(DEBUG|debug)\\s*[=:]\\s*(True|true|1)": "",
+          "customErrors\\s+mode\\s*=\\s*[\"']Off[\"']": "",
+          "app\\.use\\s*\\(\\s*errorhandler\\s*\\(": "",
+          "secure_file_priv\\s*=\\s*[\"']{2}|local_infile\\s*=\\s*(1|ON)": "",
+          "xp_cmdshell|sp_configure|enable_load_extension\\s*\\(\\s*(1|True|true)": ""
+        },
+        "sources": {}
+      },
+      "notes": "Mitigation-gap finding, not an injection point. Combine it with a confirmed SQL injection to assess real impact. Use least-privilege DB accounts, disable multi-statement execution, hide database errors from clients, and log them server-side only.",
+      "references": [
+        "https://cheatsheetseries.owasp.org/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.html",
+        "https://cwe.mitre.org/data/definitions/250.html"
+      ]
+    }
+  ]
+}
