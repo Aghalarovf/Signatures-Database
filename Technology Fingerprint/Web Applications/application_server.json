@@ -1,0 +1,34 @@
+{
+  "technologies": [
+    {
+      "name": "IBM WebSphere",
+      "category": "Application Server",
+      "cookies": {
+        "^LtpaToken2?$": "",
+        "^WASReqURL$": "",
+        "^WASPostParam$": ""
+      },
+      "implies": [
+        "Java"
+      ]
+    },
+    {
+      "name": "Oracle WebLogic",
+      "category": "Application Server",
+      "cookies": {
+        "^ADMINCONSOLESESSION$": ""
+      },
+      "implies": [
+        "Java"
+      ]
+    },
+    {
+      "name": "Oracle APEX",
+      "category": "Application Server",
+      "cookies": {
+        "^ORA_WWV_APP_\\d+$": "",
+        "^WWV_FLOW_": ""
+      }
+    }
+  ]
+}
