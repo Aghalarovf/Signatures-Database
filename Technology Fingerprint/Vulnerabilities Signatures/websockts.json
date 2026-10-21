@@ -1,0 +1,485 @@
+{
+  "vulnerabilities": [
+    {
+      "name": "Cross-Site WebSocket Hijacking (CSWSH): Handshake Without Origin Validation",
+      "category": "WebSocket Vulnerability",
+      "ws_type": "Handshake",
+      "cwe": "CWE-1385",
+      "severity": "High",
+      "description": "The WebSocket upgrade handshake relies only on ambient credentials (cookies, HTTP auth) and the server does not validate the Origin header against an allow-list. A malicious page can open a cross-origin socket in the victim's browser and read or send messages as the victim.",
+      "headers": {
+        "request": {
+          "^Upgrade$": "(?i)^websocket$",
+          "^Origin$": ".+",
+          "^Cookie$": ".+"
+        },
+        "response": {
+          "^Sec-WebSocket-Accept$": ".+",
+          "^Access-Control-Allow-Origin$": "^\\*$|^$"
+        }
+      },
+      "html": {
+        "sinks": {
+          "verifyClient\\s*:\\s*(null|undefined|false)": "",
+          "new\\s+WebSocket\\.Server\\s*\\(\\s*\\{(?![^}]*verifyClient)": "",
+          "new\\s+WebSocketServer\\s*\\(\\s*\\{(?![^}]*verifyClient)": "",
+          "AllowAnyOrigin\\s*\\(": "",
+          "setAllowedOrigins\\s*\\(\\s*[\"']\\*[\"']": "",
+          "setAllowedOriginPatterns\\s*\\(\\s*[\"']\\*[\"']": "",
+          "check_origin\\s*\\(\\s*self\\s*,\\s*origin\\s*\\)\\s*:\\s*return\\s+True": "",
+          "websocket_connect\\s*\\([^)]*\\)": ""
+        },
+        "sources": {
+          "request\\.headers\\.cookie": "",
+          "req\\.headers\\[[\"']cookie[\"']\\]": "",
+          "request\\.cookies": "",
+          "HttpSession": ""
+        }
+      },
+      "notes": "Confirmed when a handshake sent with Origin: https://attacker.example (or Origin: null) and valid session cookies still returns 101 Switching Protocols and the socket delivers authenticated data. Not exploitable if authentication uses a per-connection unguessable token (not a cookie) or if the cookie is SameSite=Strict/Lax and the handshake is cross-site.",
+      "references": [
+        "https://portswigger.net/web-security/websockets/cross-site-websocket-hijacking",
+        "https://cwe.mitre.org/data/definitions/1385.html"
+      ]
+    },
+    {
+      "name": "Weak Origin Check in WebSocket Handshake (Substring, Prefix, or Unanchored Regex)",
+      "category": "WebSocket Vulnerability",
+      "ws_type": "Handshake",
+      "cwe": "CWE-346",
+      "severity": "High",
+      "description": "Origin validation is implemented with indexOf/includes/startsWith/endsWith or an unanchored regular expression, or accepts the literal Origin value null, so look-alike domains or sandboxed iframes pass the check.",
+      "headers": {
+        "request": {
+          "^Upgrade$": "(?i)^websocket$"
+        },
+        "response": {}
+      },
+      "html": {
+        "sinks": {
+          "origin\\.(indexOf|includes|startsWith|endsWith|match|search)\\s*\\(": "",
+          "headers\\.origin\\.(indexOf|includes|startsWith|endsWith)\\s*\\(": "",
+          "getHeader\\s*\\(\\s*[\"']Origin[\"']\\s*\\)\\s*\\.(contains|startsWith|endsWith)\\s*\\(": "",
+          "origin\\s*(==|===)\\s*[\"']null[\"']": "",
+          "re\\.(match|search)\\s*\\(\\s*r?[\"'][^\"'$]*[\"']\\s*,\\s*origin": "",
+          "Origin[^;\\n]{0,40}Regex\\s*\\(\\s*@?[\"'][^\"'$]*[\"']": ""
+        },
+        "sources": {
+          "req\\.headers\\.origin": "",
+          "request\\.headers\\[[\"']origin[\"']\\]": "",
+          "info\\.origin": "",
+          "self\\.request\\.headers\\.get\\s*\\(\\s*[\"']Origin[\"']": ""
+        }
+      },
+      "notes": "Test with Origin values such as https://trusted.example.attacker.example, https://attackertrusted.example, and null. A safe check compares the parsed origin for exact equality against a fixed allow-list.",
+      "references": [
+        "https://portswigger.net/web-security/websockets/cross-site-websocket-hijacking",
+        "https://cwe.mitre.org/data/definitions/346.html"
+      ]
+    },
+    {
+      "name": "Unencrypted WebSocket Connection (ws:// Instead of wss://)",
+      "category": "WebSocket Vulnerability",
+      "ws_type": "Transport",
+      "cwe": "CWE-319",
+      "severity": "Medium",
+      "description": "The client opens a WebSocket over plaintext ws://, or the server accepts upgrades on a non-TLS listener, exposing session data and messages to network interception and tampering. On HTTPS pages, browsers block ws:// as mixed content, so this often indicates downgrade logic or a non-production code path that leaks into production.",
+      "headers": {
+        "request": {},
+        "response": {
+          "^Strict-Transport-Security$": "^$"
+        }
+      },
+      "html": {
+        "sinks": {
+          "new\\s+WebSocket\\s*\\(\\s*[\"'`]ws://": "",
+          "new\\s+WebSocket\\s*\\(\\s*[\"'`]\\s*\\$\\{[^}]*\\}\\s*[\"'`]?\\s*\\+?[^)]*ws://": "",
+          "[\"'`]ws://(?!localhost|127\\.0\\.0\\.1|\\[::1\\])[^\"'`\\s]+": "",
+          "protocol\\s*=\\s*[^;]*location\\.protocol\\s*===?\\s*[\"']http:[\"']\\s*\\?\\s*[\"']ws:[\"']": "",
+          "io\\s*\\(\\s*[\"'`]http://": "",
+          "transports\\s*:\\s*\\[[^\\]]*[\"']websocket[\"'][^\\]]*\\][^}]*secure\\s*:\\s*false": ""
+        },
+        "sources": {}
+      },
+      "notes": "Ignore ws://localhost and loopback addresses used for development. Also verify the live server: a successful upgrade on port 80 (no TLS) is a finding even if client code uses wss://.",
+      "references": [
+        "https://cheatsheetseries.owasp.org/cheatsheets/HTML5_Security_Cheat_Sheet.html#websocket-implementation-hints",
+        "https://cwe.mitre.org/data/definitions/319.html"
+      ]
+    },
+    {
+      "name": "WebSocket Message Rendered Into DOM Sink (DOM XSS via onmessage)",
+      "category": "WebSocket Vulnerability",
+      "ws_type": "Message Handling",
+      "cwe": "CWE-79",
+      "severity": "High",
+      "description": "Data received from a WebSocket (event.data) is written into innerHTML, outerHTML, document.write, jQuery html(), or evaluated as code without sanitization. If another user or an attacker can influence what the server relays, markup executes in the recipient's browser.",
+      "headers": {
+        "request": {},
+        "response": {
+          "^Content-Security-Policy$": "^$"
+        }
+      },
+      "html": {
+        "sinks": {
+          "\\.innerHTML\\s*(\\+)?=": "",
+          "\\.outerHTML\\s*=": "",
+          "\\.insertAdjacentHTML\\s*\\(": "",
+          "document\\.write(ln)?\\s*\\(": "",
+          "\\$\\([^)]*\\)\\.(html|append|prepend|after|before)\\s*\\(": "",
+          "\\beval\\s*\\(": "",
+          "new\\s+Function\\s*\\(": "",
+          "v-html\\s*=": "",
+          "dangerouslySetInnerHTML\\s*=\\s*\\{\\{\\s*__html:": ""
+        },
+        "sources": {
+          "\\.onmessage\\s*=": "",
+          "addEventListener\\s*\\(\\s*[\"']message[\"']": "",
+          "(event|evt|e|msg|message)\\.data": "",
+          "socket\\.on\\s*\\(\\s*[\"'][^\"']+[\"']\\s*,\\s*\\(?\\s*(data|msg|message|payload)": "",
+          "JSON\\.parse\\s*\\(\\s*(event|evt|e|msg)\\.data": ""
+        }
+      },
+      "notes": "Flag when a message handler's data (including fields from JSON.parse(event.data)) reaches a sink without textContent, DOMPurify.sanitize, or equivalent encoding. Confirm exploitability by checking whether any user-controlled content (chat text, usernames, notifications) is relayed to other clients unescaped.",
+      "references": [
+        "https://portswigger.net/web-security/websockets",
+        "https://cwe.mitre.org/data/definitions/79.html"
+      ]
+    },
+    {
+      "name": "Injection via WebSocket Message Into Server-Side Interpreter (SQL/Command/Template/Eval)",
+      "category": "WebSocket Vulnerability",
+      "ws_type": "Message Handling",
+      "cwe": "CWE-74",
+      "severity": "Critical",
+      "description": "A server-side WebSocket message handler passes message fields into a SQL query, shell command, template, expression evaluator, or eval without validation or parameterization. WebSocket traffic is often excluded from WAF inspection and input-validation layers, so these paths are easily overlooked.",
+      "headers": {
+        "request": {
+          "^Upgrade$": "(?i)^websocket$"
+        },
+        "response": {}
+      },
+      "html": {
+        "sinks": {
+          "(query|execute|exec|run|raw)\\s*\\(\\s*[`\"'][^`\"']*(\\$\\{|\"\\s*\\+|'\\s*\\+|%s|\\{\\})": "",
+          "child_process\\.(exec|execSync|spawn)\\s*\\(": "",
+          "os\\.(system|popen)\\s*\\(": "",
+          "subprocess\\.(call|run|Popen)\\s*\\([^)]*shell\\s*=\\s*True": "",
+          "Runtime\\.getRuntime\\(\\)\\.exec\\s*\\(": "",
+          "\\beval\\s*\\(|\\bexec\\s*\\(": "",
+          "render_template_string\\s*\\(": "",
+          "\\$where\\s*:": ""
+        },
+        "sources": {
+          "ws\\.on\\s*\\(\\s*[\"']message[\"']": "",
+          "socket\\.on\\s*\\(\\s*[\"'][^\"']+[\"']": "",
+          "@OnMessage": "",
+          "handleTextMessage\\s*\\(": "",
+          "async\\s+def\\s+(receive|on_message)\\s*\\(": "",
+          "def\\s+receive\\s*\\(\\s*self\\s*,\\s*text_data": "",
+          "JSON\\.parse\\s*\\(\\s*(data|message|msg)\\.toString\\s*\\(\\)": ""
+        }
+      },
+      "notes": "Flag when a message handler source flows into a sink through string concatenation, template literals, or format calls. Parameterized queries and argument-array process APIs without a shell are safe.",
+      "references": [
+        "https://portswigger.net/web-security/websockets",
+        "https://cwe.mitre.org/data/definitions/74.html"
+      ]
+    },
+    {
+      "name": "Missing Authentication or Authorization on WebSocket Connection and Messages",
+      "category": "WebSocket Vulnerability",
+      "ws_type": "Access Control",
+      "cwe": "CWE-306",
+      "severity": "High",
+      "description": "The socket accepts connections with no credential check, or authenticates only during the handshake and then trusts client-supplied identifiers (userId, room, channel, account) in later messages without per-message authorization, enabling unauthorized access and IDOR-style data exposure.",
+      "headers": {
+        "request": {
+          "^Upgrade$": "(?i)^websocket$",
+          "^Authorization$": "^$",
+          "^Cookie$": "^$"
+        },
+        "response": {
+          "^Sec-WebSocket-Accept$": ".+"
+        }
+      },
+      "html": {
+        "sinks": {
+          "io\\.on\\s*\\(\\s*[\"']connection[\"']\\s*,\\s*\\(?\\s*\\w+\\s*\\)?\\s*=>\\s*\\{(?![\\s\\S]{0,400}(auth|token|verify|session|jwt))": "",
+          "wss\\.on\\s*\\(\\s*[\"']connection[\"']\\s*,\\s*\\(?\\s*\\w+(\\s*,\\s*\\w+)?\\s*\\)?\\s*=>\\s*\\{(?![\\s\\S]{0,400}(auth|token|verify|session|jwt))": "",
+          "socket\\.join\\s*\\(\\s*(data|msg|message|payload|req)\\.": "",
+          "\\.subscribe\\s*\\(\\s*(data|msg|message|payload)\\.(channel|room|topic|userId)": "",
+          "(data|msg|message|payload)\\.(userId|user_id|accountId|account_id)": "",
+          "permitAll\\s*\\(\\s*\\)[\\s\\S]{0,120}/(ws|socket|websocket|stomp)": ""
+        },
+        "sources": {
+          "(data|msg|message|payload)\\.(room|channel|topic|userId|user_id)": "",
+          "socket\\.handshake\\.query": "",
+          "req\\.url": ""
+        }
+      },
+      "notes": "Behavioral confirmation: connect with no credentials, or with a low-privilege account, and subscribe to another user's channel or send a message with another user's identifier. If the server returns data or accepts the action, authorization is missing.",
+      "references": [
+        "https://cheatsheetseries.owasp.org/cheatsheets/HTML5_Security_Cheat_Sheet.html#websocket-implementation-hints",
+        "https://cwe.mitre.org/data/definitions/306.html"
+      ]
+    },
+    {
+      "name": "Authentication Token Passed in WebSocket URL Query String",
+      "category": "WebSocket Vulnerability",
+      "ws_type": "Handshake",
+      "cwe": "CWE-598",
+      "severity": "Medium",
+      "description": "Because browsers cannot set custom headers on WebSocket handshakes, developers often put session tokens or JWTs in the URL query string. URLs are recorded in server and proxy logs, browser history, and Referer headers, which can leak long-lived credentials.",
+      "headers": {
+        "request": {},
+        "response": {}
+      },
+      "html": {
+        "sinks": {
+          "new\\s+WebSocket\\s*\\(\\s*[^)]*[?&](token|access_token|auth|jwt|session|sid|api_?key|key)=": "",
+          "new\\s+WebSocket\\s*\\(\\s*[`\"'][^`\"']*\\$\\{\\s*(token|jwt|accessToken|authToken|sessionId)": "",
+          "new\\s+WebSocket\\s*\\([^)]*\\+\\s*(token|jwt|accessToken|authToken|sessionId)": "",
+          "io\\s*\\([^)]*\\{[^}]*query\\s*:\\s*\\{[^}]*(token|jwt|auth|session)": "",
+          "wss?://[^\\s\"'`]+[?&](token|access_token|auth|jwt|session|sid)=[^\\s\"'`&]+": ""
+        },
+        "sources": {
+          "localStorage\\.getItem\\s*\\(": "",
+          "sessionStorage\\.getItem\\s*\\(": "",
+          "document\\.cookie": ""
+        }
+      },
+      "notes": "Prefer short-lived single-use tickets issued over an authenticated HTTP call, or authenticate with a first message after connect. Redact query strings in access logs.",
+      "references": [
+        "https://cheatsheetseries.owasp.org/cheatsheets/HTML5_Security_Cheat_Sheet.html#websocket-implementation-hints",
+        "https://cwe.mitre.org/data/definitions/598.html"
+      ]
+    },
+    {
+      "name": "WebSocket Server Without Message Size, Rate, or Connection Limits (DoS Exposure)",
+      "category": "WebSocket Vulnerability",
+      "ws_type": "Denial of Service",
+      "cwe": "CWE-770",
+      "severity": "Medium",
+      "description": "The WebSocket server is configured with no maximum payload size, very large limits, unbounded connection counts, or no per-client rate limiting, so a single client can exhaust memory, CPU, or file descriptors.",
+      "headers": {
+        "request": {},
+        "response": {}
+      },
+      "html": {
+        "sinks": {
+          "maxPayload\\s*:\\s*(0|Infinity|\\d{9,})": "",
+          "maxHttpBufferSize\\s*:\\s*(0|Infinity|\\d{9,}|1e[89]|1e1\\d)": "",
+          "max_size\\s*=\\s*None": "",
+          "max_message_size\\s*=\\s*(0|None)": "",
+          "setMaxTextMessageBufferSize\\s*\\(\\s*(0|-1|Integer\\.MAX_VALUE)": "",
+          "perMessageDeflate\\s*:\\s*\\{(?![^}]*(threshold|maxPayload|concurrencyLimit))": "",
+          "maxConnections\\s*:\\s*(0|Infinity)": "",
+          "new\\s+WebSocket\\.Server\\s*\\(\\s*\\{(?![^}]*maxPayload)": "",
+          "new\\s+WebSocketServer\\s*\\(\\s*\\{(?![^}]*maxPayload)": ""
+        },
+        "sources": {}
+      },
+      "notes": "Test carefully with bounded, increasing message sizes and connection counts on non-production targets. The ws library defaults maxPayload to 100 MiB, which is often too high; check whether the application reduces it.",
+      "references": [
+        "https://cheatsheetseries.owasp.org/cheatsheets/HTML5_Security_Cheat_Sheet.html#websocket-implementation-hints",
+        "https://cwe.mitre.org/data/definitions/770.html"
+      ]
+    },
+    {
+      "name": "Insecure Deserialization of WebSocket Messages",
+      "category": "WebSocket Vulnerability",
+      "ws_type": "Message Handling",
+      "cwe": "CWE-502",
+      "severity": "Critical",
+      "description": "Binary or text WebSocket frames are deserialized with an unsafe object deserializer (pickle, Java ObjectInputStream, PHP unserialize, YAML load, node-serialize), or parsed into objects that are then merged into prototypes or global state, allowing remote code execution or object injection.",
+      "headers": {
+        "request": {
+          "^Upgrade$": "(?i)^websocket$"
+        },
+        "response": {}
+      },
+      "html": {
+        "sinks": {
+          "pickle\\.loads?\\s*\\(": "",
+          "cPickle\\.loads?\\s*\\(": "",
+          "yaml\\.load\\s*\\((?![^)]*Loader\\s*=\\s*(yaml\\.)?SafeLoader)": "",
+          "marshal\\.loads\\s*\\(": "",
+          "new\\s+ObjectInputStream\\s*\\(": "",
+          "readObject\\s*\\(\\s*\\)": "",
+          "XMLDecoder\\s*\\(": "",
+          "unserialize\\s*\\(": "",
+          "node-serialize|serialize\\.unserialize\\s*\\(": "",
+          "_\\.(merge|defaultsDeep|set)\\s*\\([^)]*(JSON\\.parse|data|msg|message)": "",
+          "Object\\.assign\\s*\\(\\s*\\w+\\s*,\\s*JSON\\.parse": ""
+        },
+        "sources": {
+          "ws\\.on\\s*\\(\\s*[\"']message[\"']": "",
+          "onmessage": "",
+          "@OnMessage": "",
+          "handleBinaryMessage\\s*\\(": "",
+          "receive_bytes\\s*\\(|receive\\s*\\(\\s*bytes_data": ""
+        }
+      },
+      "notes": "Flag when frame data reaches a native-object deserializer without a type allow-list or integrity check (for example HMAC). For JSON merge patterns, check for __proto__, constructor, and prototype key filtering.",
+      "references": [
+        "https://cheatsheetseries.owasp.org/cheatsheets/Deserialization_Cheat_Sheet.html",
+        "https://cwe.mitre.org/data/definitions/502.html"
+      ]
+    },
+    {
+      "name": "Socket.IO / Engine.IO Insecure CORS and Legacy Configuration",
+      "category": "WebSocket Vulnerability",
+      "ws_type": "Handshake",
+      "cwe": "CWE-942",
+      "severity": "Medium",
+      "description": "Socket.IO is configured with a wildcard or reflected CORS origin (often combined with credentials), or with legacy protocol support enabled, weakening the cross-origin protections of both polling and WebSocket transports.",
+      "headers": {
+        "request": {
+          "^Origin$": ".+"
+        },
+        "response": {
+          "^Access-Control-Allow-Origin$": "^\\*$|^null$",
+          "^Access-Control-Allow-Credentials$": "(?i)^true$"
+        }
+      },
+      "html": {
+        "sinks": {
+          "cors\\s*:\\s*\\{[^}]*origin\\s*:\\s*(\\*|[\"']\\*[\"']|true)": "",
+          "cors\\s*:\\s*\\{[^}]*origin\\s*:\\s*(req|request|origin)": "",
+          "origins\\s*\\(\\s*[\"']\\*:\\*[\"']\\s*\\)": "",
+          "allowEIO3\\s*:\\s*true": "",
+          "setCorsAllowedOrigins\\s*\\(\\s*[\"']\\*[\"']": "",
+          "cors_allowed_origins\\s*=\\s*[\"']\\*[\"']": "",
+          "cors_allowed_origins\\s*=\\s*\\[\\s*[\"']\\*[\"']\\s*\\]": ""
+        },
+        "sources": {}
+      },
+      "notes": "A wildcard origin combined with Access-Control-Allow-Credentials: true on the polling transport is the most serious case. Restrict origins to an exact allow-list.",
+      "references": [
+        "https://socket.io/docs/v4/handling-cors/",
+        "https://cwe.mitre.org/data/definitions/942.html"
+      ]
+    },
+    {
+      "name": "Session Cookie With SameSite=None Used for WebSocket Authentication",
+      "category": "WebSocket Vulnerability",
+      "ws_type": "Handshake",
+      "cwe": "CWE-1275",
+      "severity": "Medium",
+      "description": "The session cookie that authenticates the WebSocket handshake is issued with SameSite=None (or without a SameSite attribute on browsers that treat it as None), so the browser attaches it to cross-site handshakes and enables Cross-Site WebSocket Hijacking.",
+      "headers": {
+        "request": {},
+        "response": {
+          "^Set-Cookie$": "(?i)(session|sid|auth|token|jsessionid|connect\\.sid)[^;]*=[^;]*;(?![^\\n]*samesite=(strict|lax))"
+        }
+      },
+      "html": {
+        "sinks": {
+          "sameSite\\s*:\\s*[\"']none[\"']": "",
+          "SameSite\\s*=\\s*None": "",
+          "SESSION_COOKIE_SAMESITE\\s*=\\s*[\"']None[\"']": "",
+          "cookie\\s*:\\s*\\{[^}]*secure\\s*:\\s*false": ""
+        },
+        "sources": {}
+      },
+      "notes": "Pair with the CSWSH handshake rule. SameSite=Lax or Strict on the session cookie blocks the cross-site handshake in modern browsers, but should not replace server-side Origin validation.",
+      "references": [
+        "https://portswigger.net/web-security/websockets/cross-site-websocket-hijacking",
+        "https://cwe.mitre.org/data/definitions/1275.html"
+      ]
+    },
+    {
+      "name": "Sensitive Data Exposed in WebSocket Messages or Verbose Server Errors",
+      "category": "WebSocket Vulnerability",
+      "ws_type": "Information Disclosure",
+      "cwe": "CWE-209",
+      "severity": "Medium",
+      "description": "WebSocket frames carry secrets (passwords, tokens, API keys, internal identifiers) in clear text or return stack traces, SQL errors, and framework exception details to the client, helping an attacker map internals and craft further attacks.",
+      "headers": {
+        "request": {},
+        "response": {}
+      },
+      "html": {
+        "reflection_indicators": {
+          "\"(password|passwd|pwd|secret|api_?key|access_?token|refresh_?token|private_?key)\"\\s*:\\s*\"[^\"]{4,}\"": "credential-like JSON field with a value present in a WebSocket frame",
+          "\"(error|exception|stack(trace)?)\"\\s*:\\s*\"[^\"]*(at [\\w.$]+\\(|Traceback|\\.java:\\d+|\\.js:\\d+:\\d+|\\.py\", line \\d+)": "stack trace returned inside a WebSocket error frame",
+          "(SQLSTATE\\[|ORA-\\d{5}|You have an error in your SQL syntax|psycopg2\\.errors|SequelizeDatabaseError|MongoServerError)": "database error text relayed through a WebSocket frame",
+          "(TypeError|ReferenceError|SyntaxError):[^\"]{0,200}(\\.js|node_modules)": "Node.js runtime error with file paths in a WebSocket frame",
+          "java\\.lang\\.[A-Z]\\w+Exception|org\\.springframework\\.": "Java exception class name in a WebSocket frame",
+          "eyJ[A-Za-z0-9_-]{10,}\\.[A-Za-z0-9_-]{10,}\\.[A-Za-z0-9_-]{10,}": "JWT carried inside a message body (check scope and expiry)"
+        },
+        "sinks": {
+          "ws\\.send\\s*\\(\\s*(JSON\\.stringify\\s*\\()?\\s*(err|error|e|ex)(\\.stack|\\.message)?\\s*\\)?": "",
+          "socket\\.emit\\s*\\(\\s*[\"']error[\"']\\s*,\\s*(err|error|e)(\\.stack)?": "",
+          "send_text\\s*\\(\\s*(str\\s*\\()?\\s*(e|exc|err)\\b": "",
+          "session\\.getBasicRemote\\(\\)\\.sendText\\s*\\([^)]*(getMessage|printStackTrace)": ""
+        },
+        "sources": {}
+      },
+      "notes": "Inspect frames captured in both directions. Generic client-facing error codes should replace raw exception text, and secrets should never be echoed back to the client.",
+      "references": [
+        "https://cheatsheetseries.owasp.org/cheatsheets/HTML5_Security_Cheat_Sheet.html#websocket-implementation-hints",
+        "https://cwe.mitre.org/data/definitions/209.html"
+      ]
+    },
+    {
+      "name": "Missing or Permissive Content-Security-Policy connect-src for WebSockets",
+      "category": "WebSocket Vulnerability",
+      "ws_type": "Mitigation Gap",
+      "cwe": "CWE-1021",
+      "severity": "Low",
+      "description": "The page sets no Content-Security-Policy, or a connect-src (or default-src) that allows any ws:/wss: destination, so injected script can open WebSocket connections to attacker-controlled servers and exfiltrate data.",
+      "headers": {
+        "request": {},
+        "response": {
+          "^Content-Security-Policy$": "^$|connect-src[^;]*(\\bwss?:(?!//)|\\*)|^(?!.*(connect-src|default-src)).*$"
+        }
+      },
+      "html": {
+        "sinks": {
+          "<meta[^>]+http-equiv=[\"']Content-Security-Policy[\"'][^>]+connect-src[^\"']*(wss?:(?!//)|\\*)": ""
+        },
+        "sources": {}
+      },
+      "notes": "This is a mitigation-gap finding, not an injection point. Pair it with a confirmed DOM XSS or injection finding to assess real exploitability. A strict connect-src listing only the application's own wss:// endpoints limits exfiltration over sockets.",
+      "references": [
+        "https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/connect-src",
+        "https://cwe.mitre.org/data/definitions/1021.html"
+      ]
+    },
+    {
+      "name": "WebSocket Endpoint Fingerprint: Upgrade Accepted on Common Paths",
+      "category": "WebSocket Vulnerability",
+      "ws_type": "Attack Surface",
+      "cwe": "CWE-200",
+      "severity": "Info",
+      "description": "A WebSocket, Socket.IO, SockJS, SignalR, or STOMP endpoint is discoverable on a well-known path. Identifying these endpoints is the first step before running handshake, authentication, and message-handling checks, since WebSocket traffic is frequently missed by standard HTTP scanners.",
+      "headers": {
+        "request": {
+          "^Upgrade$": "(?i)^websocket$",
+          "^Connection$": "(?i)upgrade"
+        },
+        "response": {
+          "^Sec-WebSocket-Accept$": ".+",
+          "^Sec-WebSocket-Protocol$": ".*",
+          "^Sec-WebSocket-Extensions$": ".*"
+        }
+      },
+      "html": {
+        "reflection_indicators": {
+          "/socket\\.io/\\?EIO=\\d&transport=": "Socket.IO polling or upgrade URL referenced in the page",
+          "/sockjs(-node)?/info": "SockJS info endpoint referenced in the page",
+          "/signalr/(negotiate|hubs)|/\\w+hub\\?id=": "ASP.NET SignalR hub endpoint referenced in the page",
+          "/(ws|wss|websocket|socket|stomp|cable|realtime|live)\\b[\"'`/?]": "common WebSocket path referenced in client code",
+          "\"websocket\"\\s*:\\s*true|\"sid\"\\s*:\\s*\"[\\w-]{15,}\"[^}]*\"upgrades\"\\s*:\\s*\\[[^\\]]*websocket": "Engine.IO handshake JSON advertising a WebSocket upgrade"
+        }
+      },
+      "notes": "Informational. Record the endpoint, subprotocol, and required credentials, then apply the handshake (CSWSH, Origin), authentication, message-injection, and DoS rules above.",
+      "references": [
+        "https://owasp.org/www-project-web-security-testing-guide/latest/4-Web_Application_Security_Testing/11-Client-side_Testing/10-Testing_WebSockets",
+        "https://cwe.mitre.org/data/definitions/200.html"
+      ]
+    }
+  ]
+}
