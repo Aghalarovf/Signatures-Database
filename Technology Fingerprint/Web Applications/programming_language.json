@@ -15,7 +15,36 @@
       "meta": {},
       "robots": [],
       "scriptSrc": [],
-      "scriptjs": {}
+      "scriptjs": {},
+      "body": [
+        "<\\?php",
+        "PHP Version [\\d.]+",
+        "Powered by PHP",
+        "<title>phpinfo\\(\\)",
+        "(Fatal error|Parse error|Warning|Notice): .+ in .+\\.php on line \\d+"
+      ],
+      "dom": {
+        "form[action*='.php']": {
+          "attributes": {
+            "action": "\\.php(\\?|#|$)"
+          }
+        },
+        "a[href*='.php']": {
+          "attributes": {
+            "href": "\\.php(\\?|#|$)"
+          }
+        },
+        "script[src*='.php']": {
+          "attributes": {
+            "src": "\\.php(\\?|#|$)"
+          }
+        },
+        "link[href*='.php']": {
+          "attributes": {
+            "href": "\\.php(\\?|#|$)"
+          }
+        }
+      }
     },
     {
       "name": "Python",
@@ -31,7 +60,37 @@
       "meta": {},
       "robots": [],
       "scriptSrc": [],
-      "scriptjs": {}
+      "scriptjs": {},
+      "body": [
+        "Traceback \\(most recent call last\\)",
+        "Powered by (Django|Flask|Werkzeug|FastAPI|Tornado)",
+        "csrfmiddlewaretoken",
+        "Werkzeug Debugger",
+        "Django Version",
+        "You're seeing this error because you have <code>DEBUG = True",
+        "\\{\"detail\":\\s*\"Not Found\"\\}"
+      ],
+      "dom": {
+        "input[name='csrfmiddlewaretoken']": {
+          "exists": ""
+        },
+        "link[href*='/static/admin/']": {
+          "attributes": {
+            "href": "/static/admin/"
+          }
+        },
+        "script[src*='/static/admin/']": {
+          "attributes": {
+            "src": "/static/admin/"
+          }
+        },
+        "div.debugger": {
+          "exists": ""
+        },
+        "div#traceback": {
+          "exists": ""
+        }
+      }
     },
     {
       "name": "Node.js",
@@ -48,7 +107,33 @@
       "meta": {},
       "robots": [],
       "scriptSrc": [],
-      "scriptjs": {}
+      "scriptjs": {},
+      "body": [
+        "Cannot (GET|POST|PUT|PATCH|DELETE) /",
+        "<pre>(Type|Reference|Syntax|Range)?Error: .+\\n\\s+at ",
+        "node_modules/",
+        "id=\"__next\"",
+        "__NEXT_DATA__",
+        "window\\.__NUXT__",
+        "Powered by Express",
+        "/socket\\.io/socket\\.io\\.js"
+      ],
+      "dom": {
+        "script#__NEXT_DATA__": {
+          "exists": ""
+        },
+        "div#__next": {
+          "exists": ""
+        },
+        "script[src*='/socket.io/']": {
+          "attributes": {
+            "src": "/socket\\.io/"
+          }
+        },
+        "pre": {
+          "text": "Cannot (GET|POST|PUT|PATCH|DELETE) /"
+        }
+      }
     },
     {
       "name": "Ruby",
@@ -67,7 +152,38 @@
       "meta": {},
       "robots": [],
       "scriptSrc": [],
-      "scriptjs": {}
+      "scriptjs": {},
+      "body": [
+        "Powered by Rails",
+        "name=\"csrf-param\"",
+        "name=\"authenticity_token\"",
+        "ActionController::[A-Za-z]+",
+        "Phusion Passenger",
+        "We're sorry, but something went wrong",
+        "data-turbolinks|data-turbo(-track)?",
+        "/assets/application-[0-9a-f]{8,}\\.(js|css)"
+      ],
+      "dom": {
+        "meta[name='csrf-param']": {
+          "exists": ""
+        },
+        "input[name='authenticity_token']": {
+          "exists": ""
+        },
+        "script[src*='/assets/application-']": {
+          "attributes": {
+            "src": "/assets/application-[0-9a-f]+\\.js"
+          }
+        },
+        "link[href*='/assets/application-']": {
+          "attributes": {
+            "href": "/assets/application-[0-9a-f]+\\.css"
+          }
+        },
+        "[data-turbolinks-track]": {
+          "exists": ""
+        }
+      }
     },
     {
       "name": ".NET",
@@ -92,7 +208,60 @@
         "/WebResource.axd",
         "/ScriptResource.axd"
       ],
-      "scriptjs": {}
+      "scriptjs": {},
+      "body": [
+        "__VIEWSTATE",
+        "__EVENTVALIDATION",
+        "__VIEWSTATEGENERATOR",
+        "__doPostBack\\(",
+        "WebForm_(DoPostBackWithOptions|PostBackOptions)",
+        "__RequestVerificationToken",
+        "Server Error in '.+' Application",
+        "ASP\\.NET is configured to show verbose error messages",
+        "blazor\\.(server|webassembly)\\.js"
+      ],
+      "dom": {
+        "input[name='__VIEWSTATE']": {
+          "exists": ""
+        },
+        "input[name='__EVENTVALIDATION']": {
+          "exists": ""
+        },
+        "input[name='__VIEWSTATEGENERATOR']": {
+          "exists": ""
+        },
+        "input[name='__RequestVerificationToken']": {
+          "exists": ""
+        },
+        "form#aspnetForm": {
+          "exists": ""
+        },
+        "script[src*='WebResource.axd']": {
+          "attributes": {
+            "src": "WebResource\\.axd"
+          }
+        },
+        "script[src*='ScriptResource.axd']": {
+          "attributes": {
+            "src": "ScriptResource\\.axd"
+          }
+        },
+        "script[src*='blazor.']": {
+          "attributes": {
+            "src": "blazor\\.(server|webassembly)\\.js"
+          }
+        },
+        "form[action*='.aspx']": {
+          "attributes": {
+            "action": "\\.aspx(\\?|#|$)"
+          }
+        },
+        "a[href*='.aspx']": {
+          "attributes": {
+            "href": "\\.aspx(\\?|#|$)"
+          }
+        }
+      }
     },
     {
       "name": "PHP Session",
@@ -106,6 +275,25 @@
       "robots": [],
       "scriptSrc": [],
       "scriptjs": {},
+      "body": [
+        "[?&;]PHPSESSID=[a-z0-9,-]{20,}",
+        "name=\"PHPSESSID\""
+      ],
+      "dom": {
+        "a[href*='PHPSESSID=']": {
+          "attributes": {
+            "href": "PHPSESSID=[a-z0-9,-]+"
+          }
+        },
+        "form[action*='PHPSESSID=']": {
+          "attributes": {
+            "action": "PHPSESSID=[a-z0-9,-]+"
+          }
+        },
+        "input[name='PHPSESSID']": {
+          "exists": ""
+        }
+      },
       "implies": [
         "PHP"
       ]
@@ -128,7 +316,64 @@
       "meta": {},
       "robots": [],
       "scriptSrc": [],
-      "scriptjs": {}
+      "scriptjs": {},
+      "body": [
+        ";jsessionid=[A-Za-z0-9._\\-]+",
+        "javax\\.faces\\.ViewState",
+        "jakarta\\.faces\\.ViewState",
+        "Apache Tomcat/[\\d.]+",
+        "HTTP Status \\d{3}\\s*[–-]",
+        "java\\.lang\\.[A-Za-z]+(Exception|Error)",
+        "org\\.springframework\\.",
+        "Whitelabel Error Page",
+        "org\\.apache\\.(struts|jasper)"
+      ],
+      "dom": {
+        "input[name='javax.faces.ViewState']": {
+          "exists": ""
+        },
+        "input[name='jakarta.faces.ViewState']": {
+          "exists": ""
+        },
+        "form[action*=';jsessionid=']": {
+          "attributes": {
+            "action": ";jsessionid="
+          }
+        },
+        "a[href*=';jsessionid=']": {
+          "attributes": {
+            "href": ";jsessionid="
+          }
+        },
+        "form[action*='.do']": {
+          "attributes": {
+            "action": "\\.do(\\?|;|#|$)"
+          }
+        },
+        "a[href*='.action']": {
+          "attributes": {
+            "href": "\\.action(\\?|;|#|$)"
+          }
+        },
+        "a[href*='.jsp']": {
+          "attributes": {
+            "href": "\\.jsp(\\?|;|#|$)"
+          }
+        },
+        "form[action*='.jsp']": {
+          "attributes": {
+            "action": "\\.jsp(\\?|;|#|$)"
+          }
+        },
+        "a[href*='.xhtml']": {
+          "attributes": {
+            "href": "\\.xhtml(\\?|;|#|$)"
+          }
+        },
+        "h1": {
+          "text": "^HTTP Status \\d{3}"
+        }
+      }
     },
     {
       "name": "ColdFusion",
@@ -155,7 +400,48 @@
       "scriptSrc": [
         "/CFIDE/scripts/"
       ],
-      "scriptjs": {}
+      "scriptjs": {},
+      "body": [
+        "/CFIDE/scripts/",
+        "CFTOKEN=\\d+",
+        "CFID=\\d+",
+        "Adobe ColdFusion",
+        "ColdFusion\\.(Ajax|Bind|Event|Window|Layout)",
+        "cfajax",
+        "The error occurred in .+\\.cfm"
+      ],
+      "dom": {
+        "script[src*='/CFIDE/']": {
+          "attributes": {
+            "src": "/CFIDE/"
+          }
+        },
+        "link[href*='/CFIDE/']": {
+          "attributes": {
+            "href": "/CFIDE/"
+          }
+        },
+        "form[action*='.cfm']": {
+          "attributes": {
+            "action": "\\.cfm(\\?|#|$)"
+          }
+        },
+        "a[href*='.cfm']": {
+          "attributes": {
+            "href": "\\.cfm(\\?|#|$)"
+          }
+        },
+        "a[href*='.cfc']": {
+          "attributes": {
+            "href": "\\.cfc(\\?|#|$)"
+          }
+        },
+        "a[href*='CFTOKEN=']": {
+          "attributes": {
+            "href": "CFTOKEN="
+          }
+        }
+      }
     },
     {
       "name": "Classic ASP",
@@ -173,7 +459,44 @@
       "meta": {},
       "robots": [],
       "scriptSrc": [],
-      "scriptjs": {}
+      "scriptjs": {},
+      "body": [
+        "Microsoft VBScript (runtime|compilation) error",
+        "ADODB\\.(Field|Recordset|Connection|Command)",
+        "Active Server Pages error",
+        "error 'ASP 0\\d{3}'|ASP 0\\d{3}",
+        "Microsoft OLE DB Provider for",
+        "Microsoft JET Database Engine",
+        "ODBC (Drivers|Microsoft Access Driver)",
+        "<%[=@#]?\\s"
+      ],
+      "dom": {
+        "form[action*='.asp']": {
+          "attributes": {
+            "action": "\\.asp(\\?|#|$)"
+          }
+        },
+        "a[href*='.asp']": {
+          "attributes": {
+            "href": "\\.asp(\\?|#|$)"
+          }
+        },
+        "script[src*='.asp']": {
+          "attributes": {
+            "src": "\\.asp(\\?|#|$)"
+          }
+        },
+        "iframe[src*='.asp']": {
+          "attributes": {
+            "src": "\\.asp(\\?|#|$)"
+          }
+        },
+        "frame[src*='.asp']": {
+          "attributes": {
+            "src": "\\.asp(\\?|#|$)"
+          }
+        }
+      }
     },
     {
       "name": "Perl CGI::Session",
@@ -192,7 +515,49 @@
       "meta": {},
       "robots": [],
       "scriptSrc": [],
-      "scriptjs": {}
+      "scriptjs": {},
+      "body": [
+        "Software error:",
+        "Premature end of script headers",
+        "Can't locate .+ in @INC",
+        "CGI\\.pm",
+        "Mojolicious|Catalyst|Dancer2?|Template Toolkit",
+        "Powered by Perl",
+        "/cgi-bin/[\\w\\-]+\\.(pl|cgi)",
+        "mod_perl"
+      ],
+      "dom": {
+        "form[action*='/cgi-bin/']": {
+          "attributes": {
+            "action": "/cgi-bin/"
+          }
+        },
+        "a[href*='/cgi-bin/']": {
+          "attributes": {
+            "href": "/cgi-bin/"
+          }
+        },
+        "img[src*='/cgi-bin/']": {
+          "attributes": {
+            "src": "/cgi-bin/"
+          }
+        },
+        "form[action*='.cgi']": {
+          "attributes": {
+            "action": "\\.cgi(\\?|#|$)"
+          }
+        },
+        "a[href*='.cgi']": {
+          "attributes": {
+            "href": "\\.cgi(\\?|#|$)"
+          }
+        },
+        "a[href*='.pl']": {
+          "attributes": {
+            "href": "\\.pl(\\?|#|$)"
+          }
+        }
+      }
     },
     {
       "name": "Go",
@@ -205,7 +570,29 @@
       "meta": {},
       "robots": [],
       "scriptSrc": [],
-      "scriptjs": {}
+      "scriptjs": {},
+      "body": [
+        "goroutine \\d+ \\[(running|runnable|chan receive|select)\\]",
+        "(^|>)\\s*404 page not found\\s*(<|$)",
+        "http: panic serving",
+        "runtime error: (index out of range|invalid memory address|nil pointer)",
+        "panic: .+\\n\\s*goroutine",
+        "\\.go:\\d+ \\+0x[0-9a-f]+",
+        "gorilla\\.csrf\\.Token",
+        "github\\.com/(gin-gonic|labstack|gofiber|beego|gorilla|go-chi)/",
+        "Powered by (Gin|Echo|Fiber|Beego|Revel|Buffalo)"
+      ],
+      "dom": {
+        "input[name='gorilla.csrf.Token']": {
+          "exists": ""
+        },
+        "pre": {
+          "text": "goroutine \\d+ \\["
+        },
+        "body": {
+          "text": "^\\s*404 page not found\\s*$"
+        }
+      }
     }
   ]
 }
