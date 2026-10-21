@@ -1,0 +1,333 @@
+{
+  "technologies": [
+    {
+      "name": "React",
+      "category": "Frontend Framework",
+      "cookies": {},
+      "headers": {},
+      "url": [],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [
+        "react.production.min.js",
+        "react-dom.production.min.js"
+      ],
+      "scriptjs": {
+        "React": "",
+        "__REACT_DEVTOOLS_GLOBAL_HOOK__": ""
+      },
+      "html": [
+        "data-reactroot",
+        "data-reactid"
+      ]
+    },
+    {
+      "name": "Vue.js",
+      "category": "Frontend Framework",
+      "cookies": {},
+      "headers": {},
+      "url": [],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [
+        "vue.global.js",
+        "vue.runtime.esm.js"
+      ],
+      "scriptjs": {
+        "Vue": "",
+        "__VUE__": ""
+      },
+      "html": [
+        "data-v-app",
+        "v-cloak"
+      ]
+    },
+    {
+      "name": "Angular",
+      "category": "Frontend Framework",
+      "cookies": {},
+      "headers": {},
+      "url": [],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [
+        "/main.*.js",
+        "/runtime.*.js"
+      ],
+      "scriptjs": {
+        "ng": "",
+        "getAllAngularRootElements": ""
+      },
+      "html": [
+        "ng-version",
+        "ng-app"
+      ]
+    },
+    {
+      "name": "Svelte",
+      "category": "Frontend Framework",
+      "cookies": {},
+      "headers": {},
+      "url": [],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [],
+      "scriptjs": {
+        "__svelte": ""
+      },
+      "html": [
+        "class=\"svelte-"
+      ]
+    },
+    {
+      "name": "Next.js",
+      "category": "Frontend Framework",
+      "cookies": {},
+      "headers": {
+        "^X-Powered-By$": "Next\\.js"
+      },
+      "url": [
+        "/_next/static/",
+        "/_next/data/"
+      ],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [
+        "/_next/static/chunks/"
+      ],
+      "scriptjs": {
+        "__NEXT_DATA__": "",
+        "next": ""
+      },
+      "implies": [
+        "React"
+      ]
+    },
+    {
+      "name": "Nuxt.js",
+      "category": "Frontend Framework",
+      "cookies": {},
+      "headers": {},
+      "url": [
+        "/_nuxt/"
+      ],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [
+        "/_nuxt/"
+      ],
+      "scriptjs": {
+        "__NUXT__": ""
+      },
+      "implies": [
+        "Vue.js"
+      ]
+    },
+    {
+      "name": "Gatsby",
+      "category": "Frontend Framework",
+      "cookies": {},
+      "headers": {},
+      "url": [
+        "/page-data/",
+        "/static/d/"
+      ],
+      "meta": {
+        "generator": "^Gatsby ?([\\d.]+)?"
+      },
+      "robots": [],
+      "scriptSrc": [
+        "/webpack-runtime-",
+        "/app-"
+      ],
+      "scriptjs": {
+        "___gatsby": "",
+        "__GATSBY_DATA__": ""
+      },
+      "implies": [
+        "React"
+      ]
+    },
+    {
+      "name": "Ember.js",
+      "category": "Frontend Framework",
+      "cookies": {},
+      "headers": {},
+      "url": [],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [
+        "ember.debug.js",
+        "ember.min.js"
+      ],
+      "scriptjs": {
+        "Ember": ""
+      },
+      "html": [
+        "id=\"ember"
+      ]
+    },
+    {
+      "name": "jQuery",
+      "category": "Frontend Framework",
+      "cookies": {},
+      "headers": {},
+      "url": [],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [
+        "jquery.min.js",
+        "jquery-"
+      ],
+      "scriptjs": {
+        "jQuery": "",
+        "$": ""
+      }
+    },
+    {
+      "name": "Backbone.js",
+      "category": "Frontend Framework",
+      "cookies": {},
+      "headers": {},
+      "url": [],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [
+        "backbone.js",
+        "backbone-min.js"
+      ],
+      "scriptjs": {
+        "Backbone": ""
+      }
+    },
+    {
+      "name": "Alpine.js",
+      "category": "Frontend Framework",
+      "cookies": {},
+      "headers": {},
+      "url": [],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [
+        "alpinejs",
+        "alpine.min.js"
+      ],
+      "scriptjs": {
+        "Alpine": ""
+      },
+      "html": [
+        "x-data="
+      ]
+    },
+    {
+      "name": "Solid.js",
+      "category": "Frontend Framework",
+      "cookies": {},
+      "headers": {},
+      "url": [],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [
+        "solid.js"
+      ],
+      "scriptjs": {
+        "Solid": ""
+      }
+    },
+    {
+      "name": "Qwik",
+      "category": "Frontend Framework",
+      "cookies": {},
+      "headers": {},
+      "url": [
+        "/build/q-"
+      ],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [
+        "/build/q-"
+      ],
+      "scriptjs": {},
+      "html": [
+        "q:container"
+      ]
+    },
+    {
+      "name": "SvelteKit",
+      "category": "Frontend Framework",
+      "cookies": {},
+      "headers": {},
+      "url": [
+        "/_app/immutable/"
+      ],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [
+        "/_app/immutable/"
+      ],
+      "scriptjs": {},
+      "implies": [
+        "Svelte"
+      ]
+    },
+    {
+      "name": "Remix",
+      "category": "Frontend Framework",
+      "cookies": {},
+      "headers": {
+        "^X-Powered-By$": "Remix"
+      },
+      "url": [
+        "/build/_assets/"
+      ],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [
+        "/build/_assets/"
+      ],
+      "scriptjs": {
+        "__remixContext": ""
+      },
+      "implies": [
+        "React"
+      ]
+    },
+    {
+      "name": "Astro",
+      "category": "Frontend Framework",
+      "cookies": {},
+      "headers": {
+        "^X-Powered-By$": "Astro"
+      },
+      "url": [
+        "/_astro/"
+      ],
+      "meta": {
+        "generator": "^Astro ?v?([\\d.]+)?"
+      },
+      "robots": [],
+      "scriptSrc": [
+        "/_astro/"
+      ],
+      "scriptjs": {},
+      "html": [
+        "astro-island"
+      ]
+    },
+    {
+      "name": "Preact",
+      "category": "Frontend Framework",
+      "cookies": {},
+      "headers": {},
+      "url": [],
+      "meta": {},
+      "robots": [],
+      "scriptSrc": [
+        "preact.min.js"
+      ],
+      "scriptjs": {
+        "preact": ""
+      }
+    }
+  ]
+}
